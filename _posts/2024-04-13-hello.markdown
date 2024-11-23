@@ -6,7 +6,7 @@ date:   2024-04-13 21:31:09 -0400
 
 <HTML>
 <HEAD>
-<TITLE> Welcome to the Website</TITLE>
+<TITLE> Welcome to the Website!</TITLE>
 </HEAD><BODY>
 <P>This is the website that I have dedicated to what I am working on. <BR>
 I have been working more on the projects than the actual site Im putting them on.</P>
