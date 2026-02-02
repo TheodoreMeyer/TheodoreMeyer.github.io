@@ -2,7 +2,7 @@
 layout: default
 title: Simple Voice Geyser
 permalink: /projects/simplevoicegeyser/
-sidebar: true
+sidebar: simplevoicegeyser
 ---
 
 # Simple Voice Geyser

@@ -5,3 +5,9 @@ simplevoicegeyser:
       url: /projects/simplevoicegeyser/
     - title: Installation
       url: /projects/simplevoicegeyser/installation/
+
+projects:
+  title: All Projects
+  links:
+    - title: Simple Voice Geyser
+      url: /projects/simplevoicegeyser/

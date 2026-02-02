@@ -1,7 +1,9 @@
+{% if page.sidebar %}
+{% assign menu = site.data.projects_nav[page.sidebar] %}
 <aside class="project-sidebar">
-    <h3>{{ site.data.projects_nav.simplevoicegeyser.title }}</h3>
+    <h3>{{ menu.title }}</h3>
     <ul>
-        {% for item in site.data.projects_nav.simplevoicegeyser.links %}
+        {% for item in menu.links %}
         <li>
             <a href="{{ item.url | relative_url }}"
                {% if page.url == item.url %}class="active"{% endif %}>
@@ -11,3 +13,4 @@
         {% endfor %}
     </ul>
 </aside>
+{% endif %}

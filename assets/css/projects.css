@@ -13,16 +13,16 @@
    Sidebar sticky on the left
    ========================== */
 .project-sidebar {
-    position: sticky;     /* sticky while scrolling */
-    top: 2rem;            /* distance from top of viewport */
-    width: 220px;         /* fixed width */
-    padding: 1rem;        /* inner spacing */
-    border-right: 1px solid #ddd; /* separator line */
-    flex-shrink: 0;       /* don't shrink in flex container */
-    align-self: flex-start; /* aligns to top */
-    height: fit-content;  /* ensures sidebar doesn't collapse */
-    background: #fff;      /* optional: background for readability */
-    z-index: 10;           /* stay above content if overlapping occurs */
+    position: sticky;
+    top: 2rem;
+    width: 220px;
+    padding: 1rem;
+    border-right: 1px solid #ddd;
+    flex-shrink: 0;
+    align-self: flex-start;
+    height: fit-content;
+    background-color: #f9f9f9;
+    z-index: 10;
 }
 
 /* Sidebar list styling */

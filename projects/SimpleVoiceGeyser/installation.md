@@ -2,7 +2,7 @@
 layout: default
 title: Installation
 permalink: /projects/simplevoicegeyser/installation/
-sidebar: true
+sidebar: simplevoicegeyser
 ---
 
 # Installation
