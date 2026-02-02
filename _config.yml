@@ -21,11 +21,11 @@
 title: Theo Meyer  
 email: 
 description: >- # this means to ignore newlines until "baseurl:"
-  Theo's Awesome Website
+  Theo's Website
 baseurl: "" # the subpath of your site, e.g. /blog
 url: "https://theodoremeyer.github.io" # the base hostname & protocol for your site, e.g. http://example.com
 twitter_username: 
-github_username:  theodoremeyer
+github_username:  TheodoreMeyer
 
 # Build settings
 theme: minima
