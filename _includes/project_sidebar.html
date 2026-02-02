@@ -1,0 +1,13 @@
+<aside class="project-sidebar">
+    <h3>{{ site.data.projects_nav.simplevoicegeyser.title }}</h3>
+    <ul>
+        {% for item in site.data.projects_nav.simplevoicegeyser.links %}
+        <li>
+            <a href="{{ item.url | relative_url }}"
+               {% if page.url == item.url %}class="active"{% endif %}>
+                {{ item.title }}
+            </a>
+        </li>
+        {% endfor %}
+    </ul>
+</aside>

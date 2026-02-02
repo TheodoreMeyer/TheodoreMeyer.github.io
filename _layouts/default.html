@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ page.title }}</title>
+    <link rel="stylesheet" href="{{ '/assets/main.css' | relative_url }}">
+    <link rel="stylesheet" href="{{ '/assets/css/projects.css' | relative_url }}">
+</head>
+<body>
+
+{% include header.html %}
+
+<main class="page-content">
+
+    {% if page.sidebar %}
+    <div class="project-wrapper">
+
+        <!-- Sidebar floats outside the centered content -->
+        {% include project_sidebar.html %}
+
+        <!-- Main content truly centered in page -->
+        <div class="content-wrapper wrapper">
+            {{ content }}
+        </div>
+
+    </div>
+    {% else %}
+    <div class="wrapper">
+        {{ content }}
+    </div>
+    {% endif %}
+
+</main>
+
+</body>
+</html>

@@ -1,3 +1,10 @@
+---
+layout: default
+title: Simple Voice Geyser
+permalink: /projects/simplevoicegeyser/
+sidebar: true
+---
+
 # Simple Voice Geyser
 
 Simple Voice Geyser is a lightweight Bukkit plugin that lets Bedrock players on Geyser servers use Simple Voice Chat, even though they can’t install client-side mods.

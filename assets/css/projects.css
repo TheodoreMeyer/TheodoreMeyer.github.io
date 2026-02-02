@@ -1,0 +1,78 @@
+/* ==========================
+   Container for project page
+   ========================== */
+.project-wrapper {
+    display: flex;
+    align-items: flex-start;
+    gap: 2rem; /* space between sidebar and main content */
+    margin: 2rem 0; /* vertical spacing */
+    /* do NOT use position: relative; sticky requires normal flow */
+}
+
+/* ==========================
+   Sidebar sticky on the left
+   ========================== */
+.project-sidebar {
+    position: sticky;     /* sticky while scrolling */
+    top: 2rem;            /* distance from top of viewport */
+    width: 220px;         /* fixed width */
+    padding: 1rem;        /* inner spacing */
+    border-right: 1px solid #ddd; /* separator line */
+    flex-shrink: 0;       /* don't shrink in flex container */
+    align-self: flex-start; /* aligns to top */
+    height: fit-content;  /* ensures sidebar doesn't collapse */
+    background: #fff;      /* optional: background for readability */
+    z-index: 10;           /* stay above content if overlapping occurs */
+}
+
+/* Sidebar list styling */
+.project-sidebar ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.project-sidebar li {
+    margin-bottom: 0.5rem;
+}
+
+.project-sidebar a {
+    text-decoration: none;
+    color: #333;
+    transition: color 0.2s;
+}
+
+.project-sidebar a:hover {
+    color: #007acc; /* subtle hover effect */
+}
+
+.project-sidebar a.active {
+    font-weight: bold;
+}
+
+/* ==========================
+   Main content wrapper centered
+   ========================== */
+.content-wrapper {
+    margin: 0 auto;       /* centers content in viewport */
+    max-width: 800px;     /* same as home wrapper */
+    padding-left: 240px;  /* space for sidebar so text doesn't overlap */
+    padding-right: 1rem;
+}
+
+/* Optional: make headings, code blocks, etc. look like home */
+.content-wrapper h1,
+.content-wrapper h2,
+.content-wrapper h3,
+.content-wrapper h4,
+.content-wrapper h5,
+.content-wrapper h6 {
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+    font-weight: 600;
+}
+
+.content-wrapper p {
+    line-height: 1.7;
+    margin-bottom: 1rem;
+}

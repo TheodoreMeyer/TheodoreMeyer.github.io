@@ -1,3 +1,10 @@
+---
+layout: default
+title: Installation
+permalink: /projects/simplevoicegeyser/installation/
+sidebar: true
+---
+
 # Installation
 
 This guide explains how to install and set up Simple Voice Geyser on your server.
