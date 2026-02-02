@@ -20,9 +20,9 @@ It’s made for servers that want both Java and Bedrock players to be able to us
 
 ## Requirements
 
-- A Bukkit-based server (Paper, Spigot, etc.)
-- GeyserMC
-- Simple Voice Chat
+- A Bukkit-based server (Paper, Spigot, etc.): 1.21.8 or later
+- GeyserMC (optional)
+- Simple Voice Chat 2.6.0 or later
 
 This plugin does not replace Simple Voice Chat — it just extends it to support Bedrock players.
 
@@ -32,8 +32,8 @@ This project is actively developed and open to feedback, issues, and contributio
 
 ## Documentation
 
-- [Installation](installation.md)
+- [Installation](installation.markdown)
 
 ## Repository
 
-https://github.com/theodoremeyer/simplevoicegeyser
+[SimpleVoice-Geyser](https://github.com/theodoremeyer/simplevoicegeyser)
