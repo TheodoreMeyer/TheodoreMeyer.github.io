@@ -1,0 +1,12 @@
+---
+layout: post
+title: "Hello"
+date:   2024-04-13 21:31:09 -0400
+---
+
+<HTML>
+<HEAD>
+<TITLE>Simple Voice Geyser</TITLE>
+</HEAD><BODY>
+<P>pages for SVG have released! This is currently updated for 0.0.1-DEV</P>
+</BODY></HTML>
