@@ -28,7 +28,8 @@ This plugin does not replace Simple Voice Chat — it just extends it to support
 
 ## Status
 
-This project is actively developed and open to feedback, issues, and contributions.
+This project is being developed and open to feedback, issues, and contributions.
+It is still in its Dev stage.
 
 ## Documentation
 
