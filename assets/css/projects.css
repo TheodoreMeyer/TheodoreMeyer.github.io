@@ -1,6 +1,19 @@
 /* ==========================
    Container for project page
    ========================== */
+
+@media (max-width: 768px) {
+    .project-wrapper {
+        flex-direction: column;
+    }
+    .project-sidebar {
+        width: 100%;
+        border-right: none;
+        border-bottom: 1px solid #ccc;
+        padding: 1rem 0.5rem;
+    }
+}
+
 .project-wrapper {
     display: flex;
     align-items: flex-start;
@@ -74,6 +87,7 @@
     color: #007acc;
     font-weight: 600;
 }
+
 
 /* ==========================
    Main content wrapper
