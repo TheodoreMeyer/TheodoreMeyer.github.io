@@ -4,8 +4,8 @@
 .project-wrapper {
     display: flex;
     align-items: flex-start;
-    gap: 2rem; /* space between sidebar and main content */
-    margin: 2rem 0; /* vertical spacing */
+    gap: 2rem;        /* space between sidebar and main content */
+    margin: 0;        /* remove vertical spacing */
     /* do NOT use position: relative; sticky requires normal flow */
 }
 
@@ -14,19 +14,27 @@
    ========================== */
 .project-sidebar {
     position: sticky;
-    top: 2rem;
+    top: 1rem;        /* match header height */
     width: 220px;
-    padding: 1rem;
-    border-right: 1px solid #ddd;
+    padding: 2rem;
+    border-right: 1px solid #cfcfcf;
     flex-shrink: 0;
     align-self: flex-start;
     height: fit-content;
-    background-color: #f9f9f9;
+    background-color: #f1f1f1;
     z-index: 10;
 }
 
+.project-sidebar h3 {
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid #ccc;
+    font-size: 1rem;
+    font-weight: bold;
+}
+
 /* Sidebar list styling */
-.project-sidebar ul {
+.project-sidebar > ul {
     list-style: none;
     padding: 0;
     margin: 0;
@@ -50,17 +58,35 @@
     font-weight: bold;
 }
 
-/* ==========================
-   Main content wrapper centered
-   ========================== */
-.content-wrapper {
-    margin: 0 auto;       /* centers content in viewport */
-    max-width: 800px;     /* same as home wrapper */
-    padding-left: 240px;  /* space for sidebar so text doesn't overlap */
-    padding-right: 1rem;
+.sidebar-subnav {
+    list-style: none;
+    margin-top: 0.5rem;
+    margin-left: 1rem;
+    padding-left: 1rem;
+    border-left: 1px solid #ccc;
 }
 
-/* Optional: make headings, code blocks, etc. look like home */
+.sidebar-subnav a {
+    color: #555;
+}
+
+.sidebar-subnav a.active {
+    color: #007acc;
+    font-weight: 600;
+}
+
+/* ==========================
+   Main content wrapper
+   ========================== */
+.content-wrapper {
+    flex: 1;             /* takes remaining space next to sidebar */
+    max-width: 800px;    /* optional: keeps content readable */
+    padding-left: 1rem;  /* small inner padding */
+    padding-right: 1rem;
+    margin: 0;           /* do not center with auto */
+}
+
+/* Headings and text styling */
 .content-wrapper h1,
 .content-wrapper h2,
 .content-wrapper h3,
@@ -75,4 +101,27 @@
 .content-wrapper p {
     line-height: 1.7;
     margin-bottom: 1rem;
+}
+
+/* ==========================
+   Page header sticky
+   ========================== */
+.site-header {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    background-color: #fff;
+}
+
+/* Adjust content spacing to avoid overlapping header */
+.page-content {
+    padding-top: 1rem;  /* same as header height */
+    margin: 0;           /* remove extra margin */
+}
+
+/* ==========================
+   Misc
+   ========================== */
+html {
+    overflow-y: scroll;
 }

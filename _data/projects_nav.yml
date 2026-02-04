@@ -5,8 +5,13 @@ simplevoicegeyser:
       url: /projects/simplevoicegeyser/
     - title: Installation
       url: /projects/simplevoicegeyser/installation/
+      children:
+        - title: Compatibility
+          url: /projects/simplevoicegeyser/compatibility/
     - title: Joining a Server
       url: /projects/simplevoicegeyser/join_svg/
+    - title: Developer API
+      url: /projects/simplevoicegeyser/api/
 
 projects:
   title: All Projects
