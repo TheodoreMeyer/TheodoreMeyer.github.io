@@ -1,5 +1,5 @@
 ---
-layout: default
+layout: projects
 title: API
 permalink: /projects/simplevoicegeyser/api/
 sidebar: simplevoicegeyser
@@ -11,4 +11,4 @@ This is due to the fact I built this as a websocket-based plugin, where anyone w
 
 ## To Be added
 - Connection types, so server admins can limit how you can connect.
-- More Websocket support for diverse client types (whether an app, or a HTML page that is in the server website itself, etc myserver.com/svg).
+- More Websocket support for diverse client types (whether an app, or an HTML page that is in the server website itself, etc. myserver.com/svg).

@@ -4,6 +4,9 @@
     <h3>{{ menu.title }}</h3>
     <ul>
         {% for item in menu.links %}
+        {% if item.section %}
+            <li class="sidebar-section">{{ item.section }}</li>
+        {% else %}
         <li>
             <a href="{{ item.url | relative_url }}"
                {% if page.url == item.url or page.url contains item.url %}class="active"{% endif %}>
@@ -23,6 +26,7 @@
             </ul>
             {% endif %}
         </li>
+        {% endif %}
         {% endfor %}
     </ul>
 </aside>

@@ -1,5 +1,5 @@
 ---
-layout: default
+layout: projects
 title: Joining via SVG
 sidebar: simplevoicegeyser
 permalink: /projects/simplevoicegeyser/join_svg/

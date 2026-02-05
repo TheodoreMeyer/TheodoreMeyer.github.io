@@ -71,6 +71,17 @@
     font-weight: bold;
 }
 
+.sidebar-section {
+    font-weight: bold;              /* bold text */
+    color: #555;
+    cursor: default;                /* non-clickable */
+    padding: 0.5rem 1rem;           /* top/bottom and align with links */
+    margin: 0 0 0.5rem 0;           /* bottom margin like normal li spacing */
+    border-bottom: 1px solid #ccc;  /* underline */
+    display: block;                 /* makes width work */
+    box-sizing: border-box;         /* include padding in width */
+}
+
 .sidebar-subnav {
     list-style: none;
     margin-top: 0.5rem;

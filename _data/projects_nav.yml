@@ -3,6 +3,7 @@ simplevoicegeyser:
   links:
     - title: Overview
       url: /projects/simplevoicegeyser/
+    #- section: Wiki
     - title: Installation
       url: /projects/simplevoicegeyser/installation/
       children:
