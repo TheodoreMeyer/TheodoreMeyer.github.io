@@ -9,6 +9,10 @@ simplevoicegeyser:
       children:
         - title: Compatibility
           url: /projects/simplevoicegeyser/compatibility/
+        - title: Upgrading
+          url: /projects/simplevoicegeyser/upgrading/
+        - title: Security
+          url: /projects/simplevoicegeyser/security/
     - title: Joining a Server
       url: /projects/simplevoicegeyser/join_svg/
     - title: Developer API

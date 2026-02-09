@@ -21,7 +21,7 @@ Simple Voice Geyser will not work without Simple Voice Chat.
 ## Installation Steps
 
 1. Download the latest version of Simple Voice Geyser from the repository.
-   [SimpleVoiceGeyser](https://theodoremeyer.github.io/minecraft/)
+   [SimpleVoiceGeyser](https://github.com/TheodoreMeyer/SimpleVoice-Geyser/releases)
 
 2. Place the `.jar` file into your server’s `plugins` folder
 
@@ -65,6 +65,11 @@ server:
 # Do NOT use this in production. This will very quickly fill up your server logs.
 Debug: false
 ```
+
+## Upgrading Version
+Some Versions may be incompatible and require manual updates.
+
+See more at[Upgrading Compatibility](https://theodoremeyer.github.io/projects/simplevoicegeyser/upgrading/).
 
 ## Versioning notes
 - versions that end in a -DEV/-Dev are testing releasing and not meant for production environment.
