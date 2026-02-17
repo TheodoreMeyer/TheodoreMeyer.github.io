@@ -26,6 +26,10 @@ It’s made for servers that want both Java and Bedrock players to be able to us
 
 This plugin does not replace Simple Voice Chat — it just extends it to support Bedrock players.
 
+## To join
+- In order to join, please run /svg pswd [passwords]
+- see more at [Commands](https://theodoremeyer.github.io/projects/simplevoicegeyser/commands/).
+
 ## Status
 
 This project is being developed and open to feedback, issues, and contributions.
