@@ -5,14 +5,14 @@ simplevoicegeyser:
       url: /projects/simplevoicegeyser/
     #- section: Wiki
     - title: Installation
-      url: /projects/simplevoicegeyser/installation/
+      url: /projects/simplevoicegeyser/install/
       children:
         - title: Compatibility
-          url: /projects/simplevoicegeyser/compatibility/
+          url: /projects/simplevoicegeyser/install/compatibility/
         - title: Upgrading
-          url: /projects/simplevoicegeyser/upgrading/
+          url: /projects/simplevoicegeyser/install/upgrading/
         - title: Security
-          url: /projects/simplevoicegeyser/security/
+          url: /projects/simplevoicegeyser/install/security/
     - title: Commands
       url: /projects/simplevoicegeyser/commands/
     - title: Joining a Server
