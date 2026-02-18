@@ -28,7 +28,9 @@ This plugin does not replace Simple Voice Chat — it just extends it to support
 
 ## To join
 - In order to join, please run /svg pswd [passwords]
-- see more at [Commands](https://theodoremeyer.github.io/projects/simplevoicegeyser/commands/).
+  - See more at [Commands](https://theodoremeyer.github.io/projects/simplevoicegeyser/commands/).
+- Now join via Website link. See your server operator for the link.
+  - See more at [Joining](https://theodoremeyer.github.io/projects/simplevoicegeyser/join_svg/).
 
 ## Status
 
@@ -37,7 +39,7 @@ It is still in its Dev stage.
 
 ## Download
 - [Releases](https://github.com/TheodoreMeyer/SimpleVoice-Geyser/releases)
-    -  See [Installation](installation.markdown) to learn how to install.
+    -  See [Installation](installation/index.markdown) to learn how to install.
 
 ## Repository
 
