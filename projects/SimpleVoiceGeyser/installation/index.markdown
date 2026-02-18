@@ -1,7 +1,7 @@
 ---
 layout: projects
 title: Installation
-permalink: /projects/simplevoicegeyser/installation/
+permalink: /projects/simplevoicegeyser/install/
 sidebar: simplevoicegeyser
 ---
 

@@ -1,7 +1,7 @@
 ---
 layout: projects
 title: Compatibility
-permalink: /projects/simplevoicegeyser/compatibility/
+permalink: /projects/simplevoicegeyser/install/compatibility/
 sidebar: simplevoicegeyser
 ---
 

@@ -2,7 +2,7 @@
 layout: projects
 title: Security
 sidebar: simplevoicegeyser
-permalink: /projects/simplevoicegeyser/security/
+permalink: /projects/simplevoicegeyser/install/security/
 ---
 # Security Notes
 ## When Joining
