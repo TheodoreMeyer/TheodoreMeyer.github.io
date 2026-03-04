@@ -64,9 +64,9 @@ Creates a new voice group.
 
 ### Permissions
 
-- `svg.vc.creategroup.create`
-- `svg.vc.creategroup.type.isolated`
-- `svg.vc.creategroup.setpersistent`
+- `svg.vc.group.create`
+- `svg.vc.group.type.isolated`
+- `svg.vc.group.setpersistent`
 
 ---
 

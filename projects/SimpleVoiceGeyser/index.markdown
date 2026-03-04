@@ -22,6 +22,7 @@ It’s made for servers that want both Java and Bedrock players to be able to us
 
 - A Bukkit-based server (Paper, Spigot, etc.): 1.21.8 or later
 - GeyserMC (optional)
+- Floodgate (optional)
 - Simple Voice Chat 2.6.0 or later
 
 This plugin does not replace Simple Voice Chat — it just extends it to support Bedrock players.

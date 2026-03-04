@@ -7,7 +7,6 @@ permalink: /projects/simplevoicegeyser/join_svg/
 
 ## ALL
 - When you join via the website, you auto join a group named Svg with a password of 1a2b.
-     - This will be configurable soon, I did this because of how the SVC api presents groups sometimes.
 
 ## Joining the Voice Chat from the same device as Server
 1. Go to your web browser and enter 127.0.0.1:web server port (default: 8080)
@@ -15,6 +14,7 @@ permalink: /projects/simplevoicegeyser/join_svg/
 ## Joining the Voice Chat from the local network
 1. If you have not run /svg pswd [password] in-game, run it.
     - Must be between 5-25 characters.
+    - You can also execute this as /svg if you are a bedrock player.
 2. Go to (device ip4 address):(web server port).
     - Device ip4 address usually begins with 192.168.x.xxx
     - web server port default is 8080.
