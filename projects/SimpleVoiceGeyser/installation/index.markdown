@@ -39,17 +39,40 @@ Simple Voice Geyser will not work without Simple Voice Chat.
 #### Server configuration
 ```yaml
 client:
-  # default: 30
-  # Voice chat timeout in seconds.
-  # NOTE: This option is currently disabled by the developer and has no effect.
-  vctimeout: 30
 
-  # default: 2
-  # Idle WebSocket timeout in minutes.
-  # Fractional values are supported (example: 0.5 = 30 seconds).
-  # Valid range: 0.5 – 10 minutes.
-  idletimeout: 2
+   # default: 30
+   # Timeout in seconds
+   # WARNING: Developer Has disabled this for right now.
+   vctimeout: 30
+
+   # default: 2
+   # idle websocket timeout in minutes
+   idletimout: 2
+
+   # default: false
+   # Only allow bedrock players to join the chat
+   requireBedrock: false
+
+   # default: true
+   # Allows for the bedrock client to open a menu just by opening the emotes menu
+   # WARNING: Make sure you have off-hand-emote turned off in geyser or there may
+   #          be conflict
+   useEmoteForSVG: true
+
 server:
+
+   group:
+
+      # Settings for the default group for Svg players.
+      default:
+
+         # default: true
+         # This decides whether the Svg group is created for players who use the website
+         enabled: true
+
+         # default: 1a2b
+         # This control's the default groups's password.
+         password: 1a2b
 
    # default: 8080
    # port server will run on.
