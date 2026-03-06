@@ -11,6 +11,10 @@ All commands use the base command: /svg
 
 ---
 
+## /svg
+- Java Players: Displays help
+- Bedrock Players: If Geyser or Floodgate are enabled, opens Commands Menu.
+
 ## /svg pswd
 
 Sets your personal voice chat password.
@@ -93,7 +97,6 @@ Joins an existing voice group.
 ---
 
 ## /svg lgroup
-### Will be implemented in 0.0.3-DEV
 
 Leaves the current voice group.
 
@@ -111,7 +114,6 @@ Leaves the current voice group.
 ---
 
 ## /svg help
-### Will be implemented in 0.0.3-DEV
 
 Displays the command help menu.
 
