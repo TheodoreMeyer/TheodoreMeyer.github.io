@@ -28,6 +28,10 @@ permalink: /server/votes/admin
     <div id="votes">Loading...</div>
 </div>
 
+<h3>User Manager</h3>
+
+<div id="users">Loading users...</div>
+
 <div style="margin-top: 30px;">
     <button onclick="logoutAdmin()" style="padding: 8px 16px; border-radius: 5px; background: #007bff; color: #fff; border: none; cursor: pointer;">
         Log Out
@@ -189,6 +193,79 @@ permalink: /server/votes/admin
         else loadVotes();
     }
 
+    //---- USER MANAGER
+    function loadUsers(){
+
+        const script = document.createElement("script");
+
+        script.src =
+            `${API}?action=listUsers&client=${CLIENT_TOKEN}&callback=renderUsers`;
+
+        document.body.appendChild(script);
+
+    }
+
+    function renderUsers(users){
+
+        const div = document.getElementById("users");
+
+        let html = "";
+
+        users.forEach(u=>{
+
+            if(u.category === "Admin"){
+
+                html += `
+<div>
+${u.email} — Admin
+</div>
+`;
+
+            }else{
+
+                html += `
+<div>
+${u.email}
+
+<select onchange="changeRole('${u.token}', this.value)">
+
+<option ${u.category==="Player"?"selected":""}>Player</option>
+<option ${u.category==="VIP"?"selected":""}>VIP</option>
+
+</select>
+
+</div>
+`;
+
+            }
+
+        });
+
+        div.innerHTML = html;
+
+    }
+
+    function changeRole(token, role){
+
+        const script = document.createElement("script");
+
+        script.src =
+            `${API}?action=updateUserRole&admin=${adminToken}&token=${token}&role=${role}&client=${CLIENT_TOKEN}&callback=roleUpdated`;
+
+        document.body.appendChild(script);
+
+    }
+
+    function roleUpdated(res){
+
+        if(res.error){
+            alert(res.error);
+        }
+
+        loadUsers();
+
+    }
+
     // ----- LOGOUT ----
     function logoutAdmin(){
         localStorage.removeItem("admin_token");
@@ -197,4 +274,5 @@ permalink: /server/votes/admin
 
     // Initial load
     loadVotes();
+    loadUsers();
 </script>
