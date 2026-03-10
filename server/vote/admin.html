@@ -1,50 +1,168 @@
 ---
 layout: default
 title: Admin Votes
-permalink: /server/votes/admin.html
+permalink: /server/votes/admin
 ---
 
 <h2>Admin Panel</h2>
-<div>
+
+<!-- Create Vote Section -->
+<div style="margin-bottom: 25px; padding: 15px; border: 1px solid #eee; border-radius: 8px; background: #fafafa;">
     <h3>Create Vote</h3>
-    Question: <input id="newQuestion"><br>
-    Options (comma separated): <input id="newOptions"><br>
-    <button onclick="createVote()">Create Vote</button>
+    <div style="margin-bottom: 10px;">
+        <label>Question:</label><br>
+        <input id="newQuestion" style="width: 100%; padding: 8px; border-radius: 5px; border: 1px solid #ccc;">
+    </div>
+    <div style="margin-bottom: 10px;">
+        <label>Options (comma separated):</label><br>
+        <input id="newOptions" style="width: 100%; padding: 8px; border-radius: 5px; border: 1px solid #ccc;">
+    </div>
+    <button onclick="createVote()" style="padding: 8px 16px; border-radius: 5px; background: #007bff; color: #fff; border: none; cursor: pointer;">
+        Create Vote
+    </button>
 </div>
 
-<div style="margin-top:20px;">
+<!-- Existing Votes Section -->
+<div>
     <h3>Existing Votes</h3>
     <div id="votes">Loading...</div>
 </div>
+
+<div style="margin-top: 30px;">
+    <button onclick="logoutAdmin()" style="padding: 8px 16px; border-radius: 5px; background: #007bff; color: #fff; border: none; cursor: pointer;">
+        Log Out
+    </button>
+</div>
+
+<style>
+    /* Admin vote cards */
+    .vote-card {
+        background: #f9f9f9;
+        border-radius: 8px;
+        padding: 12px 18px;
+        margin-bottom: 10px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        transition: box-shadow 0.2s, transform 0.2s;
+        cursor: pointer;
+    }
+
+    .vote-card:hover {
+        box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+        transform: translateY(-2px);
+    }
+
+    .vote-card b {
+        font-size: 1.1rem;
+        color: #222;
+    }
+
+    .vote-card .status {
+        font-size: 0.9rem;
+        padding: 4px 10px;
+        border-radius: 5px;
+        background-color: #eee;
+    }
+
+    .vote-card .status.OPEN { background-color: #28a745; color: #fff; }
+    .vote-card .status.CLOSED { background-color: #dc3545; color: #fff; }
+
+    .vote-card button {
+        margin-left: 10px;
+        padding: 6px 12px;
+        border-radius: 5px;
+        border: none;
+        background-color: #007bff;
+        color: #fff;
+        cursor: pointer;
+    }
+
+    .vote-card button:hover {
+        background-color: #0056b3;
+    }
+</style>
 
 <script>
     const API = "https://script.google.com/macros/s/AKfycbwplqPfAiIXNnOneKC7oXhKk-h6N-rlU479altLiECu/exec";
     const CLIENT_TOKEN = "f3ae101d-d2ea-4cf2-b8b6-e7330854cf7a";
 
-    let adminToken = prompt("Enter your admin token:");
+    // ---------- ADMIN TOKEN ----------
+    let adminToken =
+        new URLSearchParams(window.location.search).get("admin") ||
+        localStorage.getItem("admin_token");
 
+    if (!adminToken) {
+        adminToken = prompt("Enter your admin token:");
+        if (adminToken) {
+            localStorage.setItem("admin_token", adminToken);
+        } else {
+            // If no token → redirect to 404
+            window.location.href = "/404.html";
+        }
+    }
+
+    // ----------------- LOAD VOTES -----------------
     function loadVotes() {
         const script = document.createElement("script");
         script.src = `${API}?action=adminVotes&client=${CLIENT_TOKEN}&callback=renderVotes`;
         document.body.appendChild(script);
     }
 
+    // ----------------- RENDER VOTES -----------------
     function renderVotes(votes) {
         const div = document.getElementById("votes");
         div.innerHTML = "";
+
+        if (!votes || votes.length === 0) {
+            div.innerHTML = "<i>No votes created yet.</i>";
+            return;
+        }
+
         votes.forEach(v => {
-            div.innerHTML += `
-      <div>
-        <b>${v.question}</b> [${v.status}]
-        <button onclick="closeVote('${v.id}')">Close</button>
-      </div>
-    `;
+            const card = document.createElement("div");
+            card.className = "vote-card";
+
+            // Vote info
+            const info = document.createElement("div");
+            const question = document.createElement("b");
+            question.textContent = v.question;
+            const status = document.createElement("span");
+            status.className = "status " + v.status;
+            status.textContent = v.status;
+            info.appendChild(question);
+            info.appendChild(document.createTextNode(" "));
+            info.appendChild(status);
+
+            // Close button
+            const btn = document.createElement("button");
+            btn.textContent = "Close";
+            btn.onclick = (e) => {
+                e.stopPropagation();
+                closeVote(v.id);
+            };
+
+            // Make entire card clickable for viewing vote
+            card.onclick = () => {
+                window.location = `/server/votes/vote.html?vote=${v.id}&user=${adminToken}`;
+            };
+
+            card.appendChild(info);
+            card.appendChild(btn);
+            div.appendChild(card);
         });
     }
 
+    // ----------------- CREATE VOTE -----------------
     function createVote() {
         const q = document.getElementById("newQuestion").value;
         const ops = document.getElementById("newOptions").value.split(",").map(o => o.trim());
+
+        if (!q || ops.length === 0) {
+            alert("Please enter a question and at least one option.");
+            return;
+        }
+
         const script = document.createElement("script");
         script.src = `${API}?action=createVote&user=${adminToken}&question=${encodeURIComponent(q)}&options=${encodeURIComponent(ops.join("|"))}&client=${CLIENT_TOKEN}&callback=voteCreated`;
         document.body.appendChild(script);
@@ -52,9 +170,14 @@ permalink: /server/votes/admin.html
 
     function voteCreated(res) {
         if (res.error) alert("Error: " + res.error);
-        else loadVotes();
+        else {
+            document.getElementById("newQuestion").value = "";
+            document.getElementById("newOptions").value = "";
+            loadVotes();
+        }
     }
 
+    // ----------------- CLOSE VOTE -----------------
     function closeVote(voteID) {
         const script = document.createElement("script");
         script.src = `${API}?action=closeVote&vote=${voteID}&user=${adminToken}&client=${CLIENT_TOKEN}&callback=voteClosed`;
@@ -66,5 +189,12 @@ permalink: /server/votes/admin.html
         else loadVotes();
     }
 
+    // ----- LOGOUT ----
+    function logoutAdmin(){
+        localStorage.removeItem("admin_token");
+        location.reload();
+    }
+
+    // Initial load
     loadVotes();
 </script>

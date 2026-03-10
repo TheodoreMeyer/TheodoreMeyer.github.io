@@ -1,12 +1,71 @@
 ---
 layout: default
 title: Vote
-permalink: /server/votes/vote.html
+permalink: /server/votes/vote
 ---
 
 <h2 id="question">Loading...</h2>
-<div id="options"></div>
-<div id="results" style="margin-top:20px;"></div>
+<div id="options" style="margin-top: 15px;"></div>
+<div id="results" style="margin-top: 25px;"></div>
+
+<style>
+    /* Vote page styling */
+    #question {
+        font-size: 1.4rem;
+        margin-bottom: 15px;
+        color: #333;
+    }
+
+    #options {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .vote-option {
+        background: #f1f1f1;
+        border-radius: 8px;
+        padding: 12px 18px;
+        cursor: pointer;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        transition: box-shadow 0.2s, transform 0.2s;
+    }
+
+    .vote-option:hover {
+        box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+        transform: translateY(-2px);
+    }
+
+    .vote-option b {
+        font-size: 1.1rem;
+        color: #222;
+    }
+
+    .vote-option span {
+        background: #007bff;
+        color: #fff;
+        padding: 6px 12px;
+        border-radius: 5px;
+        font-size: 0.9rem;
+        pointer-events: none; /* prevent blocking card click */
+    }
+
+    #results {
+        font-size: 1rem;
+        color: #444;
+        background: #fafafa;
+        border: 1px solid #eee;
+        padding: 12px 15px;
+        border-radius: 8px;
+    }
+
+    #results i {
+        color: #777;
+        font-style: italic;
+    }
+</style>
 
 <script>
     const API = "https://script.google.com/macros/s/AKfycbwplqPfAiIXNnOneKC7oXhKk-h6N-rlU479altLiECu/exec";
@@ -18,7 +77,12 @@ permalink: /server/votes/vote.html
 
     if (!userToken) {
         userToken = prompt("Enter your voting token:");
-        if (userToken) localStorage.setItem("vote_user_token", userToken);
+        if (userToken) {
+            localStorage.setItem("vote_user_token", userToken);
+        } else {
+            // If no token → redirect to 404
+            window.location.href = "/404.html";
+        }
     }
 
     // ----------------- LOAD VOTE -----------------
@@ -27,7 +91,6 @@ permalink: /server/votes/vote.html
             document.getElementById("question").innerText = "Invalid vote link.";
             return;
         }
-
         const script = document.createElement("script");
         script.src = `${API}?action=getVote&vote=${voteID}&client=${CLIENT_TOKEN}&callback=renderVote`;
         document.body.appendChild(script);
@@ -47,11 +110,19 @@ permalink: /server/votes/vote.html
         optionsDiv.innerHTML = "";
 
         vote.options.forEach(opt => {
-            const btn = document.createElement("button");
-            btn.style.margin = "5px";
-            btn.innerText = `${opt.name} (${opt.votes} pts)`;
-            btn.onclick = () => submitVote(opt.name);
-            optionsDiv.appendChild(btn);
+            const card = document.createElement("div");
+            card.className = "vote-option";
+            card.onclick = () => submitVote(opt.name);
+
+            const name = document.createElement("b");
+            name.textContent = opt.name;
+
+            const points = document.createElement("span");
+            points.textContent = `${opt.votes} pts`;
+
+            card.appendChild(name);
+            card.appendChild(points);
+            optionsDiv.appendChild(card);
         });
 
         renderResults(vote.options);
@@ -67,10 +138,8 @@ permalink: /server/votes/vote.html
 
     // ----------------- VOTE SUBMITTED CALLBACK -----------------
     function voteSubmitted(res) {
-        if (res.error) {
-            alert("Error: " + res.error);
-        }
-        loadVote(); // Refresh vote details after submitting
+        if (res.error) alert("Error: " + res.error);
+        loadVote(); // Refresh vote details
     }
 
     // ----------------- DISPLAY RESULTS -----------------
