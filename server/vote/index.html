@@ -5,108 +5,51 @@ permalink: /server/votes/
 ---
 
 <h2>Active Votes</h2>
-
 <div id="votes">Loading votes...</div>
 
 <script>
-
-    const API =
-        "https://script.google.com/macros/s/AKfycbwplqPfAiIXNnOneKC7oXhKk-h6N-rlU479altLiECu/exec";
-
+    const API = "https://script.google.com/macros/s/AKfycbwplqPfAiIXNnOneKC7oXhKk-h6N-rlU479altLiECu/exec";
     const CLIENT_TOKEN = "f3ae101d-d2ea-4cf2-b8b6-e7330854cf7a";
 
-
-
-    // ---------- TOKEN HANDLING ----------
-
-    let userToken =
-        new URLSearchParams(window.location.search).get("user") ||
+    // Handle user token
+    let userToken = new URLSearchParams(window.location.search).get("user") ||
         localStorage.getItem("vote_user_token");
 
-    if(!userToken){
-
+    if (!userToken) {
         userToken = prompt("Enter your voting token:");
-
-        if(userToken){
-
-            localStorage.setItem("vote_user_token", userToken);
-
-        }
-
+        if (userToken) localStorage.setItem("vote_user_token", userToken);
     }
 
-
-
-    // ---------- LOAD VOTES ----------
-
-    async function loadVotes(){
-
-        const url =
-            API +
-            "?action=listVotes"+
-            "&client="+CLIENT_TOKEN;
-
-        const res = await fetch(url,{
-            method:"GET",
-            redirect:"follow",
-            mode:"cors"
-        });
-
-        const votes = await res.json();
-
-        renderVotes(votes);
-
+    // JSONP loader
+    function loadVotes() {
+        const script = document.createElement("script");
+        script.src = `${API}?action=listVotes&client=${CLIENT_TOKEN}&callback=renderVotes`;
+        document.body.appendChild(script);
     }
 
-
-
-    // ---------- RENDER ----------
-
-    function renderVotes(votes){
-
+    // Render votes
+    function renderVotes(votes) {
         const div = document.getElementById("votes");
-
-        if(votes.length === 0){
-
-            div.innerHTML = "No active votes.";
-
+        if (!votes || votes.length === 0) {
+            div.innerHTML = "<i>No active votes.</i>";
             return;
-
         }
-
         let html = "";
-
         votes.forEach(v => {
-
             html += `
-<div style="margin-bottom:20px">
-<b>${v.question}</b><br>
-<button onclick="openVote('${v.id}')">
-Vote
-</button>
-</div>
-`;
-
+      <div>
+        <b>${v.question}</b>
+        <button onclick="openVote('${v.id}')">Vote</button>
+      </div>
+    `;
         });
-
         div.innerHTML = html;
-
     }
 
-
-
-    // ---------- NAVIGATE ----------
-
-    function openVote(voteID){
-
-        window.location =
-            "/server/votes/vote.html?vote="+voteID+
-            "&user="+userToken;
-
+    // Navigate to vote page
+    function openVote(voteID) {
+        window.location = `/server/votes/vote.html?vote=${voteID}&user=${userToken}`;
     }
-
-
 
     loadVotes();
-
 </script>
