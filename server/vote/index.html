@@ -46,7 +46,11 @@ permalink: /server/votes/
             "?action=listVotes"+
             "&client="+CLIENT_TOKEN;
 
-        const res = await fetch(url);
+        const res = await fetch(url,{
+            method:"GET",
+            redirect:"follow",
+            mode:"cors"
+        });
 
         const votes = await res.json();
 
