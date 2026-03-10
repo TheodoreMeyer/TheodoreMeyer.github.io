@@ -1,0 +1,108 @@
+---
+layout: default
+title: Votes
+permalink: /server/votes/
+---
+
+<h2>Active Votes</h2>
+
+<div id="votes">Loading votes...</div>
+
+<script>
+
+    const API =
+        "https://script.google.com/macros/s/AKfycbzWgBbacVQN4CdO-_UsO_P5IsLsA0nGPUQG8N0-r9VmeUAKYewKISWbUOOMPL2JJSiScA/exec";
+
+    const CLIENT_TOKEN = "f3ae101d-d2ea-4cf2-b8b6-e7330854cf7a";
+
+
+
+    // ---------- TOKEN HANDLING ----------
+
+    let userToken =
+        new URLSearchParams(window.location.search).get("user") ||
+        localStorage.getItem("vote_user_token");
+
+    if(!userToken){
+
+        userToken = prompt("Enter your voting token:");
+
+        if(userToken){
+
+            localStorage.setItem("vote_user_token", userToken);
+
+        }
+
+    }
+
+
+
+    // ---------- LOAD VOTES ----------
+
+    async function loadVotes(){
+
+        const url =
+            API +
+            "?action=listVotes"+
+            "&client="+CLIENT_TOKEN;
+
+        const res = await fetch(url);
+
+        const votes = await res.json();
+
+        renderVotes(votes);
+
+    }
+
+
+
+    // ---------- RENDER ----------
+
+    function renderVotes(votes){
+
+        const div = document.getElementById("votes");
+
+        if(votes.length === 0){
+
+            div.innerHTML = "No active votes.";
+
+            return;
+
+        }
+
+        let html = "";
+
+        votes.forEach(v => {
+
+            html += `
+<div style="margin-bottom:20px">
+<b>${v.question}</b><br>
+<button onclick="openVote('${v.id}')">
+Vote
+</button>
+</div>
+`;
+
+        });
+
+        div.innerHTML = html;
+
+    }
+
+
+
+    // ---------- NAVIGATE ----------
+
+    function openVote(voteID){
+
+        window.location =
+            "/server/votes/vote.html?vote="+voteID+
+            "&user="+userToken;
+
+    }
+
+
+
+    loadVotes();
+
+</script>

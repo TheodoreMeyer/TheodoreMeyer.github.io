@@ -1,0 +1,135 @@
+---
+layout: default
+title: Vote
+permalink: /server/votes/vote.html
+---
+
+<h2 id="question">Loading vote...</h2>
+
+<div id="options"></div>
+
+<div id="results"></div>
+
+<script>
+
+    const API =
+        "https://script.google.com/macros/s/AKfycbzWgBbacVQN4CdO-_UsO_P5IsLsA0nGPUQG8N0-r9VmeUAKYewKISWbUOOMPL2JJSiScA/exec";
+
+    const CLIENT_TOKEN = "f3ae101d-d2ea-4cf2-b8b6-e7330854cf7a";
+
+    const params = new URLSearchParams(window.location.search);
+
+    const voteID = params.get("vote");
+
+    let userToken =
+        params.get("user") ||
+        localStorage.getItem("vote_user_token");
+
+    if(!userToken){
+
+        userToken = prompt("Enter your voting token:");
+
+        localStorage.setItem("vote_user_token", userToken);
+
+    }
+
+
+
+    // ---------- LOAD VOTE ----------
+
+    async function loadVote(){
+
+        const url =
+            API +
+            "?action=getVote"+
+            "&vote="+voteID+
+            "&user="+userToken+
+            "&client="+CLIENT_TOKEN;
+
+        const res = await fetch(url);
+
+        const vote = await res.json();
+
+        renderVote(vote);
+
+    }
+
+
+
+    // ---------- RENDER ----------
+
+    function renderVote(vote){
+
+        document.getElementById("question").innerText =
+            vote.question;
+
+        const div = document.getElementById("options");
+
+        div.innerHTML = "";
+
+        vote.options.forEach(opt => {
+
+            let btn = document.createElement("button");
+
+            btn.innerText =
+                opt.name + " ("+opt.votes.toFixed(2)+")";
+
+            btn.onclick = () => voteOption(opt.name);
+
+            div.appendChild(btn);
+
+        });
+
+        renderResults(vote);
+
+    }
+
+
+
+    // ---------- SUBMIT ----------
+
+    async function voteOption(option){
+
+        const url =
+            API +
+            "?action=vote"+
+            "&vote="+voteID+
+            "&user="+userToken+
+            "&option="+encodeURIComponent(option)+
+            "&client="+CLIENT_TOKEN;
+
+        await fetch(url);
+
+        loadVote();
+
+    }
+
+
+
+    // ---------- RESULTS ----------
+
+    function renderResults(vote){
+
+        let html = "<h3>Results</h3>";
+
+        vote.options.forEach(opt => {
+
+            html +=
+                opt.name +
+                " — " +
+                opt.votes.toFixed(2) +
+                " pts<br>";
+
+        });
+
+        document.getElementById("results").innerHTML = html;
+
+    }
+
+
+
+    loadVote();
+
+    setInterval(loadVote,5000);
+
+</script>

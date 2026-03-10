@@ -1,0 +1,117 @@
+---
+layout: default
+title: Admin Voting
+permalink: /server/votes/admin.html
+---
+
+<h2>Vote Admin Panel</h2>
+
+<button onclick="createVote()">Create Vote</button>
+
+<h3>Existing Votes</h3>
+
+<div id="votes"></div>
+
+<script>
+
+    const API =
+        "https://script.google.com/macros/s/AKfycbzWgBbacVQN4CdO-_UsO_P5IsLsA0nGPUQG8N0-r9VmeUAKYewKISWbUOOMPL2JJSiScA/exec";
+
+    const CLIENT_TOKEN="f3ae101d-d2ea-4cf2-b8b6-e7330854cf7a";
+
+    let adminToken =
+        prompt("Enter admin token:");
+
+
+
+    async function loadVotes(){
+
+        const url =
+            API +
+            "?action=adminVotes"+
+            "&client="+CLIENT_TOKEN;
+
+        const res = await fetch(url);
+
+        const votes = await res.json();
+
+        renderVotes(votes);
+
+    }
+
+
+
+    function renderVotes(votes){
+
+        let html="";
+
+        votes.forEach(v=>{
+
+            html+=`
+<div style="margin-bottom:15px">
+
+<b>${v.question}</b>
+(${v.status})
+
+<button onclick="closeVote('${v.id}')">
+Close
+</button>
+
+</div>
+`;
+
+        });
+
+        document.getElementById("votes").innerHTML=html;
+
+    }
+
+
+
+    async function createVote(){
+
+        const question = prompt("Vote question:");
+
+        const options =
+            prompt("Options separated by |");
+
+        const url =
+            API +
+            "?action=createVote"+
+            "&user="+adminToken+
+            "&question="+encodeURIComponent(question)+
+            "&options="+encodeURIComponent(options)+
+            "&client="+CLIENT_TOKEN;
+
+        await fetch(url);
+
+        loadVotes();
+
+    }
+
+
+
+    async function closeVote(id){
+
+        const url =
+            API +
+            "?action=closeVote"+
+            "&vote="+id+
+            "&user="+adminToken+
+            "&client="+CLIENT_TOKEN;
+
+        const res = await fetch(url);
+
+        const data = await res.json();
+
+        alert("Winner: "+data.winner);
+
+        loadVotes();
+
+    }
+
+
+
+    loadVotes();
+
+</script>
