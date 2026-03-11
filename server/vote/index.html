@@ -5,25 +5,58 @@ permalink: /server/votes/
 ---
 
 <h2>Active Votes</h2>
-<div id="votes">Authenticating...</div>
+<div id="votes" style="display:flex; flex-direction:column; gap:15px;">Authenticating...</div>
+
+<style>
+    /* Vote Cards */
+    .vote-card {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 15px 20px;
+        border-radius: 10px;
+        background-color: #f9f9f9;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+        cursor: pointer;
+        transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .vote-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+    }
+
+    .vote-card b {
+        font-size: 1.1rem;
+        color: #222;
+    }
+
+    .vote-card button {
+        padding: 8px 14px;
+        border-radius: 5px;
+        border: none;
+        background-color: #007bff;
+        color: #fff;
+        font-weight: bold;
+        cursor: pointer;
+        transition: background-color 0.2s;
+    }
+
+    .vote-card button:hover {
+        background-color: #0056b3;
+    }
+</style>
 
 <script src="/server/js/auth.js"></script>
 
 <script>
-
     function loadVotes(){
-
         const script = document.createElement("script");
-
-        script.src =
-            `${API}?action=listVotes&client=${CLIENT_TOKEN}&callback=renderVotes`;
-
+        script.src = `${API}?action=listVotes&client=${CLIENT_TOKEN}&callback=renderVotes`;
         document.body.appendChild(script);
-
     }
 
     function renderVotes(votes){
-
         const div = document.getElementById("votes");
 
         if(!votes || votes.length === 0){
@@ -33,24 +66,25 @@ permalink: /server/votes/
 
         div.innerHTML = "";
 
-        votes.forEach(v=>{
-
+        votes.forEach(v => {
             const card = document.createElement("div");
-
             card.className = "vote-card";
 
-            card.onclick = () => {
-                window.location =
-                    `/server/votes/vote?vote=${v.id}&user=${localStorage.getItem("user_token")}`;
+            const question = document.createElement("b");
+            question.textContent = v.question;
+
+            const btn = document.createElement("button");
+            btn.textContent = "Vote";
+            btn.onclick = e => {
+                e.stopPropagation();
+                window.location = `/server/votes/vote/?vote=${v.id}&user=${localStorage.getItem("user_token")}`;
             };
 
-            card.innerHTML =
-                `<b>${v.question}</b><button>Vote</button>`;
+            card.appendChild(question);
+            card.appendChild(btn);
 
             div.appendChild(card);
-
         });
-
     }
 
     // AUTH FIRST
@@ -58,5 +92,4 @@ permalink: /server/votes/
         document.getElementById("votes").innerText = "Loading votes...";
         loadVotes();
     });
-
 </script>

@@ -1,79 +1,83 @@
 ---
 layout: default
 title: Vote
-permalink: /server/votes/vote
+permalink: /server/votes/vote/
 ---
 
-<h2 id="question">Authenticating...</h2>
-<div id="options"></div>
-<div id="results"></div>
+<h2 id="question" style="margin-bottom:20px;">Authenticating...</h2>
+
+<div id="options" style="display:flex; flex-direction:column; gap:12px;"></div>
+<div id="results" style="margin-top:20px;"></div>
+
+<style>
+    /* Option cards */
+    .vote-option {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 12px 18px;
+        border-radius: 10px;
+        background-color: #f1f1f1;
+        box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+        cursor: pointer;
+        transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .vote-option:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+    }
+
+    .vote-option b {
+        font-size: 1rem;
+        color: #222;
+    }
+
+    .vote-option span {
+        font-weight: bold;
+        color: #007bff;
+    }
+</style>
 
 <script src="/server/js/auth.js"></script>
 
 <script>
-
     const params = new URLSearchParams(window.location.search);
     const voteID = params.get("vote");
 
     function loadVote(){
-
         const script = document.createElement("script");
-
-        script.src =
-            `${API}?action=getVote&vote=${voteID}&client=${CLIENT_TOKEN}&callback=renderVote`;
-
+        script.src = `${API}?action=getVote&vote=${voteID}&client=${CLIENT_TOKEN}&callback=renderVote`;
         document.body.appendChild(script);
-
     }
 
     function renderVote(vote){
-
         document.getElementById("question").innerText = vote.question;
-
         const optionsDiv = document.getElementById("options");
-
         optionsDiv.innerHTML = "";
 
-        vote.options.forEach(opt=>{
-
+        vote.options.forEach(opt => {
             const card = document.createElement("div");
-
             card.className = "vote-option";
-
-            card.onclick = ()=> submitVote(opt.name);
-
-            card.innerHTML =
-                `<b>${opt.name}</b><span>${opt.votes} pts</span>`;
-
+            card.onclick = () => submitVote(opt.name);
+            card.innerHTML = `<b>${opt.name}</b><span>${opt.votes.toFixed(2)} pts</span>`;
             optionsDiv.appendChild(card);
-
         });
-
     }
 
     function submitVote(option){
-
         const token = localStorage.getItem("user_token");
-
         const script = document.createElement("script");
-
-        script.src =
-            `${API}?action=vote&vote=${voteID}&user=${token}&option=${encodeURIComponent(option)}&client=${CLIENT_TOKEN}&callback=voteSubmitted`;
-
+        script.src = `${API}?action=vote&vote=${voteID}&user=${token}&option=${encodeURIComponent(option)}&client=${CLIENT_TOKEN}&callback=voteSubmitted`;
         document.body.appendChild(script);
-
     }
 
     function voteSubmitted(res){
-
         if(res.error) alert(res.error);
-
         loadVote();
-
     }
 
     requireAuth(function(){
         loadVote();
     });
-
 </script>
