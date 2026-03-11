@@ -4,156 +4,76 @@ title: Vote
 permalink: /server/votes/vote
 ---
 
-<h2 id="question">Loading...</h2>
-<div id="options" style="margin-top: 15px;"></div>
-<div id="results" style="margin-top: 25px;"></div>
+<h2 id="question">Authenticating...</h2>
+<div id="options"></div>
+<div id="results"></div>
 
-<style>
-    /* Vote page styling */
-    #question {
-        font-size: 1.4rem;
-        margin-bottom: 15px;
-        color: #333;
-    }
-
-    #options {
-        display: flex;
-        flex-direction: column;
-        gap: 12px;
-    }
-
-    .vote-option {
-        background: #f1f1f1;
-        border-radius: 8px;
-        padding: 12px 18px;
-        cursor: pointer;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        transition: box-shadow 0.2s, transform 0.2s;
-    }
-
-    .vote-option:hover {
-        box-shadow: 0 4px 12px rgba(0,0,0,0.12);
-        transform: translateY(-2px);
-    }
-
-    .vote-option b {
-        font-size: 1.1rem;
-        color: #222;
-    }
-
-    .vote-option span {
-        background: #007bff;
-        color: #fff;
-        padding: 6px 12px;
-        border-radius: 5px;
-        font-size: 0.9rem;
-        pointer-events: none; /* prevent blocking card click */
-    }
-
-    #results {
-        font-size: 1rem;
-        color: #444;
-        background: #fafafa;
-        border: 1px solid #eee;
-        padding: 12px 15px;
-        border-radius: 8px;
-    }
-
-    #results i {
-        color: #777;
-        font-style: italic;
-    }
-</style>
+<script src="/server/js/auth.js"></script>
 
 <script>
-    const API = "https://script.google.com/macros/s/AKfycbwplqPfAiIXNnOneKC7oXhKk-h6N-rlU479altLiECu/exec";
-    const CLIENT_TOKEN = "f3ae101d-d2ea-4cf2-b8b6-e7330854cf7a";
 
     const params = new URLSearchParams(window.location.search);
     const voteID = params.get("vote");
-    let userToken = params.get("user") || localStorage.getItem("vote_user_token");
 
-    if (!userToken) {
-        userToken = prompt("Enter your voting token:");
-        if (userToken) {
-            localStorage.setItem("vote_user_token", userToken);
-        } else {
-            // If no token → redirect to 404
-            window.location.href = "/404.html";
-        }
-    }
+    function loadVote(){
 
-    // ----------------- LOAD VOTE -----------------
-    function loadVote() {
-        if (!voteID) {
-            document.getElementById("question").innerText = "Invalid vote link.";
-            return;
-        }
         const script = document.createElement("script");
-        script.src = `${API}?action=getVote&vote=${voteID}&client=${CLIENT_TOKEN}&callback=renderVote`;
+
+        script.src =
+            `${API}?action=getVote&vote=${voteID}&client=${CLIENT_TOKEN}&callback=renderVote`;
+
         document.body.appendChild(script);
+
     }
 
-    // ----------------- RENDER VOTE -----------------
-    function renderVote(vote) {
-        if (!vote || !vote.options) {
-            document.getElementById("question").innerText = "Vote not found or no options available.";
-            document.getElementById("options").innerHTML = "";
-            document.getElementById("results").innerHTML = "";
-            return;
-        }
+    function renderVote(vote){
 
         document.getElementById("question").innerText = vote.question;
+
         const optionsDiv = document.getElementById("options");
+
         optionsDiv.innerHTML = "";
 
-        vote.options.forEach(opt => {
+        vote.options.forEach(opt=>{
+
             const card = document.createElement("div");
+
             card.className = "vote-option";
-            card.onclick = () => submitVote(opt.name);
 
-            const name = document.createElement("b");
-            name.textContent = opt.name;
+            card.onclick = ()=> submitVote(opt.name);
 
-            const points = document.createElement("span");
-            points.textContent = `${opt.votes} pts`;
+            card.innerHTML =
+                `<b>${opt.name}</b><span>${opt.votes} pts</span>`;
 
-            card.appendChild(name);
-            card.appendChild(points);
             optionsDiv.appendChild(card);
+
         });
 
-        renderResults(vote.options);
     }
 
-    // ----------------- SUBMIT VOTE -----------------
-    function submitVote(option) {
-        if (!option) return;
+    function submitVote(option){
+
+        const token = localStorage.getItem("user_token");
+
         const script = document.createElement("script");
-        script.src = `${API}?action=vote&vote=${voteID}&user=${userToken}&option=${encodeURIComponent(option)}&client=${CLIENT_TOKEN}&callback=voteSubmitted`;
+
+        script.src =
+            `${API}?action=vote&vote=${voteID}&user=${token}&option=${encodeURIComponent(option)}&client=${CLIENT_TOKEN}&callback=voteSubmitted`;
+
         document.body.appendChild(script);
+
     }
 
-    // ----------------- VOTE SUBMITTED CALLBACK -----------------
-    function voteSubmitted(res) {
-        if (res.error) alert("Error: " + res.error);
-        loadVote(); // Refresh vote details
+    function voteSubmitted(res){
+
+        if(res.error) alert(res.error);
+
+        loadVote();
+
     }
 
-    // ----------------- DISPLAY RESULTS -----------------
-    function renderResults(options) {
-        const div = document.getElementById("results");
-        if (!options || options.length === 0) {
-            div.innerHTML = "<i>No votes yet.</i>";
-            return;
-        }
-        let html = "<b>Live Results:</b><br>";
-        options.forEach(opt => html += `${opt.name} — ${opt.votes} pts<br>`);
-        div.innerHTML = html;
-    }
+    requireAuth(function(){
+        loadVote();
+    });
 
-    // Initial load
-    loadVote();
 </script>

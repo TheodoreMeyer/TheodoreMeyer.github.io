@@ -25,15 +25,14 @@ permalink: /server/votes/admin
 <!-- Existing Votes Section -->
 <div>
     <h3>Existing Votes</h3>
-    <div id="votes">Loading...</div>
+    <div id="votes">Authenticating...</div>
 </div>
 
 <h3>User Manager</h3>
-
 <div id="users">Loading users...</div>
 
 <div style="margin-top: 30px;">
-    <button onclick="logoutAdmin()" style="padding: 8px 16px; border-radius: 5px; background: #007bff; color: #fff; border: none; cursor: pointer;">
+    <button onclick="logout()" style="padding: 8px 16px; border-radius: 5px; background: #007bff; color: #fff; border: none; cursor: pointer;">
         Log Out
     </button>
 </div>
@@ -87,37 +86,32 @@ permalink: /server/votes/admin
     }
 </style>
 
+<script src="/server/js/auth.js"></script>
+
 <script>
     const API = "https://script.google.com/macros/s/AKfycbwplqPfAiIXNnOneKC7oXhKk-h6N-rlU479altLiECu/exec";
     const CLIENT_TOKEN = "f3ae101d-d2ea-4cf2-b8b6-e7330854cf7a";
+    let CURRENT_USER = null;
 
-    // ---------- ADMIN TOKEN ----------
-    let adminToken =
-        new URLSearchParams(window.location.search).get("admin") ||
-        localStorage.getItem("admin_token");
+    // ----------------- AUTH CHECK -----------------
+    requireAdmin(user => {
+        CURRENT_USER = user;
+        document.getElementById("votes").innerText = "Loading votes...";
+        loadVotes();
+        loadUsers();
+    });
 
-    if (!adminToken) {
-        adminToken = prompt("Enter your admin token:");
-        if (adminToken) {
-            localStorage.setItem("admin_token", adminToken);
-        } else {
-            // If no token → redirect to 404
-            window.location.href = "/404.html";
-        }
-    }
-
-    // ----------------- LOAD VOTES -----------------
+    // ----------------- VOTES -----------------
     function loadVotes() {
+        const token = CURRENT_USER.token;
         const script = document.createElement("script");
         script.src = `${API}?action=adminVotes&client=${CLIENT_TOKEN}&callback=renderVotes`;
         document.body.appendChild(script);
     }
 
-    // ----------------- RENDER VOTES -----------------
     function renderVotes(votes) {
         const div = document.getElementById("votes");
         div.innerHTML = "";
-
         if (!votes || votes.length === 0) {
             div.innerHTML = "<i>No votes created yet.</i>";
             return;
@@ -127,7 +121,6 @@ permalink: /server/votes/admin
             const card = document.createElement("div");
             card.className = "vote-card";
 
-            // Vote info
             const info = document.createElement("div");
             const question = document.createElement("b");
             question.textContent = v.question;
@@ -138,17 +131,15 @@ permalink: /server/votes/admin
             info.appendChild(document.createTextNode(" "));
             info.appendChild(status);
 
-            // Close button
             const btn = document.createElement("button");
             btn.textContent = "Close";
-            btn.onclick = (e) => {
+            btn.onclick = e => {
                 e.stopPropagation();
                 closeVote(v.id);
             };
 
-            // Make entire card clickable for viewing vote
             card.onclick = () => {
-                window.location = `/server/votes/vote.html?vote=${v.id}&user=${adminToken}`;
+                window.location = `/server/votes/vote?vote=${v.id}&user=${CURRENT_USER.token}`;
             };
 
             card.appendChild(info);
@@ -161,19 +152,18 @@ permalink: /server/votes/admin
     function createVote() {
         const q = document.getElementById("newQuestion").value;
         const ops = document.getElementById("newOptions").value.split(",").map(o => o.trim());
-
         if (!q || ops.length === 0) {
-            alert("Please enter a question and at least one option.");
+            alert("Please enter a question and options.");
             return;
         }
-
+        const token = CURRENT_USER.token;
         const script = document.createElement("script");
-        script.src = `${API}?action=createVote&user=${adminToken}&question=${encodeURIComponent(q)}&options=${encodeURIComponent(ops.join("|"))}&client=${CLIENT_TOKEN}&callback=voteCreated`;
+        script.src = `${API}?action=createVote&user=${token}&question=${encodeURIComponent(q)}&options=${encodeURIComponent(ops.join("|"))}&client=${CLIENT_TOKEN}&callback=voteCreated`;
         document.body.appendChild(script);
     }
 
     function voteCreated(res) {
-        if (res.error) alert("Error: " + res.error);
+        if (res.error) alert(res.error);
         else {
             document.getElementById("newQuestion").value = "";
             document.getElementById("newOptions").value = "";
@@ -183,96 +173,59 @@ permalink: /server/votes/admin
 
     // ----------------- CLOSE VOTE -----------------
     function closeVote(voteID) {
+        const token = CURRENT_USER.token;
         const script = document.createElement("script");
-        script.src = `${API}?action=closeVote&vote=${voteID}&user=${adminToken}&client=${CLIENT_TOKEN}&callback=voteClosed`;
+        script.src = `${API}?action=closeVote&vote=${voteID}&user=${token}&client=${CLIENT_TOKEN}&callback=voteClosed`;
         document.body.appendChild(script);
     }
 
     function voteClosed(res) {
-        if (res.error) alert("Error: " + res.error);
-        else loadVotes();
+        if (res.error) alert(res.error);
+        loadVotes();
     }
 
-    //---- USER MANAGER
-    function loadUsers(){
-
+    // ----------------- USER MANAGER -----------------
+    function loadUsers() {
         const script = document.createElement("script");
-
-        script.src =
-            `${API}?action=listUsers&client=${CLIENT_TOKEN}&callback=renderUsers`;
-
+        script.src = `${API}?action=listUsers&client=${CLIENT_TOKEN}&callback=renderUsers`;
         document.body.appendChild(script);
-
     }
 
-    function renderUsers(users){
-
+    function renderUsers(users) {
         const div = document.getElementById("users");
-
         let html = "";
-
-        users.forEach(u=>{
-
-            if(u.category === "Admin"){
-
-                html += `
-<div>
-${u.email} — Admin
-</div>
-`;
-
-            }else{
-
+        users.forEach(u => {
+            if (u.category === "Admin") {
+                html += `<div>${u.email} — Admin</div>`;
+            } else {
                 html += `
 <div>
 ${u.email}
-
 <select onchange="changeRole('${u.token}', this.value)">
-
 <option ${u.category==="Player"?"selected":""}>Player</option>
 <option ${u.category==="VIP"?"selected":""}>VIP</option>
-
 </select>
-
-</div>
-`;
-
+</div>`;
             }
-
         });
-
         div.innerHTML = html;
-
     }
 
-    function changeRole(token, role){
-
+    function changeRole(userToken, role) {
+        const adminToken = CURRENT_USER.token;
         const script = document.createElement("script");
-
-        script.src =
-            `${API}?action=updateUserRole&admin=${adminToken}&token=${token}&role=${role}&client=${CLIENT_TOKEN}&callback=roleUpdated`;
-
+        script.src = `${API}?action=updateUserRole&admin=${adminToken}&token=${userToken}&role=${role}&client=${CLIENT_TOKEN}&callback=roleUpdated`;
         document.body.appendChild(script);
-
     }
 
-    function roleUpdated(res){
-
-        if(res.error){
-            alert(res.error);
-        }
-
+    function roleUpdated(res) {
+        if (res.error) alert(res.error);
         loadUsers();
-
     }
 
-    // ----- LOGOUT ----
-    function logoutAdmin(){
-        localStorage.removeItem("admin_token");
+    // ----------------- LOGOUT -----------------
+    function logout() {
+        localStorage.removeItem("user_token");
         location.reload();
     }
-
-    // Initial load
-    loadVotes();
-    loadUsers();
 </script>

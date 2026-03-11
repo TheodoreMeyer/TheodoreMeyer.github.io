@@ -5,119 +5,58 @@ permalink: /server/votes/
 ---
 
 <h2>Active Votes</h2>
-<div id="votes">Loading votes...</div>
+<div id="votes">Authenticating...</div>
 
-<style>
-    /* Container for all vote cards */
-    #votes {
-        display: flex;
-        flex-direction: column;
-        gap: 15px;
-        margin-top: 20px;
-    }
-
-    /* Individual vote card */
-    .vote-card {
-        background: #f9f9f9;
-        border: 1px solid #ddd;
-        border-radius: 8px;
-        padding: 15px 20px;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        transition: box-shadow 0.2s, transform 0.2s;
-        cursor: pointer;
-        text-decoration: none;
-        color: inherit;
-    }
-
-    .vote-card:hover {
-        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-        transform: translateY(-2px);
-    }
-
-    .vote-card b {
-        font-size: 1.1rem;
-        color: #333;
-    }
-
-    .vote-card button {
-        background: #007bff;
-        color: white;
-        border: none;
-        padding: 8px 16px;
-        border-radius: 5px;
-        cursor: pointer;
-        transition: background 0.2s;
-        pointer-events: none; /* So button doesn't block card click */
-    }
-
-    .vote-card button:hover {
-        background: #0056b3;
-    }
-
-    /* Empty message styling */
-    #votes i {
-        color: #777;
-        font-style: italic;
-    }
-</style>
+<script src="/server/js/auth.js"></script>
 
 <script>
-    const API = "https://script.google.com/macros/s/AKfycbwplqPfAiIXNnOneKC7oXhKk-h6N-rlU479altLiECu/exec";
-    const CLIENT_TOKEN = "f3ae101d-d2ea-4cf2-b8b6-e7330854cf7a";
 
-    // Handle user token
-    let userToken = new URLSearchParams(window.location.search).get("user") ||
-        localStorage.getItem("vote_user_token");
+    function loadVotes(){
 
-    if (!userToken) {
-        userToken = prompt("Enter your voting token:");
-        if (userToken) {
-            localStorage.setItem("vote_user_token", userToken);
-        } else {
-            // If no token → redirect to 404
-            window.location.href = "/404.html";
-        }
-    }
-
-    // JSONP loader
-    function loadVotes() {
         const script = document.createElement("script");
-        script.src = `${API}?action=listVotes&client=${CLIENT_TOKEN}&callback=renderVotes`;
+
+        script.src =
+            `${API}?action=listVotes&client=${CLIENT_TOKEN}&callback=renderVotes`;
+
         document.body.appendChild(script);
+
     }
 
-    // Render votes
-    function renderVotes(votes) {
+    function renderVotes(votes){
+
         const div = document.getElementById("votes");
-        if (!votes || votes.length === 0) {
+
+        if(!votes || votes.length === 0){
             div.innerHTML = "<i>No active votes.</i>";
             return;
         }
 
-        div.innerHTML = ""; // Clear previous content
-        votes.forEach(v => {
+        div.innerHTML = "";
+
+        votes.forEach(v=>{
+
             const card = document.createElement("div");
+
             card.className = "vote-card";
-            card.onclick = () => openVote(v.id); // Make entire card clickable
 
-            const question = document.createElement("b");
-            question.textContent = v.question;
+            card.onclick = () => {
+                window.location =
+                    `/server/votes/vote?vote=${v.id}&user=${localStorage.getItem("user_token")}`;
+            };
 
-            const btn = document.createElement("button");
-            btn.textContent = "Vote"; // Optional, just for visual cue
+            card.innerHTML =
+                `<b>${v.question}</b><button>Vote</button>`;
 
-            card.appendChild(question);
-            card.appendChild(btn);
             div.appendChild(card);
+
         });
+
     }
 
-    // Navigate to vote page
-    function openVote(voteID) {
-        window.location = `/server/votes/vote.html?vote=${voteID}&user=${userToken}`;
-    }
+    // AUTH FIRST
+    requireAuth(function(){
+        document.getElementById("votes").innerText = "Loading votes...";
+        loadVotes();
+    });
 
-    loadVotes();
 </script>
