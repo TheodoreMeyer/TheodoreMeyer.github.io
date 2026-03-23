@@ -89,9 +89,9 @@ permalink: /server/votes/admin
 <script src="/server/js/auth.js"></script>
 
 <script>
-    const API = "https://script.google.com/macros/s/AKfycbwplqPfAiIXNnOneKC7oXhKk-h6N-rlU479altLiECu/exec";
-    const CLIENT_TOKEN = "f3ae101d-d2ea-4cf2-b8b6-e7330854cf7a";
-    let CURRENT_USER = null;
+    //const API = "https://script.google.com/macros/s/AKfycbwplqPfAiIXNnOneKC7oXhKk-h6N-rlU479altLiECu/exec";
+    //const CLIENT_TOKEN = "f3ae101d-d2ea-4cf2-b8b6-e7330854cf7a";
+    //let CURRENT_USER = null;
 
     // ----------------- AUTH CHECK -----------------
     requireAdmin(user => {
@@ -101,17 +101,25 @@ permalink: /server/votes/admin
         loadUsers();
     });
 
+    // ----------------- UTIL -----------------
+    function callAPI(url) {
+        const script = document.createElement("script");
+        script.src = url;
+
+        // prevent script spam / memory leak
+        script.onload = () => script.remove();
+        document.body.appendChild(script);
+    }
+
     // ----------------- VOTES -----------------
     function loadVotes() {
-        const token = CURRENT_USER.token;
-        const script = document.createElement("script");
-        script.src = `${API}?action=adminVotes&client=${CLIENT_TOKEN}&callback=renderVotes`;
-        document.body.appendChild(script);
+        callAPI(`${API}?action=adminVotes&client=${CLIENT_TOKEN}&callback=renderVotes`);
     }
 
     function renderVotes(votes) {
         const div = document.getElementById("votes");
         div.innerHTML = "";
+
         if (!votes || votes.length === 0) {
             div.innerHTML = "<i>No votes created yet.</i>";
             return;
@@ -122,18 +130,22 @@ permalink: /server/votes/admin
             card.className = "vote-card";
 
             const info = document.createElement("div");
+
             const question = document.createElement("b");
             question.textContent = v.question;
+
             const status = document.createElement("span");
             status.className = "status " + v.status;
             status.textContent = v.status;
+
             info.appendChild(question);
             info.appendChild(document.createTextNode(" "));
             info.appendChild(status);
 
             const btn = document.createElement("button");
             btn.textContent = "Close";
-            btn.onclick = e => {
+
+            btn.onclick = (e) => {
                 e.stopPropagation();
                 closeVote(v.id);
             };
@@ -150,33 +162,38 @@ permalink: /server/votes/admin
 
     // ----------------- CREATE VOTE -----------------
     function createVote() {
-        const q = document.getElementById("newQuestion").value;
-        const ops = document.getElementById("newOptions").value.split(",").map(o => o.trim());
-        if (!q || ops.length === 0) {
-            alert("Please enter a question and options.");
+        const q = document.getElementById("newQuestion").value.trim();
+        const ops = document.getElementById("newOptions").value
+            .split(",")
+            .map(o => o.trim())
+            .filter(o => o.length > 0);
+
+        if (!q || ops.length < 2) {
+            alert("Enter a question and at least 2 options.");
             return;
         }
+
         const token = CURRENT_USER.token;
-        const script = document.createElement("script");
-        script.src = `${API}?action=createVote&user=${token}&question=${encodeURIComponent(q)}&options=${encodeURIComponent(ops.join("|"))}&client=${CLIENT_TOKEN}&callback=voteCreated`;
-        document.body.appendChild(script);
+
+        callAPI(`${API}?action=createVote&user=${token}&question=${encodeURIComponent(q)}&options=${encodeURIComponent(ops.join("|"))}&client=${CLIENT_TOKEN}&callback=voteCreated`);
     }
 
     function voteCreated(res) {
-        if (res.error) alert(res.error);
-        else {
-            document.getElementById("newQuestion").value = "";
-            document.getElementById("newOptions").value = "";
-            loadVotes();
+        if (res.error) {
+            alert(res.error);
+            return;
         }
+
+        document.getElementById("newQuestion").value = "";
+        document.getElementById("newOptions").value = "";
+        loadVotes();
     }
 
     // ----------------- CLOSE VOTE -----------------
     function closeVote(voteID) {
         const token = CURRENT_USER.token;
-        const script = document.createElement("script");
-        script.src = `${API}?action=closeVote&vote=${voteID}&user=${token}&client=${CLIENT_TOKEN}&callback=voteClosed`;
-        document.body.appendChild(script);
+
+        callAPI(`${API}?action=closeVote&vote=${voteID}&user=${token}&client=${CLIENT_TOKEN}&callback=voteClosed`);
     }
 
     function voteClosed(res) {
@@ -184,41 +201,63 @@ permalink: /server/votes/admin
         loadVotes();
     }
 
-    // ----------------- USER MANAGER -----------------
+    // ----------------- USERS -----------------
     function loadUsers() {
-        const script = document.createElement("script");
-        script.src = `${API}?action=listUsers&client=${CLIENT_TOKEN}&callback=renderUsers`;
-        document.body.appendChild(script);
+        callAPI(`${API}?action=listUsers&client=${CLIENT_TOKEN}&callback=renderUsers`);
     }
 
     function renderUsers(users) {
         const div = document.getElementById("users");
         let html = "";
+
+        // sort: unapproved first (nice UX)
+        users.sort((a, b) => (a.approved === b.approved) ? 0 : a.approved ? 1 : -1);
+
         users.forEach(u => {
             if (u.category === "Admin") {
                 html += `<div>${u.email} — Admin</div>`;
             } else {
                 html += `
-<div>
+<div style="margin-bottom:8px;">
 ${u.email}
+
 <select onchange="changeRole('${u.token}', this.value)">
-<option ${u.category==="Player"?"selected":""}>Player</option>
-<option ${u.category==="VIP"?"selected":""}>VIP</option>
+<option value="Player" ${u.category==="Player"?"selected":""}>Player</option>
+<option value="VIP" ${u.category==="VIP"?"selected":""}>VIP</option>
 </select>
+
+${
+                    u.approved
+                        ? `<span style="color:green; margin-left:10px;">✔ Approved</span>`
+                        : `<button onclick="event.stopPropagation(); approveUser('${u.token}')" style="margin-left:10px;">Approve</button>`
+                }
+
 </div>`;
             }
         });
+
         div.innerHTML = html;
     }
 
     function changeRole(userToken, role) {
         const adminToken = CURRENT_USER.token;
-        const script = document.createElement("script");
-        script.src = `${API}?action=updateUserRole&admin=${adminToken}&token=${userToken}&role=${role}&client=${CLIENT_TOKEN}&callback=roleUpdated`;
-        document.body.appendChild(script);
+
+        callAPI(`${API}?action=updateUserRole&admin=${adminToken}&token=${userToken}&role=${role}&client=${CLIENT_TOKEN}&callback=roleUpdated`);
     }
 
     function roleUpdated(res) {
+        if (res.error) alert(res.error);
+        loadUsers();
+    }
+
+    // ----------------- APPROVE -----------------
+    function approveUser(userToken) {
+        const adminToken = CURRENT_USER.token;
+
+        callAPI(`${API}?action=approveUser&admin=${adminToken}&token=${userToken}&client=${CLIENT_TOKEN}&callback=approvedUser`);
+    }
+
+    function approvedUser(res) {
         if (res.error) alert(res.error);
         loadUsers();
     }

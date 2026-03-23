@@ -1,7 +1,7 @@
 ---
 layout: default
 title: Server Pictures
-permalink: /server/pictures
+permalink: /server/gallery/
 ---
 
 # Server Pictures 📸
