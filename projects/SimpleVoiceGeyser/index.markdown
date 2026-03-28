@@ -21,7 +21,7 @@ It’s made for servers that want both Java and Bedrock players to be able to us
 ## Requirements
 
 - A Bukkit-based server (Paper, Spigot, etc.): 1.21.8 or later
-- GeyserMC (optional)
+- GeyserMC 2.9.0-SNAPSHOT or later
 - Floodgate (optional)
 - Simple Voice Chat 2.6.0 or later
 

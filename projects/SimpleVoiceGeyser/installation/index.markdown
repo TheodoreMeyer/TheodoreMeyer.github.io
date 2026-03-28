@@ -25,14 +25,19 @@ Simple Voice Geyser will not work without Simple Voice Chat.
 
 2. Place the `.jar` file into your server’s `plugins` folder
 
-3. Start or restart your server
+3. Install Dependencies:
+    - Simple Voice Chat: [SimpleVoiceChat](https://www.curseforge.com/minecraft/mc-mods/simple-voice-chat)
+    - Geyser: [GeyserMC](https://geysermc.org/)
+    - Optional: Floodgate
 
-4. Verify that:
+4. Start or restart your server
+
+5. Verify that:
     - Simple Voice Chat is running correctly
     - Simple Voice Geyser loads without errors 
     - If the server starts without errors, the plugin is installed.
 
-5. Configure the plugin (`config.yml`)
+6. Configure the plugin (`config.yml`)
      - The plugin is configured via the `config.yml` file located in the plugin’s data folder.
      - Below is an overview of the available configuration options and their purpose.
 
