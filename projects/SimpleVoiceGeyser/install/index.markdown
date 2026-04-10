@@ -103,7 +103,7 @@ Debug: false
 ## Upgrading Version
 Some Versions may be incompatible and require manual updates.
 
-See more at[Upgrading Compatibility](https://theodoremeyer.github.io/projects/simplevoicegeyser/upgrading/).
+See more at [Upgrading Compatibility](https://theodoremeyer.github.io/projects/simplevoicegeyser/upgrading/).
 
 ## Versioning notes
 - versions that end in a -DEV/-Dev are testing releasing and not meant for production environment.

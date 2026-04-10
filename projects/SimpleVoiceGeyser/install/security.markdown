@@ -32,7 +32,6 @@ This plugin exposes a web-based voice interface. You are responsible for securin
 
 - Passwords are hashed, but:
   - Weak passwords can still be brute-forced
-  - Default password (`1a2b`) is insecure
 
 ---
 

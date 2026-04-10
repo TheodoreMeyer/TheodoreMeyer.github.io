@@ -25,7 +25,7 @@ This is because modern browsers block microphone access on insecure origins.
 
 3. In the input field, add your server address:
 
-   http://<ip>:<port>
+   http:// ip: port
 
    Example: http://192.168.1.10:8080
 

@@ -90,8 +90,10 @@ https://yourdomain.com
 Instead of:
 
 http://<ip>:8080
-Summary
-Setup Type	Status
-HTTP only	Not recommended
-Chrome flags	Temporary workaround
-HTTPS proxy	✅ Correct solution
+
+## Summary
+Setup Type-Status:
+
+HTTP only-Not recommended
+Chrome flags-Temporary workaround
+HTTPS proxy-Correct solution
