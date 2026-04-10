@@ -13,10 +13,15 @@ simplevoicegeyser:
           url: /projects/simplevoicegeyser/install/upgrading/
         - title: Security
           url: /projects/simplevoicegeyser/install/security/
+        - title: Proxy
+          url: /projects/simplevoicegeyser/install/proxy/
     - title: Commands
       url: /projects/simplevoicegeyser/commands/
     - title: Joining a Server
-      url: /projects/simplevoicegeyser/join_svg/
+      url: /projects/simplevoicegeyser/join/
+      children:
+        - title: Chrome Flags
+          url: /projects/simplevoicegeyser/join/chrome-flags/
     - title: Developer API
       url: /projects/simplevoicegeyser/api/
 

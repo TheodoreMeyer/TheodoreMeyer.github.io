@@ -7,41 +7,47 @@ sidebar: simplevoicegeyser
 
 # Installation
 
-This guide explains how to install and set up Simple Voice Geyser on your server.
+This guide covers installing and configuring Simple Voice Geyser.
+
+---
 
 ## Requirements
 
-Before installing, make sure your server has:
+Before installing, ensure your server has:
 
-- A Bukkit-based server (Paper, Spigot, or similar)
-- Simple Voice Chat installed on the server
+- A Bukkit-based server (Paper, Spigot, etc.)
+- Simple Voice Chat installed
+- GeyserMC installed
+- (Optional) Floodgate
 
-Simple Voice Geyser will not work without Simple Voice Chat.
+> This plugin depends on Simple Voice Chat and will not function without it.
+
+---
 
 ## Installation Steps
 
-1. Download the latest version of Simple Voice Geyser from the repository.
-   [SimpleVoiceGeyser](https://github.com/TheodoreMeyer/SimpleVoice-Geyser/releases)
+1. Download the latest release:  
+   https://github.com/TheodoreMeyer/SimpleVoice-Geyser/releases
 
-2. Place the `.jar` file into your server’s `plugins` folder
+2. Place the `.jar` file into your server’s `plugins/` folder
 
-3. Install Dependencies:
-    - Simple Voice Chat: [SimpleVoiceChat](https://www.curseforge.com/minecraft/mc-mods/simple-voice-chat)
-    - Geyser: [GeyserMC](https://geysermc.org/)
-    - Optional: Floodgate
+3. Install dependencies:
+   - Simple Voice Chat
+   - GeyserMC
+   - Optional: Floodgate
 
 4. Start or restart your server
 
-5. Verify that:
-    - Simple Voice Chat is running correctly
-    - Simple Voice Geyser loads without errors 
-    - If the server starts without errors, the plugin is installed.
+5. Verify startup:
+   - No errors in console
+   - Plugin loads successfully
+   - Voice Chat is functioning
 
-6. Configure the plugin (`config.yml`)
-     - The plugin is configured via the `config.yml` file located in the plugin’s data folder.
-     - Below is an overview of the available configuration options and their purpose.
+---
 
-#### Server configuration
+## Server Configuration
+
+The plugin is configured via:
 ```yaml
 client:
 

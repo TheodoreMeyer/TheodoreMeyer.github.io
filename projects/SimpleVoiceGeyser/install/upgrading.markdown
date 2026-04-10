@@ -1,0 +1,49 @@
+---
+layout: projects
+title: Upgrading
+permalink: /projects/simplevoicegeyser/install/upgrading/
+sidebar: simplevoicegeyser
+---
+
+# Upgrading
+
+This page documents version upgrade behavior and breaking changes.
+
+---
+
+## General Rules
+
+- Upgrading to newer versions is supported unless stated otherwise
+- Downgrading is **not supported**
+- Always back up your server before upgrading
+
+---
+
+## Version-Specific Notes
+
+### Upgrade to 0.0.3-DEV
+
+- Password storage behavior changed
+- Passwords are no longer persisted in plaintext
+- Users must reset passwords after upgrading
+
+#### Impact
+
+- Existing users will lose access until passwords are reconfigured
+- Improves overall security
+
+---
+
+## Best Practices
+
+- Test upgrades in a staging environment
+- Read changelogs before updating
+- Avoid upgrading production servers blindly
+
+---
+
+## DEV Builds
+
+- `-DEV` versions are experimental
+- Expect breaking changes
+- Not recommended for production use

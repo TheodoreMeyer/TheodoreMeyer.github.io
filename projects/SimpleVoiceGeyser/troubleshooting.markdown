@@ -16,4 +16,3 @@ permalink: /projects/simplevoicegeyser/troubleshooting/
 
 ## Audio Sounds buggy
 - Make sure you have a good internet access.
-- The Audio is still in the workings for features and stability (as of 0.0.2-DEV).

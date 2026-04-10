@@ -2,8 +2,12 @@
 layout: projects
 title: Joining via SVG
 sidebar: simplevoicegeyser
-permalink: /projects/simplevoicegeyser/join_svg/
+permalink: /projects/simplevoicegeyser/join/
 ---
+## This page shows the best way, and main steps to join the voice chat using Simple Voice Chat Geyser.
+
+### Other Guides
+- J
 
 ## ALL
 - When you join via the website, you auto join a group named Svg with a password of 1a2b.
