@@ -1,0 +1,111 @@
+/* ==========================
+   Sidebar Container
+   ========================== */
+.project-sidebar {
+    position: sticky;
+    top: 1rem;
+
+    width: 260px;
+    flex-shrink: 0;
+
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+
+    padding: 1.25rem;
+
+    height: fit-content;
+}
+
+/* ==========================
+   Title
+   ========================== */
+.project-sidebar h3 {
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+
+    color: var(--text-muted);
+    margin-bottom: 1rem;
+}
+
+/* ==========================
+   Lists
+   ========================== */
+.project-sidebar ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.project-sidebar li {
+    margin-bottom: 0.25rem;
+}
+
+/* ==========================
+   Links
+   ========================== */
+.project-sidebar a {
+    display: block;
+    padding: 0.4rem 0.6rem;
+
+    border-radius: 6px;
+
+    text-decoration: none;
+    color: var(--text-muted);
+
+    transition: background 0.15s ease, color 0.15s ease;
+}
+
+.project-sidebar a:hover {
+    background: var(--surface-light);
+    color: var(--text);
+}
+
+.project-sidebar > ul > li > a.active {
+    background: var(--accent);
+    color: white;
+}
+
+/* ==========================
+   Sections
+   ========================== */
+.sidebar-section {
+    margin-top: 1rem;
+    margin-bottom: 0.5rem;
+
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--text-muted);
+}
+
+/* ==========================
+   Sub-navigation
+   ========================== */
+.sidebar-subnav {
+    margin-left: 0.75rem;
+    padding-left: 0.75rem;
+
+    border-left: 2px solid var(--surface-light);
+}
+
+.sidebar-subnav a {
+    font-size: 0.9rem;
+    padding-left: 0.4rem;
+}
+
+.sidebar-subnav a.active {
+    background: none;
+    color: var(--accent);
+    font-weight: 600;
+}
+
+/* ==========================
+   Mobile
+   ========================== */
+@media (max-width: 768px) {
+    .project-sidebar {
+        position: relative;
+        width: 100%;
+    }
+}

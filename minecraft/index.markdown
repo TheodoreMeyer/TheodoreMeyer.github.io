@@ -6,7 +6,7 @@ title: Minecraft
 ## SimpleVoice-Geyser
 - A spigot plugin to allow bedrock clients to connect to Simple Voice Chat through a web interface.
 
-## Links
+### Links
 - Github repo: [Click here](https://github.com/TheodoreMeyer/SimpleVoice-Geyser)
 - Releases: [Click here](https://github.com/TheodoreMeyer/SimpleVoice-Geyser/releases)
 

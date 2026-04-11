@@ -3,8 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <title>{{ page.title }}</title>
-    <link rel="stylesheet" href="{{ '/assets/main.css' | relative_url }}">
+
+    <!-- Your styles ONLY -->
     <link rel="stylesheet" href="{{ '/assets/css/projects.css' | relative_url }}">
+    <link rel="stylesheet" href="{{ '/assets/css/sidebar.css' | relative_url }}">
 </head>
 <body>
 
@@ -15,22 +17,21 @@
     {% if page.sidebar %}
     <div class="project-wrapper">
 
-        <!-- Sidebar floats outside the centered content -->
         {% include project_sidebar.html %}
 
-        <!-- Main content truly centered in page -->
         <div class="content-wrapper">
             {{ content }}
         </div>
 
     </div>
     {% else %}
-    <div class="wrapper">
+    <div class="content-wrapper" style="max-width: 800px; margin: 2rem auto;">
         {{ content }}
     </div>
     {% endif %}
 
 </main>
+
 {% include footer.html %}
 
 </body>

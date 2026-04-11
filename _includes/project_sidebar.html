@@ -1,33 +1,69 @@
 {% if page.sidebar %}
 {% assign menu = site.data.projects_nav[page.sidebar] %}
+
 <aside class="project-sidebar">
     <h3>{{ menu.title }}</h3>
+
     <ul>
         {% for item in menu.links %}
+
+        {%- comment -%}
+        SECTION LABEL
+        {%- endcomment -%}
         {% if item.section %}
-            <li class="sidebar-section">{{ item.section }}</li>
-        {% else %}
+        <li class="sidebar-section">
+            {{ item.section }}
+        </li>
+        {% continue %}
+        {% endif %}
+
+        {%- comment -%}
+        DETERMINE ACTIVE STATES
+        {%- endcomment -%}
+        {% assign is_active = false %}
+        {% assign is_parent_active = false %}
+
+        {% if page.url == item.url %}
+        {% assign is_active = true %}
+        {% endif %}
+
+        {% if item.children %}
+        {% for child in item.children %}
+        {% if page.url == child.url %}
+        {% assign is_parent_active = true %}
+        {% endif %}
+        {% endfor %}
+        {% endif %}
+
         <li>
             <a href="{{ item.url | relative_url }}"
-               {% if page.url == item.url or page.url contains item.url %}class="active"{% endif %}>
+               class="{% if is_active %}active{% endif %}">
                 {{ item.title }}
             </a>
 
             {% if item.children %}
             <ul class="sidebar-subnav">
                 {% for child in item.children %}
+
+                {% assign is_child_active = false %}
+                {% if page.url == child.url %}
+                {% assign is_child_active = true %}
+                {% endif %}
+
                 <li>
                     <a href="{{ child.url | relative_url }}"
-                       {% if page.url == child.url or page.url contains child.url %}class="active"{% endif %}>
+                       class="{% if is_child_active %}active{% endif %}">
                         {{ child.title }}
                     </a>
                 </li>
+
                 {% endfor %}
             </ul>
             {% endif %}
         </li>
-        {% endif %}
+
         {% endfor %}
     </ul>
 </aside>
+
 {% endif %}

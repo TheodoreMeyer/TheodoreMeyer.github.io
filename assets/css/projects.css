@@ -1,152 +1,249 @@
 /* ==========================
-   Container for project page
+   Design System (Light)
    ========================== */
+:root {
+    --bg: #f9fafb;
+    --surface: #ffffff;
+    --surface-light: #f3f4f6;
+    --border: #e5e7eb;
 
-@media (max-width: 768px) {
-    .project-wrapper {
-        flex-direction: column;
-    }
-    .project-sidebar {
-        width: 100%;
-        border-right: none;
-        border-bottom: 1px solid #ccc;
-        padding: 1rem 0.5rem;
-    }
-}
+    --text: #111827;
+    --text-muted: #6b7280;
 
-.project-wrapper {
-    display: flex;
-    align-items: flex-start;
-    gap: 2rem;        /* space between sidebar and main content */
-    margin: 0;        /* remove vertical spacing */
-    /* do NOT use position: relative; sticky requires normal flow */
+    --accent: #2563eb;
 }
 
 /* ==========================
-   Sidebar sticky on the left
+   Base
    ========================== */
-.project-sidebar {
-    position: sticky;
-    top: 1rem;        /* match header height */
-    width: 220px;
-    padding: 2rem;
-    border-right: 1px solid #cfcfcf;
-    flex-shrink: 0;
-    align-self: flex-start;
-    height: fit-content;
-    background-color: #f1f1f1;
-    z-index: 10;
+* {
+    box-sizing: border-box;
 }
 
-.project-sidebar h3 {
-    margin-bottom: 1rem;
-    padding-bottom: 0.5rem;
-    border-bottom: 1px solid #ccc;
-    font-size: 1rem;
-    font-weight: bold;
+html {
+    scroll-behavior: smooth;
 }
 
-/* Sidebar list styling */
-.project-sidebar > ul {
-    list-style: none;
-    padding: 0;
+body {
     margin: 0;
+    font-family: system-ui, -apple-system, sans-serif;
+    background: var(--bg);
+    color: var(--text);
 }
-
-.project-sidebar li {
-    margin-bottom: 0.5rem;
-}
-
-.project-sidebar a {
-    text-decoration: none;
-    color: #333;
-    transition: color 0.2s;
-}
-
-.project-sidebar a:hover {
-    color: #007acc; /* subtle hover effect */
-}
-
-.project-sidebar a.active {
-    font-weight: bold;
-}
-
-.sidebar-section {
-    font-weight: bold;              /* bold text */
-    color: #555;
-    cursor: default;                /* non-clickable */
-    padding: 0.5rem 1rem;           /* top/bottom and align with links */
-    margin: 0 0 0.5rem 0;           /* bottom margin like normal li spacing */
-    border-bottom: 1px solid #ccc;  /* underline */
-    display: block;                 /* makes width work */
-    box-sizing: border-box;         /* include padding in width */
-}
-
-.sidebar-subnav {
-    list-style: none;
-    margin-top: 0.5rem;
-    margin-left: 1rem;
-    padding-left: 1rem;
-    border-left: 1px solid #ccc;
-}
-
-.sidebar-subnav a {
-    color: #555;
-}
-
-.sidebar-subnav a.active {
-    color: #007acc;
-    font-weight: 600;
-}
-
 
 /* ==========================
-   Main content wrapper
+   Global Wrapper
    ========================== */
-.content-wrapper {
-    flex: 1;             /* takes remaining space next to sidebar */
-    max-width: 800px;    /* optional: keeps content readable */
-    padding-left: 1rem;  /* small inner padding */
-    padding-right: 1rem;
-    margin: 0;           /* do not center with auto */
-}
-
-/* Headings and text styling */
-.content-wrapper h1,
-.content-wrapper h2,
-.content-wrapper h3,
-.content-wrapper h4,
-.content-wrapper h5,
-.content-wrapper h6 {
-    margin-top: 2rem;
-    margin-bottom: 1rem;
-    font-weight: 600;
-}
-
-.content-wrapper p {
-    line-height: 1.7;
-    margin-bottom: 1rem;
+.wrapper {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 1rem;
 }
 
 /* ==========================
-   Page header sticky
+   Header
    ========================== */
 .site-header {
     position: sticky;
     top: 0;
     z-index: 1000;
-    background-color: #fff;
+
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
 }
 
-/* Adjust content spacing to avoid overlapping header */
-.page-content {
-    padding-top: 1rem;  /* same as header height */
-    margin: 0;           /* remove extra margin */
+.site-header .wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 60px;
+}
+
+/* Title */
+.site-title {
+    font-weight: 700;
+    font-size: 1.1rem;
+
+    color: var(--text);
+    text-decoration: none;
+
+    border: none;
+    outline: none;
+    background: none;
+}
+
+.site-title:visited {
+    color: var(--text);
+}
+
+.site-title:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+    border-radius: 4px;
+}
+
+/* Nav */
+.site-nav {
+    display: flex;
+    gap: 1rem;
+}
+
+.site-nav a {
+    color: var(--text);
+    text-decoration: none;
+}
+
+.site-nav a:visited {
+    color: var(--text);
+}
+
+.site-nav a:hover {
+    color: var(--accent);
 }
 
 /* ==========================
-   Misc
+   Layout
    ========================== */
-html {
-    overflow-y: scroll;
+main {
+    width: 100%;
+}
+
+.project-wrapper {
+    display: flex;
+    gap: 2rem;
+
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 2rem 1rem;
+}
+
+.content-wrapper {
+    flex: 1;
+    max-width: 800px;
+
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+
+    padding: 2rem;
+}
+
+/* ==========================
+   Typography
+   ========================== */
+.content-wrapper h1 {
+    font-size: 2rem;
+    font-weight: 700;
+}
+
+.content-wrapper h2 {
+    font-size: 1.5rem;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 0.3rem;
+}
+
+.content-wrapper h3 {
+    font-size: 1.2rem;
+    color: var(--text-muted);
+}
+
+.content-wrapper p {
+    line-height: 1.7;
+    color: var(--text-muted);
+}
+
+.content-wrapper > * + * {
+    margin-top: 1.25rem;
+}
+
+/* ==========================
+   Code Blocks
+   ========================== */
+
+code {
+    background: #f3f4f6;
+    color: #111827;
+
+    padding: 0.2rem 0.35rem;
+    border-radius: 4px;
+
+    font-size: 0.9em;
+}
+
+pre {
+    background: #f8fafc;
+    color: #111827;
+
+    border: 1px solid var(--border);
+    border-radius: 8px;
+
+    padding: 1rem;
+    margin: 1.5rem 0;
+
+    overflow-x: auto;
+}
+
+pre code {
+    background: none;
+    padding: 0;
+    color: inherit;
+}
+
+pre code.language-yaml {
+    color: #e5e7eb;
+}
+
+/* ==========================
+   Footer
+   ========================== */
+.site-footer {
+    margin-top: 3rem;
+    padding: 1.5rem 0;
+
+    background: var(--surface);
+    border-top: 1px solid var(--border);
+}
+
+.footer-inner {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.site-footer a {
+    color: var(--text-muted);
+    text-decoration: none;
+}
+
+.site-footer a:visited {
+    color: var(--text-muted);
+}
+
+.site-footer a:hover {
+    color: var(--accent);
+}
+
+.github-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+}
+
+/* ==========================
+   Responsive
+   ========================== */
+@media (max-width: 768px) {
+    .project-wrapper {
+        flex-direction: column;
+    }
+
+    .content-wrapper {
+        padding: 1.25rem;
+    }
+
+    .footer-inner {
+        flex-direction: column;
+        gap: 0.5rem;
+        text-align: center;
+    }
 }
