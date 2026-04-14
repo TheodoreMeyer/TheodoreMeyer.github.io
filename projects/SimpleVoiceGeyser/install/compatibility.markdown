@@ -5,22 +5,6 @@ permalink: /projects/simplevoicegeyser/install/compatibility/
 sidebar: simplevoicegeyser
 ---
 
----
-
-layout: projects
-title: Compatibility
-permalink: /projects/simplevoicegeyser/install/compatibility/
-sidebar: simplevoicegeyser
---------------------------
-
----
-
-layout: projects
-title: Compatibility
-permalink: /projects/simplevoicegeyser/install/compatibility/
-sidebar: simplevoicegeyser
---------------------------
-
 # Compatibility
 
 This page outlines supported environments, tested versions, and known limitations.

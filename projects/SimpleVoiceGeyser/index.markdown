@@ -5,14 +5,6 @@ permalink: /projects/simplevoicegeyser/
 sidebar: simplevoicegeyser
 ---
 
----
-
-layout: projects
-title: Simple Voice Geyser
-permalink: /projects/simplevoicegeyser/
-sidebar: simplevoicegeyser
---------------------------
-
 # Simple Voice Geyser
 
 Simple Voice Geyser is a cross-platform extension for Simple Voice Chat that allows Bedrock players on Geyser servers to participate in proximity voice chat — without requiring client-side mods.

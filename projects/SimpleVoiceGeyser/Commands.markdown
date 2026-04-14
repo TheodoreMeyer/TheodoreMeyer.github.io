@@ -1,5 +1,4 @@
 ---
-
 layout: projects
 title: Commands
 permalink: /projects/simplevoicegeyser/commands/

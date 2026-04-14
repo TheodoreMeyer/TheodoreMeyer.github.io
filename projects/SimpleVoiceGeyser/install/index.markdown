@@ -5,14 +5,6 @@ permalink: /projects/simplevoicegeyser/install/
 sidebar: simplevoicegeyser
 ---
 
----
-
-layout: projects
-title: Installation
-permalink: /projects/simplevoicegeyser/install/
-sidebar: simplevoicegeyser
---------------------------
-
 # Installation
 
 This guide covers installing and configuring Simple Voice Geyser.
