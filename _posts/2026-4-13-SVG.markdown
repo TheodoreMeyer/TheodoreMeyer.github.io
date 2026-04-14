@@ -1,0 +1,14 @@
+---
+layout: post
+title: SimpleVoice-Geyser"
+date:   2024-04-13 21:31:09 -0400
+---
+
+## Simple Voice Geyser 0.1.0-DEV is now available! 
+- See the [Docs](https://theodoremeyer.github.io/projects/simplevoicegeyser/) for more information.
+
+## This release includes:
+- Initial support for Fabric servers (1.21.11+)
+- Updated compatibility with Simple Voice Chat 2.6.x
+- ptt voice chat system
+- And more!
