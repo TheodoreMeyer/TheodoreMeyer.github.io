@@ -9,7 +9,15 @@ This plugin/addon to SVG is not planning (currently) to have a large API. Instea
 
 This is due to the fact I built this as a websocket-based plugin, where anyone with the correct password/information can connect with any client to the websocket.
 
-## To Be added
+## Core
+- You can build your own implementation of SimpleVoice-Geyser for a platform using the new Core Module.
+- See the [Core Module](https://github.com/TheodoreMeyer/SimpleVoice-Geyser/tree/master/core) for more information.
+- Download any jar with Core in it at [Releases](https://github.com/TheodoreMeyer/SimpleVoice-Geyser/releases).
+
+## Websocket
+- In Progress...
+
+### To Be added
 - Connection types, so server admins can limit how you can connect.
 - More Websocket support for diverse client types (whether an app, or an HTML page that is in the server website itself, etc. myserver.com/svg).
 

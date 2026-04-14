@@ -5,54 +5,103 @@ permalink: /projects/simplevoicegeyser/install/compatibility/
 sidebar: simplevoicegeyser
 ---
 
+---
+
+layout: projects
+title: Compatibility
+permalink: /projects/simplevoicegeyser/install/compatibility/
+sidebar: simplevoicegeyser
+--------------------------
+
+---
+
+layout: projects
+title: Compatibility
+permalink: /projects/simplevoicegeyser/install/compatibility/
+sidebar: simplevoicegeyser
+--------------------------
+
 # Compatibility
 
-This page outlines supported environments and known limitations.
+This page outlines supported environments, tested versions, and known limitations.
 
 ---
 
 ## Browser Compatibility
+
+Simple Voice Geyser uses a web-based client that relies on WebRTC. Browser support may vary depending on implementation differences.
 
 | Version   | Chrome | Firefox | Edge |
 |-----------|--------|---------|------|
 | 0.0.1-DEV | ✅      | ❌       | ❌    |
 | 0.0.2-DEV | ✅      | 🛠️     | ❌    |
 | 0.0.3-DEV | ✅      | 🚧      | ❌    |
+| 0.1.0-DEV | ✅      | ✅       | 🚧   |
 
 ---
 
-## Plugin Compatibility
+## Bukkit-based Servers (Paper / Purpur / Spigot)
 
-| Version   | Spigot  | Voice Chat | Geyser         | Status |
-|-----------|---------|------------|----------------|--------|
-| 0.0.1-DEV | 1.21.8  | 2.5.27     | 2.4.1-SNAPSHOT | ❌      |
-| 0.0.2-DEV | 1.21.8+ | 2.6.x      | 2.4.1-SNAPSHOT | ⚠️     |
-| 0.0.3-DEV | 1.21.8+ | 2.6.x      | 2.9.0-SNAPSHOT | ✅      |
+| Version   | MC Version | Voice Chat | Geyser          | Floodgate       | Status |
+|-----------|------------|------------|-----------------|-----------------|--------|
+| 0.0.1-DEV | 1.21.8     | 2.5.27     | NONE            | NONE            | ❌      |
+| 0.0.2-DEV | 1.21.8+    | 2.6.x      | NONE            | NONE            | ⚠️     |
+| 0.0.3-DEV | 1.21.8+    | 2.6.x      | 2.9.0-SNAPSHOT  | 2.2.4-SNAPSHOT+ | ⚠️     |
+| 0.1.0-DEV | 1.20.1+    | 2.6.x      | 2.9.0-SNAPSHOT+ | 2.2.4-SNAPSHOT+ | ✅      |
+
+### Requirements
+
+* Minecraft 1.20.1+
+* Simple Voice Chat 2.6.x+
+* GeyserMC 2.9.0-SNAPSHOT+ (Optional)
+* Floodgate (optional)
+
+---
+
+## Fabric
+
+| Version   | MC Version | Voice Chat | Geyser          | Floodgate       | LuckPerms             | Status |
+|-----------|------------|------------|-----------------|-----------------|-----------------------|--------|
+| 0.1.0-DEV | 1.21.11+   | 2.6.x      | 2.9.0-SNAPSHOT+ | 2.2.4-SNAPSHOT+ | compatible w/ 5.4 api | ✅      |
+
+### Requirements
+
+* Fabric Loader (matching your Minecraft version)
+* Fabric API (required)
+* Simple Voice Chat 2.6.x+
+
+### Optional Integrations
+
+* Floodgate (for Bedrock account linking)
+* LuckPerms (for permissions handling)
+* GeyserMC 2.9.0-SNAPSHOT+ (for Bedrock compatibility)
 
 ---
 
 ## Status Key
 
-- ✅ Supported
-- ⚠️ End of support / limited support
-- 🚧 Not production-ready
-- 🛠️ Work in progress
-- ❌ Unsupported
+* ✅ Fully supported and tested
+* ⚠️ Partially supported (may contain bugs or missing features)
+* 🚧 Experimental (not production-ready)
+* 🛠️ In development (actively being worked on)
+* ❌ Unsupported / broken
 
 ---
 
-## Notes
+## Known Limitations
 
-- Chrome is currently the only fully supported browser
-- Firefox support is incomplete due to WebRTC / permission differences
-- Edge is not tested and should be considered unsupported
+* Chrome is currently the only fully supported browser
+* Firefox support is incomplete due to WebRTC permission and audio handling differences
+* Edge is untested and should be considered unsupported
 
 ---
 
 ## Recommendation
 
-Use:
-- Latest Chrome
-- Latest supported plugin versions
+For the best experience, use:
 
-Avoid mixing outdated components.
+* Latest version of the Browser (preferably Chrome).
+* Matching versions from the tables above
+* Fully updated dependencies per platform
+
+Avoid mixing incompatible or outdated components, as this may result in connection failures or degraded audio quality.

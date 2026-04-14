@@ -5,43 +5,80 @@ permalink: /projects/simplevoicegeyser/
 sidebar: simplevoicegeyser
 ---
 
+---
+
+layout: projects
+title: Simple Voice Geyser
+permalink: /projects/simplevoicegeyser/
+sidebar: simplevoicegeyser
+--------------------------
+
 # Simple Voice Geyser
 
-Simple Voice Geyser is a Bukkit plugin that lets Bedrock players on Geyser servers use Simple Voice Chat, even though they can’t install client-side mods.
+Simple Voice Geyser is a cross-platform extension for Simple Voice Chat that allows Bedrock players on Geyser servers to participate in proximity voice chat — without requiring client-side mods.
 
-It’s made for servers that want both Java and Bedrock players to be able to use proximity voice chat with no extra setup for players.
+It supports both Java and Bedrock players, bridging the gap between platforms seamlessly.
 
 ## What it does
 
-- Allows Bedrock players to connect to Simple Voice Chat
-- Works alongside GeyserMC
-- No mods required for Bedrock players
-- Simple, lightweight, and easy to install
+* Enables Bedrock players to connect to Simple Voice Chat
+* Works alongside GeyserMC
+* No mods required for Bedrock players
+* Supports multiple server platforms
+* Lightweight and easy to install
+
+## Supported Platforms
+
+* Paper
+* Purpur
+* Spigot (untested, but should work)
+* Fabric
 
 ## Requirements
 
-- A Bukkit-based server (Paper, Spigot, etc.): 1.21.8 or later
-- GeyserMC 2.9.0-SNAPSHOT or later
-- Floodgate (optional)
-- Simple Voice Chat 2.6.0 or later
+### Common
+Required:
+* Simple Voice Chat 2.6.0 or later
 
-This plugin does not replace Simple Voice Chat — it just extends it to support Bedrock players.
+Optional:
+* GeyserMC 2.9.0-SNAPSHOT or later
+* Floodgate 2.2.4-SNAPSHOT or later
 
-## To join
-- In order to join, please run /svg pswd [passwords]
-  - See more at [Commands](https://theodoremeyer.github.io/projects/simplevoicegeyser/commands/).
-- Now join via Website link. See your server operator for the link.
-  - See more at [Joining](https://theodoremeyer.github.io/projects/simplevoicegeyser/join_svg/).
+### Bukkit-based servers (Paper, Purpur, Spigot)
+
+* Minecraft 1.21.8 or later
+
+### Fabric
+
+* Fabric Loader for Minecraft 1.21.11 or later
+* Latest version of Fabric API 
+
+## To Join
+
+1. Run:
+
+   ```
+   /svg pswd <password>
+   ```
+
+   See more at [Commands](https://theodoremeyer.github.io/projects/simplevoicegeyser/commands/).
+
+2. Open the provided web link from your server operator.
+
+3. Connect and start talking.
+
+See more at [Joining](https://theodoremeyer.github.io/projects/simplevoicegeyser/join_svg/).
 
 ## Status
 
-This project is being developed and open to feedback, issues, and contributions.
-It is still in its Dev stage.
+This project is currently in active development and is considered **alpha**.
+Feedback, issues, and contributions are welcome.
 
 ## Download
-- [Releases](https://github.com/TheodoreMeyer/SimpleVoice-Geyser/releases)
-    -  See [Installation](installation/index.markdown) to learn how to install.
+
+* [Releases](https://github.com/TheodoreMeyer/SimpleVoice-Geyser/releases)
+  → See [Installation](installation/index.markdown) for setup instructions.
 
 ## Repository
 
-[SimpleVoice-Geyser](https://github.com/theodoremeyer/simplevoicegeyser)
+[SimpleVoice-Geyser](https://github.com/theodoremeyer/simplevoice-geyser)

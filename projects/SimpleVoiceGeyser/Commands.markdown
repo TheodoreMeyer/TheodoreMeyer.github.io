@@ -1,19 +1,23 @@
 ---
+
 layout: projects
 title: Commands
 permalink: /projects/simplevoicegeyser/commands/
 sidebar: simplevoicegeyser
----
+--------------------------
 
 # SimpleVoiceGeyser Commands
 
-All commands use the base command: /svg
+All commands use the base command: `/svg`
 
 ---
 
 ## /svg
-- Java Players: Displays help
-- Bedrock Players: If Geyser or Floodgate are enabled, opens Commands Menu.
+
+* Java Players: Displays help
+* Bedrock Players: Opens the command menu (if supported by Geyser/Floodgate)
+
+---
 
 ## /svg pswd
 
@@ -21,16 +25,15 @@ Sets your personal voice chat password.
 
 ### Usage
 
-
+```
 /svg pswd <new-password>
-
+```
 
 ### Details
 
-- Must be executed by a player
-- Password length must be between 8 and 32 characters
-- Used for password in Website
-- It is recommended to go to the website and use Google's create Strong password feature, then copy and paste here.
+* Must be executed by a player
+* Password length must be between 8 and 32 characters
+* Used for authentication on the web client
 
 ---
 
@@ -40,37 +43,52 @@ Creates a new voice group.
 
 ### Usage
 
+```
+/svg cgroup <group-name> [-t type] [-p password] [-ps]
+```
 
-/svg cgroup -name <group-name> [-t type] [-p password] [-ps]
+### Arguments
 
+* `<group-name>`
+
+  * Required
+  * Name of the group
 
 ### Flags
 
-- `-name <group-name>`
-    - Required
-    - Defines the name of the group
+* `-t <type>`
 
-- `-t <type>`
-    - Optional
-    - Available types:
-        - `open`
-        - `normal`
-        - `isolated`
+  * Optional
+  * Group type:
 
-- `-p <password>`
-    - Optional
-    - Sets a password for the group
+    * `open` (default)
+    * `normal`
+    * `isolated`
 
-- `-ps`
-    - Optional
-    - Makes the group persistent
-    - Persistent groups remain even when empty
+* `-p <password>`
+
+  * Optional
+  * Sets a password for the group
+
+* `-ps`
+
+  * Optional
+  * Marks the group as persistent
+  * Persistent groups remain after all players leave
+
+### Defaults
+
+If not specified:
+
+* `type = open`
+* `password = ""`
+* `persistent = false`
 
 ### Permissions
 
-- `svg.vc.group.create`
-- `svg.vc.group.type.isolated`
-- `svg.vc.group.setpersistent`
+* `svg.vc.group.create`
+* `svg.vc.group.type.isolated`
+* `svg.vc.group.setpersistent`
 
 ---
 
@@ -80,19 +98,21 @@ Joins an existing voice group.
 
 ### Usage
 
+```
+/svg jgroup <group-name> [password]
+```
 
-/svg jgroup -n <group-name> [-p password]
+### Arguments
 
+* `<group-name>`
 
-### Flags
+  * Required
+  * Name of the group to join
 
-- `-n <group-name>`
-    - Required
-    - Name of the group to join
+* `[password]`
 
-- `-p <password>`
-    - Optional
-    - Required if the group is password protected
+  * Optional
+  * Required if the group is password protected
 
 ---
 
@@ -102,14 +122,14 @@ Leaves the current voice group.
 
 ### Usage
 
-
+```
 /svg lgroup
-
+```
 
 ### Details
 
-- Must be executed by a player
-- Immediately removes the player from their current group
+* Must be executed by a player
+* Immediately removes the player from their current group
 
 ---
 
@@ -119,12 +139,13 @@ Displays the command help menu.
 
 ### Usage
 
+```
 /svg help
-
+```
 
 ---
 
 ## Group Persistence
 
-- Persistent groups remain registered even when no players are inside
-- Non-persistent groups are automatically deleted when empty  
+* Persistent groups remain registered even when empty
+* Non-persistent groups are automatically deleted when empty
