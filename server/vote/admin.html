@@ -89,31 +89,44 @@ permalink: /server/votes/admin
 <script src="/server/js/auth.js"></script>
 
 <script>
-    //const API = "https://script.google.com/macros/s/AKfycbwplqPfAiIXNnOneKC7oXhKk-h6N-rlU479altLiECu/exec";
-    //const CLIENT_TOKEN = "f3ae101d-d2ea-4cf2-b8b6-e7330854cf7a";
-    //let CURRENT_USER = null;
 
-    // ----------------- AUTH CHECK -----------------
+    // ---------- AUTH ----------
     requireAdmin(user => {
         CURRENT_USER = user;
+
         document.getElementById("votes").innerText = "Loading votes...";
         loadVotes();
         loadUsers();
     });
 
-    // ----------------- UTIL -----------------
-    function callAPI(url) {
-        const script = document.createElement("script");
-        script.src = url;
+    // ---------- UTIL ----------
+    function clean(v) {
+        return (v || "").toString().trim();
+    }
 
-        // prevent script spam / memory leak
+    function buildURL(params) {
+        const query = Object.entries(params)
+            .map(([k, v]) => `${k}=${encodeURIComponent(v)}`)
+            .join("&");
+
+        return `${API}?${query}&client=${CLIENT_TOKEN}`;
+    }
+
+    function callAPI(params, callbackName) {
+        const script = document.createElement("script");
+
+        script.src = buildURL({
+            ...params,
+            callback: callbackName
+        });
+
         script.onload = () => script.remove();
         document.body.appendChild(script);
     }
 
-    // ----------------- VOTES -----------------
+    // ---------- VOTES ----------
     function loadVotes() {
-        callAPI(`${API}?action=adminVotes&client=${CLIENT_TOKEN}&callback=renderVotes`);
+        callAPI({ action: "adminVotes" }, "renderVotes");
     }
 
     function renderVotes(votes) {
@@ -160,12 +173,12 @@ permalink: /server/votes/admin
         });
     }
 
-    // ----------------- CREATE VOTE -----------------
+    // ---------- CREATE VOTE ----------
     function createVote() {
-        const q = document.getElementById("newQuestion").value.trim();
+        const q = clean(document.getElementById("newQuestion").value);
         const ops = document.getElementById("newOptions").value
             .split(",")
-            .map(o => o.trim())
+            .map(o => clean(o))
             .filter(o => o.length > 0);
 
         if (!q || ops.length < 2) {
@@ -173,9 +186,12 @@ permalink: /server/votes/admin
             return;
         }
 
-        const token = CURRENT_USER.token;
-
-        callAPI(`${API}?action=createVote&user=${token}&question=${encodeURIComponent(q)}&options=${encodeURIComponent(ops.join("|"))}&client=${CLIENT_TOKEN}&callback=voteCreated`);
+        callAPI({
+            action: "createVote",
+            user: CURRENT_USER.token,
+            question: q,
+            options: ops.join("|")
+        }, "voteCreated");
     }
 
     function voteCreated(res) {
@@ -186,14 +202,17 @@ permalink: /server/votes/admin
 
         document.getElementById("newQuestion").value = "";
         document.getElementById("newOptions").value = "";
+
         loadVotes();
     }
 
-    // ----------------- CLOSE VOTE -----------------
+    // ---------- CLOSE ----------
     function closeVote(voteID) {
-        const token = CURRENT_USER.token;
-
-        callAPI(`${API}?action=closeVote&vote=${voteID}&user=${token}&client=${CLIENT_TOKEN}&callback=voteClosed`);
+        callAPI({
+            action: "closeVote",
+            vote: voteID,
+            user: CURRENT_USER.token
+        }, "voteClosed");
     }
 
     function voteClosed(res) {
@@ -201,23 +220,24 @@ permalink: /server/votes/admin
         loadVotes();
     }
 
-    // ----------------- USERS -----------------
+    // ---------- USERS ----------
     function loadUsers() {
-        callAPI(`${API}?action=listUsers&client=${CLIENT_TOKEN}&callback=renderUsers`);
+        callAPI({ action: "listUsers" }, "renderUsers");
     }
 
     function renderUsers(users) {
         const div = document.getElementById("users");
-        let html = "";
 
-        // sort: unapproved first (nice UX)
-        users.sort((a, b) => (a.approved === b.approved) ? 0 : a.approved ? 1 : -1);
+        users.sort((a, b) =>
+            a.approved === b.approved ? 0 : a.approved ? 1 : -1
+        );
 
-        users.forEach(u => {
+        div.innerHTML = users.map(u => {
             if (u.category === "Admin") {
-                html += `<div>${u.email} — Admin</div>`;
-            } else {
-                html += `
+                return `<div>${u.email} — Admin</div>`;
+            }
+
+            return `
 <div style="margin-bottom:8px;">
 ${u.email}
 
@@ -227,22 +247,23 @@ ${u.email}
 </select>
 
 ${
-                    u.approved
-                        ? `<span style="color:green; margin-left:10px;">✔ Approved</span>`
-                        : `<button onclick="event.stopPropagation(); approveUser('${u.token}')" style="margin-left:10px;">Approve</button>`
-                }
-
-</div>`;
+                u.approved
+                    ? `<span style="color:green; margin-left:10px;">✔ Approved</span>`
+                    : `<button onclick="approveUser('${u.token}')"
+        style="margin-left:10px;">Approve</button>`
             }
-        });
-
-        div.innerHTML = html;
+</div>`;
+        }).join("");
     }
 
+    // ---------- ROLE ----------
     function changeRole(userToken, role) {
-        const adminToken = CURRENT_USER.token;
-
-        callAPI(`${API}?action=updateUserRole&admin=${adminToken}&token=${userToken}&role=${role}&client=${CLIENT_TOKEN}&callback=roleUpdated`);
+        callAPI({
+            action: "updateUserRole",
+            admin: CURRENT_USER.token,
+            token: userToken,
+            role: role
+        }, "roleUpdated");
     }
 
     function roleUpdated(res) {
@@ -250,11 +271,13 @@ ${
         loadUsers();
     }
 
-    // ----------------- APPROVE -----------------
+    // ---------- APPROVE ----------
     function approveUser(userToken) {
-        const adminToken = CURRENT_USER.token;
-
-        callAPI(`${API}?action=approveUser&admin=${adminToken}&token=${userToken}&client=${CLIENT_TOKEN}&callback=approvedUser`);
+        callAPI({
+            action: "approveUser",
+            admin: CURRENT_USER.token,
+            token: userToken
+        }, "approvedUser");
     }
 
     function approvedUser(res) {
@@ -262,7 +285,7 @@ ${
         loadUsers();
     }
 
-    // ----------------- LOGOUT -----------------
+    // ---------- LOGOUT ----------
     function logout() {
         localStorage.removeItem("user_token");
         location.reload();
