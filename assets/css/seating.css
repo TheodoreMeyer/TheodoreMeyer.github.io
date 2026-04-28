@@ -233,16 +233,6 @@ button.danger:hover {
     margin: 0;
 }
 
-.highlight-theo {
-    background: rgba(37, 99, 235, 0.06) !important; /* very light blue tint */
-    border-color: rgba(37, 99, 235, 0.18) !important;
-}
-
-.highlight-green {
-    background: rgba(34, 197, 94, 0.06) !important;
-    border-color: rgba(34, 197, 94, 0.18) !important;
-}
-
 /* ================= RESPONSIVE ================= */
 
 @media (max-width: 768px) {
