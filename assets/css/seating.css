@@ -108,7 +108,19 @@ select:focus {
     display: grid;
     grid-template-columns: 1fr 1fr auto;
     gap: 0.5rem;
-    align-items: end;
+    align-items: center;
+}
+
+.row input,
+.row button {
+    height: 38px;
+    margin: 0; /* critical */
+}
+
+.row button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 /* ================= BUTTONS ================= */

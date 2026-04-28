@@ -44,17 +44,6 @@ const highlightRules = [
         bg: "rgba(239, 68, 68, 0.06)", // red
         border: "rgba(239, 68, 68, 0.18)"
     },
-
-    {
-        test: (name) => (name || "").toLowerCase().includes("annie"),
-        bg: "rgba(249, 115, 22, 0.06)", // orange
-        border: "rgba(249, 115, 22, 0.18)"
-    },
-    {
-        test: (name) => (name || "").toLowerCase().includes("owen"),
-        bg: "rgba(148, 163, 184, 0.06)", // slate gray
-        border: "rgba(148, 163, 184, 0.18)"
-    },
     {
         test: (name) => (name || "").toLowerCase().includes("georgia"),
         bg: "rgba(20, 184, 166, 0.06)", // teal
