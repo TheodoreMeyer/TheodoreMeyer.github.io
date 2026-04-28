@@ -21,27 +21,26 @@ permalink: /chart/
     <!-- ================= INPUT VIEW ================= -->
     <section id="app-view">
 
+        <div class="card" id="roster-panel">
+            <h2>Students</h2>
+
+            <h3>Saved Rosters</h3>
+
+            <select id="saved-rosters">
+                <option value="">Select roster</option>
+            </select>
+
+            <input id="roster-name" placeholder="Roster name">
+
+            <button id="save-roster" type="button">Save</button>
+            <button id="delete-roster" class="danger" type="button">Delete</button>
+
+            <h3>Add Students</h3>
+            <textarea id="student-names"></textarea>
+        </div>
+
         <!-- ===== SEATING ===== -->
         <section id="seating-section">
-
-            <div class="card">
-                <h2>Students</h2>
-                <div class="card">
-                    <h2>Saved Rosters</h2>
-
-                    <select id="saved-rosters-seating">
-                        <option value="">Select roster</option>
-                    </select>
-
-                    <input id="roster-name-seating" placeholder="Roster name">
-                    <button id="save-roster-seating" type="button">Save</button>
-                    <button class="danger" id="delete-roster-seating" type="button">
-                        Delete
-                    </button>
-                </div>
-                <h3>Add Students</h3>
-                <textarea id="seating-names"></textarea>
-            </div>
 
             <div class="card">
                 <h2>Layout</h2>
@@ -61,25 +60,6 @@ permalink: /chart/
 
         <!-- ===== GROUPS ===== -->
         <section id="groups-section" class="hidden">
-
-            <div class="card">
-                <h2>Students</h2>
-                <div class="card">
-                    <h2>Saved Rosters</h2>
-
-                    <select id="saved-rosters-groups">
-                        <option value="">Select roster</option>
-                    </select>
-
-                    <input id="roster-name-groups" placeholder="Roster name">
-                    <button id="save-roster-groups" type="button">Save</button>
-                    <button class="danger" id="delete-roster-groups" type="button">
-                        Delete
-                    </button>
-                </div>
-                <h3>Add Students</h3>
-                <textarea id="group-names"></textarea>
-            </div>
 
             <div class="card">
                 <h2>Groups</h2>

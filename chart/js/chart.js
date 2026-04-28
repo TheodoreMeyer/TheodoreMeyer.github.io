@@ -78,26 +78,21 @@ function saveRosters(data) {
    CORE FIX: SINGLE ROSTER APPLIER
    ========================= */
 
-function applyRoster(type, name) {
-    const textarea = document.getElementById(`${type}-names`);
-    const nameInput = document.getElementById(`roster-name-${type}`);
-
+function applyRoster(name) {
+    const textarea = document.getElementById("student-names");
     const rosters = getRosters();
 
     if (!textarea || !name || !rosters[name]) return;
 
     textarea.value = rosters[name];
-
-    if (nameInput) nameInput.value = "";
 }
 
 /* =========================
    SAVE ROSTER
    ========================= */
-
-function saveRoster(type) {
-    const nameInput = document.getElementById(`roster-name-${type}`);
-    const textarea = document.getElementById(`${type}-names`);
+function saveRoster() {
+    const nameInput = document.getElementById("roster-name");
+    const textarea = document.getElementById("student-names");
 
     if (!nameInput || !textarea) return;
 
@@ -132,8 +127,7 @@ function deleteRoster(name) {
 
     refreshRosterDropdowns();
 
-    document.getElementById("saved-rosters-seating").value = "";
-    document.getElementById("saved-rosters-groups").value = "";
+    document.getElementById("saved-rosters").value = "";
 }
 
 /* =========================
@@ -142,9 +136,7 @@ function deleteRoster(name) {
 
 function refreshRosterDropdowns() {
     const rosters = getRosters();
-
-    const seatingSelect = document.getElementById("saved-rosters-seating");
-    const groupsSelect = document.getElementById("saved-rosters-groups");
+    const select = document.getElementById("saved-rosters");
 
     const options =
         `<option value="">Select roster</option>` +
@@ -152,8 +144,7 @@ function refreshRosterDropdowns() {
             .map(name => `<option value="${name}">${name}</option>`)
             .join("");
 
-    if (seatingSelect) seatingSelect.innerHTML = options;
-    if (groupsSelect) groupsSelect.innerHTML = options;
+    if (select) select.innerHTML = options;
 }
 
 /* =========================
@@ -189,33 +180,17 @@ document.addEventListener("DOMContentLoaded", () => {
         ?.addEventListener("click", () => showTab("groups"));
 
     /* SAVE */
-    document.getElementById("save-roster-seating")
-        ?.addEventListener("click", () => saveRoster("seating"));
+    document.getElementById("save-roster")
+        ?.addEventListener("click", saveRoster);
 
-    document.getElementById("save-roster-groups")
-        ?.addEventListener("click", () => saveRoster("groups"));
-
-    /* LOAD */
-    document.getElementById("saved-rosters-seating")
-        ?.addEventListener("change", (e) =>
-            autoFillRosterOnSelect("seating", e.target.value)
-        );
-
-    document.getElementById("saved-rosters-groups")
-        ?.addEventListener("change", (e) =>
-            autoFillRosterOnSelect("groups", e.target.value)
-        );
-
-    /* DELETE */
-    document.getElementById("delete-roster-seating")
-        ?.addEventListener("click", () => {
-            const name = document.getElementById("saved-rosters-seating")?.value;
-            deleteRoster(name);
+    document.getElementById("saved-rosters")
+        ?.addEventListener("change", (e) => {
+            if (e.target.value) applyRoster(e.target.value);
         });
 
-    document.getElementById("delete-roster-groups")
+    document.getElementById("delete-roster")
         ?.addEventListener("click", () => {
-            const name = document.getElementById("saved-rosters-groups")?.value;
+            const name = document.getElementById("saved-rosters")?.value;
             deleteRoster(name);
         });
 

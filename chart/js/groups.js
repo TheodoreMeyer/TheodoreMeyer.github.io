@@ -2,31 +2,7 @@
    HIGHLIGHT ENGINE (SHARED LOGIC)
    ========================= */
 
-function applyHighlights(el, text) {
-    const matched = [];
 
-    for (const rule of highlightRules) {
-        if (rule.test(text)) {
-            matched.push(rule);
-        }
-    }
-
-    if (matched.length === 0) return;
-
-    // if only one match → simple styling
-    if (matched.length === 1) {
-        const r = matched[0];
-        el.style.background = r.bg;
-        el.style.borderColor = r.border;
-        return;
-    }
-
-    // multiple matches → diagonal split effect
-    const colors = matched.map(r => r.bg.replace("0.06", "0.10")).join(", ");
-
-    el.style.background = `linear-gradient(135deg, ${colors})`;
-    el.style.borderColor = matched[0].border;
-}
 /* =========================
    GENERATE GROUPS
    ========================= */
@@ -35,31 +11,36 @@ function generateGroups() {
     const output = document.getElementById("results-content");
     if (!output) return;
 
-    const names = shuffle(getNames("group-names"));
+    const names = shuffle(getNames("student-names"));
     const mode = document.getElementById("group-mode").value;
     const value = Number(document.getElementById("group-value").value);
 
     const groups = [];
 
-    // build groups
+    // Build groups
     if (mode === "size") {
         for (let i = 0; i < names.length; i += value) {
             groups.push(names.slice(i, i + value));
         }
     } else {
-        for (let i = 0; i < value; i++) groups.push([]);
+        for (let i = 0; i < value; i++) {
+            groups.push([]);
+        }
 
-        names.forEach((n, i) => {
-            groups[i % value].push(n);
+        names.forEach((name, i) => {
+            groups[i % value].push(name);
         });
     }
 
     output.innerHTML = "";
 
-    // render
+    // Render groups
     groups.forEach((group, i) => {
         const card = document.createElement("div");
         card.className = "group-card";
+
+        // Highlight the entire card based on all members
+        applyHighlights(card, group);
 
         const title = document.createElement("strong");
         title.textContent = `Group ${i + 1}`;
@@ -71,17 +52,15 @@ function generateGroups() {
             const el = document.createElement("div");
             el.textContent = name;
 
-            applyHighlights(el, name);
-
             card.appendChild(el);
         });
 
         output.appendChild(card);
     });
 
-    document.getElementById("results-view").classList.remove("hidden");
-    document.getElementById("app-view").classList.add("hidden");
     document.getElementById("results-title").textContent = "Groups";
+    document.getElementById("app-view").classList.add("hidden");
+    document.getElementById("results-view").classList.remove("hidden");
 }
 
 /* =========================

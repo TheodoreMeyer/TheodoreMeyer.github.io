@@ -27,26 +27,29 @@ const highlightRules = [
    ========================= */
 
 function applyHighlights(el, text) {
+    const values = Array.isArray(text) ? text : [text];
     const matched = [];
 
     for (const rule of highlightRules) {
-        if (rule.test(text)) {
+        if (values.some(value => rule.test(value))) {
             matched.push(rule);
         }
     }
 
-    if (matched.length === 0) return;
-
-    // if only one match → simple styling
-    if (matched.length === 1) {
-        const r = matched[0];
-        el.style.background = r.bg;
-        el.style.borderColor = r.border;
+    if (matched.length === 0) {
         return;
     }
 
-    // multiple matches → diagonal split effect
-    const colors = matched.map(r => r.bg.replace("0.06", "0.10")).join(", ");
+    if (matched.length === 1) {
+        const rule = matched[0];
+        el.style.background = rule.bg;
+        el.style.borderColor = rule.border;
+        return;
+    }
+
+    const colors = matched
+        .map(rule => rule.bg.replace("0.06", "0.10"))
+        .join(", ");
 
     el.style.background = `linear-gradient(135deg, ${colors})`;
     el.style.borderColor = matched[0].border;
@@ -106,7 +109,7 @@ function generateSeating() {
     const output = document.getElementById("results-content");
     if (!output) return;
 
-    const names = getNames("seating-names");
+    const names = getNames("student-names");
 
     const seats = [];
     seatLayout.forEach((row, r) =>
