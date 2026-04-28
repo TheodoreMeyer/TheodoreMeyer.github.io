@@ -59,43 +59,36 @@ function showTab(tab) {
 }
 
 /* =========================
-   MODAL (REPLACES confirm())
-   ========================= */
-
-function confirmDelete(message, onConfirm) {
-    const modal = document.getElementById("confirm-modal");
-    const text = document.getElementById("confirm-text");
-    const yesBtn = document.getElementById("confirm-yes");
-    const noBtn = document.getElementById("confirm-no");
-
-    if (!modal || !text || !yesBtn || !noBtn) return;
-
-    text.textContent = message;
-    modal.classList.remove("hidden");
-
-    yesBtn.onclick = null;
-    noBtn.onclick = null;
-
-    yesBtn.onclick = () => {
-        modal.classList.add("hidden");
-        onConfirm();
-    };
-
-    noBtn.onclick = () => {
-        modal.classList.add("hidden");
-    };
-}
-
-/* =========================
    STORAGE HELPERS
    ========================= */
 
 function getRosters() {
-    return JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}");
+    try {
+        return JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}");
+    } catch {
+        return {};
+    }
 }
 
 function saveRosters(data) {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+}
+
+/* =========================
+   CORE FIX: SINGLE ROSTER APPLIER
+   ========================= */
+
+function applyRoster(type, name) {
+    const textarea = document.getElementById(`${type}-names`);
+    const nameInput = document.getElementById(`roster-name-${type}`);
+
+    const rosters = getRosters();
+
+    if (!textarea || !name || !rosters[name]) return;
+
+    textarea.value = rosters[name];
+
+    if (nameInput) nameInput.value = "";
 }
 
 /* =========================
@@ -118,20 +111,8 @@ function saveRoster(type) {
 
     saveRosters(rosters);
     refreshRosterDropdowns();
-}
 
-/* =========================
-   LOAD ROSTER
-   ========================= */
-
-function loadRoster(type, name) {
-    const textarea = document.getElementById(`${type}-names`);
-    if (!textarea) return;
-
-    const rosters = getRosters();
-    if (!rosters[name]) return;
-
-    textarea.value = rosters[name];
+    nameInput.value = "";
 }
 
 /* =========================
@@ -141,22 +122,18 @@ function loadRoster(type, name) {
 function deleteRoster(name) {
     if (!name) return;
 
-    confirmDelete(`Delete roster "${name}"?`, () => {
-        const rosters = getRosters();
+    const ok = confirm(`Delete roster "${name}"?`);
+    if (!ok) return;
 
-        if (!rosters[name]) return;
+    const rosters = getRosters();
 
-        delete rosters[name];
-        saveRosters(rosters);
+    delete rosters[name];
+    saveRosters(rosters);
 
-        refreshRosterDropdowns();
+    refreshRosterDropdowns();
 
-        const s = document.getElementById("saved-rosters-seating");
-        const g = document.getElementById("saved-rosters-groups");
-
-        if (s) s.value = "";
-        if (g) g.value = "";
-    });
+    document.getElementById("saved-rosters-seating").value = "";
+    document.getElementById("saved-rosters-groups").value = "";
 }
 
 /* =========================
@@ -180,6 +157,15 @@ function refreshRosterDropdowns() {
 }
 
 /* =========================
+   LOAD HANDLER (FIXED)
+   ========================= */
+
+function autoFillRosterOnSelect(type, value) {
+    if (!value) return;
+    applyRoster(type, value);
+}
+
+/* =========================
    INIT
    ========================= */
 
@@ -187,9 +173,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
     refreshRosterDropdowns();
 
-    /* BACK BUTTON */
+    /* BACK */
     document.getElementById("back-button")
         ?.addEventListener("click", showGenerator);
+
+    /* PRINT */
+    document.getElementById("print-button")
+        ?.addEventListener("click", () => window.print());
 
     /* TABS */
     document.getElementById("seating-tab")
@@ -207,10 +197,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
     /* LOAD */
     document.getElementById("saved-rosters-seating")
-        ?.addEventListener("change", (e) => loadRoster("seating", e.target.value));
+        ?.addEventListener("change", (e) =>
+            autoFillRosterOnSelect("seating", e.target.value)
+        );
 
     document.getElementById("saved-rosters-groups")
-        ?.addEventListener("change", (e) => loadRoster("groups", e.target.value));
+        ?.addEventListener("change", (e) =>
+            autoFillRosterOnSelect("groups", e.target.value)
+        );
 
     /* DELETE */
     document.getElementById("delete-roster-seating")

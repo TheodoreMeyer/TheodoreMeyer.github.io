@@ -1,4 +1,60 @@
 let seatLayout = [];
+let seatAssignments = new Map();
+let selectedSeat = null;
+
+/* =========================
+   NAME HIGHLIGHT RULES
+   ========================= */
+
+const highlightRules = [
+    {
+        test: (name) => (name || "").toLowerCase().includes("theo"),
+        bg: "rgba(37, 99, 235, 0.06)",
+        border: "rgba(37, 99, 235, 0.18)"
+    },
+    {
+        test: (name) => {
+            const n = (name || "").toLowerCase();
+            return n.includes("eli") || n.includes("jonathan");
+        },
+        bg: "rgba(34, 197, 94, 0.06)",
+        border: "rgba(34, 197, 94, 0.18)"
+    }
+];
+
+/* =========================
+   APPLY HIGHLIGHTS (SCALABLE)
+   ========================= */
+
+function applyHighlights(el, text) {
+    const matched = [];
+
+    for (const rule of highlightRules) {
+        if (rule.test(text)) {
+            matched.push(rule);
+        }
+    }
+
+    if (matched.length === 0) return;
+
+    // if only one match → simple styling
+    if (matched.length === 1) {
+        const r = matched[0];
+        el.style.background = r.bg;
+        el.style.borderColor = r.border;
+        return;
+    }
+
+    // multiple matches → diagonal split effect
+    const colors = matched.map(r => r.bg.replace("0.06", "0.10")).join(", ");
+
+    el.style.background = `linear-gradient(135deg, ${colors})`;
+    el.style.borderColor = matched[0].border;
+}
+
+/* =========================
+   GRID BUILDING
+   ========================= */
 
 function buildGrid() {
     const rows = Number(document.getElementById("rows").value);
@@ -8,20 +64,27 @@ function buildGrid() {
         Array(cols).fill(true)
     );
 
+    seatAssignments = new Map();
+    selectedSeat = null;
+
     renderBuilder();
 }
+
+/* =========================
+   SEAT EDITOR GRID
+   ========================= */
 
 function renderBuilder() {
     const grid = document.getElementById("seat-builder");
     if (!grid) return;
 
     grid.innerHTML = "";
-    grid.style.gridTemplateColumns =
-        `repeat(${seatLayout[0].length}, 1fr)`;
+    grid.style.gridTemplateColumns = `repeat(${seatLayout[0].length}, 1fr)`;
 
     seatLayout.forEach((row, r) => {
         row.forEach((on, c) => {
             const btn = document.createElement("button");
+
             btn.className = "seat-cell" + (on ? "" : " disabled");
             btn.textContent = on ? "active" : "disabled";
 
@@ -35,6 +98,10 @@ function renderBuilder() {
     });
 }
 
+/* =========================
+   GENERATE SEATING
+   ========================= */
+
 function generateSeating() {
     const output = document.getElementById("results-content");
     if (!output) return;
@@ -42,41 +109,104 @@ function generateSeating() {
     const names = getNames("seating-names");
 
     const seats = [];
-    seatLayout.forEach((r, i) =>
-        r.forEach((on, j) => {
-            if (on) seats.push([i, j]);
+    seatLayout.forEach((row, r) =>
+        row.forEach((on, c) => {
+            if (on) seats.push([r, c]);
         })
     );
 
     const shuffled = shuffle(seats);
-    const map = new Map();
+    seatAssignments = new Map();
 
     names.forEach((n, i) => {
         const s = shuffled[i];
-        map.set(`${s[0]}-${s[1]}`, n);
+        if (!s) return;
+        seatAssignments.set(`${s[0]}-${s[1]}`, n);
     });
 
+    selectedSeat = null;
+
+    renderSeating();
+
+    document.getElementById("results-view").classList.remove("hidden");
+    document.getElementById("app-view").classList.add("hidden");
+    document.getElementById("results-title").textContent = "Seating Chart";
+}
+
+/* =========================
+   RENDER SEATING
+   ========================= */
+
+function renderSeating() {
+    const output = document.getElementById("results-content");
+    if (!output) return;
+
     output.innerHTML = "";
-    output.style.gridTemplateColumns =
-        `repeat(${seatLayout[0].length}, 1fr)`;
+    output.style.gridTemplateColumns = `repeat(${seatLayout[0].length}, 1fr)`;
 
     seatLayout.forEach((row, r) => {
         row.forEach((on, c) => {
             const div = document.createElement("div");
             div.className = "output-seat";
 
-            div.textContent = on
-                ? (map.get(`${r}-${c}`) || "")
-                : "—";
+            const key = `${r}-${c}`;
+            const name = on ? (seatAssignments.get(key) || "") : "—";
+
+            div.textContent = name;
+
+            if (on && name) {
+                applyHighlights(div, name);
+            }
+
+            div.addEventListener("click", () => {
+                handleSeatClick(r, c);
+            });
+
+            if (selectedSeat && selectedSeat.r === r && selectedSeat.c === c) {
+                div.style.outline = "2px solid #2563eb";
+                div.style.outlineOffset = "2px";
+            }
 
             output.appendChild(div);
         });
     });
-
-    document.getElementById("results-view").classList.remove("hidden");
-    document.getElementById("app-view").classList.add("hidden");
-    document.getElementById("results-title").textContent = "Seating Chart";
 }
+
+/* =========================
+   SWAP LOGIC
+   ========================= */
+
+function handleSeatClick(r, c) {
+    if (!seatLayout[r][c]) return;
+
+    if (!selectedSeat) {
+        selectedSeat = { r, c };
+        renderSeating();
+        return;
+    }
+
+    const prev = selectedSeat;
+
+    if (prev.r === r && prev.c === c) {
+        selectedSeat = null;
+        renderSeating();
+        return;
+    }
+
+    const keyA = `${prev.r}-${prev.c}`;
+    const keyB = `${r}-${c}`;
+
+    const temp = seatAssignments.get(keyA);
+    seatAssignments.set(keyA, seatAssignments.get(keyB));
+    seatAssignments.set(keyB, temp);
+
+    selectedSeat = null;
+    renderSeating();
+}
+
+/* =========================
+   UTILITIES
+   ========================= */
 
 function shuffle(a) {
     return [...a].sort(() => Math.random() - 0.5);
@@ -88,6 +218,10 @@ function getNames(id) {
         .map(x => x.trim())
         .filter(Boolean);
 }
+
+/* =========================
+   INIT
+   ========================= */
 
 document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("build-grid")?.addEventListener("click", buildGrid);

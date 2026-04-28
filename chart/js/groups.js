@@ -1,3 +1,36 @@
+/* =========================
+   HIGHLIGHT ENGINE (SHARED LOGIC)
+   ========================= */
+
+function applyHighlights(el, text) {
+    const matched = [];
+
+    for (const rule of highlightRules) {
+        if (rule.test(text)) {
+            matched.push(rule);
+        }
+    }
+
+    if (matched.length === 0) return;
+
+    // if only one match → simple styling
+    if (matched.length === 1) {
+        const r = matched[0];
+        el.style.background = r.bg;
+        el.style.borderColor = r.border;
+        return;
+    }
+
+    // multiple matches → diagonal split effect
+    const colors = matched.map(r => r.bg.replace("0.06", "0.10")).join(", ");
+
+    el.style.background = `linear-gradient(135deg, ${colors})`;
+    el.style.borderColor = matched[0].border;
+}
+/* =========================
+   GENERATE GROUPS
+   ========================= */
+
 function generateGroups() {
     const output = document.getElementById("results-content");
     if (!output) return;
@@ -8,6 +41,7 @@ function generateGroups() {
 
     const groups = [];
 
+    // build groups
     if (mode === "size") {
         for (let i = 0; i < names.length; i += value) {
             groups.push(names.slice(i, i + value));
@@ -22,11 +56,27 @@ function generateGroups() {
 
     output.innerHTML = "";
 
-    groups.forEach((g, i) => {
-        const div = document.createElement("div");
-        div.className = "group-card";
-        div.innerHTML = `<strong>Group ${i + 1}</strong><br>${g.join("<br>")}`;
-        output.appendChild(div);
+    // render
+    groups.forEach((group, i) => {
+        const card = document.createElement("div");
+        card.className = "group-card";
+
+        const title = document.createElement("strong");
+        title.textContent = `Group ${i + 1}`;
+        card.appendChild(title);
+
+        card.appendChild(document.createElement("br"));
+
+        group.forEach(name => {
+            const el = document.createElement("div");
+            el.textContent = name;
+
+            applyHighlights(el, name);
+
+            card.appendChild(el);
+        });
+
+        output.appendChild(card);
     });
 
     document.getElementById("results-view").classList.remove("hidden");
@@ -34,9 +84,18 @@ function generateGroups() {
     document.getElementById("results-title").textContent = "Groups";
 }
 
+/* =========================
+   INIT
+   ========================= */
+
 document.addEventListener("DOMContentLoaded", () => {
-    document.getElementById("generate-groups")?.addEventListener("click", generateGroups);
+    document.getElementById("generate-groups")
+        ?.addEventListener("click", generateGroups);
 });
+
+/* =========================
+   UTILITIES
+   ========================= */
 
 function shuffle(a) {
     return [...a].sort(() => Math.random() - 0.5);
