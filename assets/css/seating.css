@@ -1,0 +1,217 @@
+body {
+    margin: 0;
+    font-family: system-ui, sans-serif;
+    background: #f6f7fb;
+    color: #111827;
+}
+
+.hidden {
+    display: none !important;
+}
+
+/* ================= APP ================= */
+
+.app {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 2rem 1rem;
+}
+
+/* ================= HEADER ================= */
+
+.header {
+    text-align: center;
+    margin-bottom: 1rem;
+}
+
+/* ================= TABS ================= */
+
+.tabs {
+    display: flex;
+    gap: 0.8rem;
+    margin-bottom: 1rem;
+}
+
+.tab {
+    flex: 1;
+    padding: 0.75rem;
+
+    border: 1px solid #e5e7eb;
+    background: #ffffff;
+    border-radius: 10px;
+
+    cursor: pointer;
+    font-weight: 600;
+
+    color: #111827;              /* FIX: visible default text */
+    transition: all 0.2s ease;
+
+    user-select: none;
+}
+
+.tab:hover {
+    border-color: #2563eb;
+}
+
+.tab.active {
+    background: #2563eb;
+    border-color: #2563eb;
+    color: #ffffff;
+}
+
+/* ================= CARDS ================= */
+
+.card {
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 14px;
+    padding: 1rem;
+    margin-bottom: 1rem;
+
+    box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+}
+
+/* ================= INPUTS ================= */
+
+textarea,
+input,
+select {
+    width: 100%;
+    padding: 0.65rem;
+
+    border-radius: 8px;
+    border: 1px solid #d1d5db;
+
+    margin-top: 0.4rem;
+    margin-bottom: 0.8rem;
+
+    font: inherit;
+    background: #ffffff;
+}
+
+textarea {
+    min-height: 180px;   /* makes it taller */
+    resize: vertical;    /* keeps usability */
+    line-height: 1.4;
+}
+
+textarea:focus,
+input:focus,
+select:focus {
+    outline: 2px solid #2563eb33;
+    border-color: #2563eb;
+}
+
+/* ================= GRID CONTROLS ================= */
+
+.row {
+    display: grid;
+    grid-template-columns: 1fr 1fr auto;
+    gap: 0.5rem;
+    align-items: end;
+}
+
+/* ================= BUTTONS ================= */
+
+button {
+    padding: 0.7rem;
+    border: none;
+    border-radius: 8px;
+
+    background: #2563eb;
+    color: #ffffff;
+
+    cursor: pointer;
+    font-weight: 600;
+
+    transition: background 0.2s ease;
+}
+
+button:hover {
+    background: #1d4ed8;
+}
+
+button.danger {
+    background: #dc2626; /* red */
+    color: #ffffff;
+}
+
+button.danger:hover {
+    background: #b91c1c;
+}
+
+/* ================= SEATING GRID ================= */
+
+.grid,
+#results-content {
+    display: grid;
+    gap: 0.35rem;
+
+    overflow-x: auto;
+    width: 100%;
+}
+
+/* SMALL CARDS (FIXED SCALE + CONSISTENT LOOK) */
+
+.seat-cell,
+.output-seat {
+    min-width: 60px;
+    min-height: 42px;
+
+    font-size: 0.75rem;
+    line-height: 1.1;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 8px;
+    border: 1px solid #e5e7eb;
+
+    background: #f9fafb;
+    color: #111827;
+
+    text-align: center;
+    word-break: break-word;
+}
+
+.seat-cell {
+    background: #eef2ff;
+}
+
+.seat-cell.disabled {
+    background: #e5e7eb;
+    color: #9ca3af;
+}
+
+/* ================= RESULTS ================= */
+
+.results-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    margin-bottom: 1rem;
+}
+
+.group-card {
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+
+    padding: 1rem;
+    border-radius: 10px;
+
+    margin-bottom: 0.5rem;
+}
+
+/* ================= RESPONSIVE ================= */
+
+@media (max-width: 768px) {
+    .row {
+        grid-template-columns: 1fr;
+    }
+
+    .tabs {
+        flex-direction: column;
+    }
+}
