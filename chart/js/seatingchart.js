@@ -12,13 +12,53 @@ const highlightRules = [
         bg: "rgba(37, 99, 235, 0.06)",
         border: "rgba(37, 99, 235, 0.18)"
     },
+
     {
         test: (name) => {
             const n = (name || "").toLowerCase();
-            return n.includes("eli") || n.includes("jonathan");
+
+            const isEli = n.includes("eli");
+            const isJonathan = n.includes("jonathan");
+            const hasJustice = n.includes("justice");
+
+            return isEli || (isJonathan && !hasJustice);
         },
         bg: "rgba(34, 197, 94, 0.06)",
         border: "rgba(34, 197, 94, 0.18)"
+    },
+
+    {
+        test: (name) => (name || "").toLowerCase().includes("julianne"),
+        bg: "rgba(244, 114, 182, 0.06)", // pink
+        border: "rgba(244, 114, 182, 0.18)"
+    },
+
+    {
+        test: (name) => (name || "").toLowerCase().includes("zoey"),
+        bg: "rgba(168, 85, 247, 0.06)", // purple
+        border: "rgba(168, 85, 247, 0.18)"
+    },
+
+    {
+        test: (name) => (name || "").toLowerCase().includes("nehemiah"),
+        bg: "rgba(239, 68, 68, 0.06)", // red
+        border: "rgba(239, 68, 68, 0.18)"
+    },
+
+    {
+        test: (name) => (name || "").toLowerCase().includes("annie"),
+        bg: "rgba(249, 115, 22, 0.06)", // orange
+        border: "rgba(249, 115, 22, 0.18)"
+    },
+    {
+        test: (name) => (name || "").toLowerCase().includes("owen"),
+        bg: "rgba(148, 163, 184, 0.06)", // slate gray
+        border: "rgba(148, 163, 184, 0.18)"
+    },
+    {
+        test: (name) => (name || "").toLowerCase().includes("georgia"),
+        bg: "rgba(20, 184, 166, 0.06)", // teal
+        border: "rgba(20, 184, 166, 0.18)"
     }
 ];
 
