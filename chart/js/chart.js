@@ -113,11 +113,10 @@ function saveRoster() {
 /* =========================
    DELETE ROSTER
    ========================= */
-
 function deleteRoster(name) {
     if (!name) return;
 
-    const ok = confirm(`Delete roster "${name}"?`);
+    const ok = confirm(`Delete roster "${name}"?\n\nThis will also clear the current student input text.`);
     if (!ok) return;
 
     const rosters = getRosters();
@@ -127,7 +126,13 @@ function deleteRoster(name) {
 
     refreshRosterDropdowns();
 
-    document.getElementById("saved-rosters").value = "";
+    const select = document.getElementById("saved-rosters");
+    const textarea = document.getElementById("student-names");
+
+    if (select) select.value = "";
+
+    // CLEAR INPUT TEXTAREA TOO
+    if (textarea) textarea.value = "";
 }
 
 /* =========================

@@ -12,17 +12,35 @@ const highlightRules = [
         bg: "rgba(37, 99, 235, 0.06)",
         border: "rgba(37, 99, 235, 0.18)"
     },
-
     {
         test: (name) => {
-            const n = (name || "").toLowerCase();
+            const n = (name || "").toLowerCase().trim();
 
-            const isEli = n.includes("eli");
-            const isJonathan = n.includes("jonathan");
-            const hasJustice = n.includes("justice");
+            // Handle "Last, First" vs "First Last"
+            const isCommaFormat = n.includes(",");
+
+            let first = "";
+            let last = "";
+
+            if (isCommaFormat) {
+                const [l, f] = n.split(",").map(s => s.trim());
+                last = l || "";
+                first = f || "";
+            } else {
+                const parts = n.split(/\s+/);
+                first = parts[0] || "";
+                last = parts.slice(1).join(" ");
+            }
+
+            const isEli = first === "eli" || last === "eli";
+
+            const isJonathan = first === "jonathan" || last === "jonathan";
+
+            const hasJustice = /\bjustice\b/.test(n); // word-safe match
 
             return isEli || (isJonathan && !hasJustice);
         },
+
         bg: "rgba(34, 197, 94, 0.06)",
         border: "rgba(34, 197, 94, 0.18)"
     },
