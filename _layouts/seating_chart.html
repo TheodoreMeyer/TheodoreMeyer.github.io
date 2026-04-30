@@ -6,8 +6,8 @@
 
     <title>{{ page.title }}</title>
 
-    <link rel="stylesheet" href="{{ '/assets/css/seating.css' | relative_url }}">
     <link rel="stylesheet" href="/assets/css/projects.css">
+    <link rel="stylesheet" href="{{ '/assets/css/seating.css' | relative_url }}">
 </head>
 
 {% include header.html %}
@@ -17,9 +17,10 @@
 {{ content }}
 
 <!-- JS ORDER MATTERS -->
-<script src="{{ '/chart/js/chart.js' | relative_url }}"></script>
-<script src="{{ '/chart/js/groups.js' | relative_url }}"></script>
-<script src="{{ '/chart/js/seatingchart.js' | relative_url }}"></script>
+<script src="{{ '/class-tools/chart/js/highlights.js' | relative_url }}"></script>
+<script src="{{ '/class-tools/chart/js/chart.js' | relative_url }}"></script>
+<script src="{{ '/class-tools/chart/js/groups.js' | relative_url }}"></script>
+<script src="{{ '/class-tools/chart/js/seatingchart.js' | relative_url }}"></script>
 
 {% include footer.html %}
 

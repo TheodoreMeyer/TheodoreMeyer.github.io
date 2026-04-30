@@ -1,0 +1,109 @@
+---
+layout: seating_chart
+title: Classroom Randomizer
+permalink: /class-tools/chart/
+---
+
+<div class="app">
+
+    <!-- ================= HEADER ================= -->
+    <header class="header">
+        <h1>Classroom Randomizer</h1>
+        <p>Seating charts and group generator</p>
+    </header>
+
+    <!-- ================= TABS ================= -->
+    <nav class="tabs">
+        <button id="seating-tab" class="tab active">Seating</button>
+        <button id="groups-tab" class="tab">Groups</button>
+    </nav>
+
+    <!-- ================= INPUT VIEW ================= -->
+    <section id="app-view">
+
+        <div class="card" id="roster-panel">
+            <h2>Students</h2>
+
+            <h3>Saved Rosters</h3>
+
+            <select id="saved-rosters">
+                <option value="">Select roster</option>
+            </select>
+
+            <input id="roster-name" placeholder="Roster name">
+
+            <button id="save-roster" type="button">Save</button>
+            <button id="delete-roster" class="danger" type="button">Delete</button>
+
+            <h3>Add Students</h3>
+            <p>Enter one student name per line.</p>
+            <textarea id="student-names"></textarea>
+        </div>
+
+        <!-- ===== SEATING ===== -->
+        <section id="seating-section">
+
+            <div class="card">
+                <h2>Layout</h2>
+
+                <div class="row">
+                    <input id="rows" type="number" min="1" value="5">
+                    <input id="columns" type="number" min="1" value="6">
+                    <button id="build-grid" type="button">Build</button>
+                </div>
+
+                <div id="seat-builder" class="grid"></div>
+
+                <button id="generate-seating" type="button">Generate Seating</button>
+            </div>
+
+        </section>
+
+        <!-- ===== GROUPS ===== -->
+        <section id="groups-section" class="hidden">
+
+            <div class="card">
+                <h2>Groups</h2>
+
+                <select id="group-mode">
+                    <option value="size">Groups of Size</option>
+                    <option value="count">Number of Groups</option>
+                </select>
+
+                <input id="group-value" type="number" min="1" value="4">
+
+                <button id="generate-groups" type="button">
+                    Generate Groups
+                </button>
+            </div>
+
+        </section>
+
+    </section>
+
+    <!-- ================= RESULTS ================= -->
+    <section id="results-view" class="hidden">
+
+        <div class="results-header">
+
+            <div class="results-title-block">
+                <h1 id="results-title"></h1>
+                <p class="results-subtitle">
+                    For Seating: Click a student, then click another to swap their positions.
+                </p>
+            </div>
+
+            <div class="results-actions">
+                <button id="print-button" type="button">Print</button>
+                <button id="back-button" type="button" class="secondary">
+                    Back
+                </button>
+            </div>
+
+        </div>
+
+        <div id="results-content"></div>
+
+    </section>
+
+</div>

@@ -1,8 +1,14 @@
 body {
     margin: 0;
     font-family: system-ui, sans-serif;
-    background: #f6f7fb;
-    color: #111827;
+    /* background: #f6f7fb;--> */
+    /*color: #111827; */
+
+    background-image: url("/class-tools/chart/images/mc_fire.gif");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
 }
 
 .hidden {
@@ -238,11 +244,12 @@ button.danger:hover {
 .group-card {
     background: #ffffff;
     border: 1px solid #e5e7eb;
-
     padding: 1rem;
     border-radius: 10px;
-
     margin: 0;
+
+    width: 100%;
+    box-sizing: border-box;
 }
 
 /* ================= RESPONSIVE ================= */
