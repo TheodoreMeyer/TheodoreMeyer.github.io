@@ -1,0 +1,103 @@
+/* =========================
+   LAYOUT STATES
+   ========================= */
+
+.hidden {
+    display: none !important;
+}
+
+.setup-view,
+.wheel-view {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 2rem 1rem;
+}
+
+/* =========================
+   CONTROL PANEL
+   ========================= */
+
+.control-panel {
+    max-width: 420px;
+}
+
+/* =========================
+   WHEEL
+   ========================= */
+
+.wheel-stage {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+}
+
+.wheel-container {
+    position: relative;
+    width: min(700px, 100%);
+}
+
+#wheelCanvas {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+.wheel-pointer {
+    position: absolute;
+    top: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+
+    width: 0;
+    height: 0;
+
+    border-left: 22px solid transparent;
+    border-right: 22px solid transparent;
+    border-top: 50px solid #dc2626;
+}
+
+/* =========================
+   BUTTON LAYOUT
+   ========================= */
+
+button {
+    margin-top: 0.75rem;
+}
+
+/* =========================
+   WINNER OVERLAY
+   ========================= */
+
+.winner-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.6);
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.winner-card {
+    background: white;
+    padding: 3rem;
+    border-radius: 18px;
+    text-align: center;
+    width: min(500px, 90vw);
+}
+
+.winner-name {
+    font-size: 3rem;
+    font-weight: 800;
+    margin: 1rem 0;
+}
+
+/* =========================
+   SPIN STATE
+   ========================= */
+
+.spinning .control-panel {
+    opacity: 0;
+    pointer-events: none;
+}

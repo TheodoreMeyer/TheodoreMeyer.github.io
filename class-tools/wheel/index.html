@@ -1,0 +1,72 @@
+---
+layout: base
+title: Wheel System
+extra_css:
+- /class-tools/wheel/wheel.css
+extra_js:
+- /class-tools/wheel/wheel.js
+- /class-tools/chart/js/highlights.js
+---
+
+<section class="setup-view" id="setupView">
+
+    <div class="card control-panel">
+
+        <h2>Setup</h2>
+
+        <label for="savedRosterSelect">Roster</label>
+        <select id="savedRosterSelect"></select>
+
+        <label for="namesInput">Names</label>
+        <textarea id="namesInput"></textarea>
+
+        <label for="modeSelect">Mode</label>
+        <select id="modeSelect">
+            <option value="winner">Winner</option>
+            <option value="seat" hidden disabled>Seat</option>
+            <option value="group" hidden disabled>Group</option>
+        </select>
+
+        <div id="mappingSection" class="hidden">
+            <label>Target</label>
+            <select id="targetSelect"></select>
+        </div>
+
+        <button id="createWheelBtn">Create Wheel</button>
+
+    </div>
+
+</section>
+
+<section class="wheel-view hidden" id="wheelView">
+
+    <div class="card wheel-stage">
+
+        <div class="wheel-container">
+            <canvas id="wheelCanvas" width="700" height="700"></canvas>
+            <div class="wheel-pointer"></div>
+        </div>
+
+        <button id="spinBtn">Spin</button>
+        <button id="backBtn" class="danger">Back</button>
+
+    </div>
+
+</section>
+
+<div class="winner-overlay hidden" id="winnerOverlay">
+
+    <div class="winner-card">
+
+        <div class="winner-label">Winner</div>
+        <div class="winner-name" id="winnerName"></div>
+        <div class="winner-target" id="winnerTarget"></div>
+
+        <div class="winner-actions">
+            <button id="removeWinnerBtn" class="danger">Remove</button>
+            <button id="closeWinnerBtn">Continue</button>
+        </div>
+
+    </div>
+
+</div>

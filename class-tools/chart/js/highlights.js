@@ -7,7 +7,7 @@ const highlightRules = [
         test: name => (name || "").toLowerCase().includes("theo"),
         bg: "rgba(37, 99, 235, 0.35)",
         border: "rgba(37, 99, 235, 0.7)",
-        bgImage: "url('images/mc_1.png')",
+        bgImage: "url('../chart/images/mc_1.png')",
         textColor: "#ffffff",
         textShadow: "0 1px 3px rgba(0, 0, 0, 0.9)"
     },
@@ -42,7 +42,7 @@ const highlightRules = [
 
         bg: "rgba(34, 197, 94, 0.06)",
         border: "rgba(34, 197, 94, 0.18)",
-        bgImage: "url('images/mc_3.png')",
+        bgImage: "url('../chart/images/mc_3.png')",
         textColor: "#ffffff",
         // softer shadow so text doesn't look “blurry heavy”
         textShadow: "0 1px 3px rgba(0, 0, 0, 0.65)"
@@ -52,7 +52,7 @@ const highlightRules = [
         test: (name) => (name || "").toLowerCase().includes("julianne"),
         bg: "rgba(244, 114, 182, 0.06)", // pink
         border: "rgba(244, 114, 182, 0.18)",
-        bgImage: "url('images/mc_2.png')",
+        bgImage: "url('../chart/images/mc_2.png')",
 
         textColor: "#0b1220",
         textShadow: "0 0 2px rgba(255, 255, 255, 0.95), 0 1px 3px rgba(0,0,0,0.35)"
@@ -68,7 +68,7 @@ const highlightRules = [
         test: (name) => (name || "").toLowerCase().includes("nehemiah"),
         bg: "rgba(239, 68, 68, 0.06)", // red
         border: "rgba(239, 68, 68, 0.18)",
-        bgImage: "url('images/mc_4.png')",
+        bgImage: "url('../chart/images/mc_4.png')",
         textColor: "#f1f5f9",
         textShadow: "0 1px 2px rgba(15, 23, 42, 0.75)"
     },
