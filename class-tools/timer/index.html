@@ -1,0 +1,177 @@
+---
+layout: base
+title: Classroom Timer
+extra_css:
+- /class-tools/timer/timer.css
+---
+
+<section class="timer-page">
+
+    <!-- Setup Screen -->
+    <div id="setupView" class="timer-container card">
+        <header class="timer-header">
+            <h1>Classroom Timer</h1>
+            <p>Set your timer, then begin.</p>
+        </header>
+
+        <div class="time-grid">
+            <div class="input-group">
+                <label for="minutesInput">Minutes</label>
+                <input
+                        id="minutesInput"
+                        type="number"
+                        min="0"
+                        max="999"
+                        value="5"
+                >
+            </div>
+
+            <div class="input-group">
+                <label for="secondsInput">Seconds</label>
+                <input
+                        id="secondsInput"
+                        type="number"
+                        min="0"
+                        max="59"
+                        value="0"
+                >
+            </div>
+        </div>
+
+        <button id="beginBtn" type="button">
+            Start Timer
+        </button>
+    </div>
+
+    <!-- Timer Screen -->
+    <div id="timerView" class="timer-container card hidden">
+        <div id="timerDisplay" class="timer-display">
+            05:00
+        </div>
+
+        <div class="controls">
+            <button id="backBtn" type="button">
+                Back
+            </button>
+
+            <button id="toggleBtn" type="button">
+                Start
+            </button>
+
+            <button id="resetBtn" type="button" class="danger">
+                Reset
+            </button>
+        </div>
+    </div>
+
+</section>
+
+<script>
+    let totalSeconds = 300;
+    let remainingSeconds = 300;
+    let timerInterval = null;
+    let isRunning = false;
+
+    const setupView = document.getElementById("setupView");
+    const timerView = document.getElementById("timerView");
+
+    const minutesInput = document.getElementById("minutesInput");
+    const secondsInput = document.getElementById("secondsInput");
+
+    const timerDisplay = document.getElementById("timerDisplay");
+    const toggleBtn = document.getElementById("toggleBtn");
+
+    function formatTime(seconds) {
+        const minutes = Math.floor(seconds / 60);
+        const secs = seconds % 60;
+
+        return `${String(minutes).padStart(2, "0")}:${String(secs).padStart(2, "0")}`;
+    }
+
+    function updateDisplay() {
+        timerDisplay.textContent = formatTime(remainingSeconds);
+    }
+
+    function stopTimer() {
+        clearInterval(timerInterval);
+        timerInterval = null;
+        isRunning = false;
+        toggleBtn.textContent = "Start";
+    }
+
+    function startTimer() {
+        if (isRunning || remainingSeconds <= 0) {
+            return;
+        }
+
+        isRunning = true;
+        toggleBtn.textContent = "Pause";
+
+        timerInterval = setInterval(() => {
+            remainingSeconds--;
+            updateDisplay();
+
+            if (remainingSeconds <= 0) {
+                stopTimer();
+                alert("Time's up!");
+            }
+        }, 1000);
+    }
+
+    function toggleTimer() {
+        if (isRunning) {
+            stopTimer();
+        } else {
+            startTimer();
+        }
+    }
+
+    function resetTimer() {
+        stopTimer();
+        remainingSeconds = totalSeconds;
+        updateDisplay();
+    }
+
+    function showSetup() {
+        resetTimer();
+        timerView.classList.add("hidden");
+        setupView.classList.remove("hidden");
+    }
+
+    function showTimer() {
+        setupView.classList.add("hidden");
+        timerView.classList.remove("hidden");
+    }
+
+    function beginTimer() {
+        const minutes = parseInt(minutesInput.value, 10) || 0;
+        const seconds = parseInt(secondsInput.value, 10) || 0;
+
+        const safeSeconds = Math.min(seconds, 59);
+        totalSeconds = (minutes * 60) + safeSeconds;
+
+        if (totalSeconds <= 0) {
+            return;
+        }
+
+        remainingSeconds = totalSeconds;
+        updateDisplay();
+        stopTimer();
+        showTimer();
+    }
+
+    document.getElementById("beginBtn")
+        .addEventListener("click", beginTimer);
+
+    document.getElementById("toggleBtn")
+        .addEventListener("click", toggleTimer);
+
+    document.getElementById("resetBtn")
+        .addEventListener("click", resetTimer);
+
+    document.getElementById("backBtn")
+        .addEventListener("click", showSetup);
+
+    updateDisplay();
+</script>
+```
