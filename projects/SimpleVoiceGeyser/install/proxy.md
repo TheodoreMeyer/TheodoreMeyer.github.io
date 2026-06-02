@@ -55,6 +55,10 @@ server {
         proxy_set_header Connection "upgrade";
 
         proxy_set_header Host $host;
+        
+        # Enforce connections and request rate ceilings
+        limit_conn websocket_conn_limit 5;
+        limit_req zone=websocket_req_limit burst=10 nodelay;
     }
 }
 ```

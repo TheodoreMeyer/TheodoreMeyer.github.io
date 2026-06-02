@@ -11,6 +11,14 @@ This plugin exposes a web-based voice interface. You are responsible for securin
 
 ---
 
+# Built-in protections:
+- Passwords are hashed (bcrypt)
+- No default credentials
+- If someone spams logins for a player (more than 5 per minute), that player is temporarily locked out for 5 minutes.
+     - To get back in, the player must wait 5 minutes or change their password in-game (which resets the lockout)
+
+---
+
 ## Key Risks
 
 ### 1. Unencrypted Traffic

@@ -32,6 +32,16 @@ This page documents version upgrade behavior and breaking changes.
 - Existing users will lose access until passwords are reconfigured
 - Improves overall security
 
+### Upgrade to 0.1.1
+
+- Password storage behavior changed
+- Users must reset passwords after upgrading
+
+#### Impact
+
+- Existing users will lose access until passwords are reconfigured
+- This removes redundancy and increases performance.
+
 ---
 
 ## Best Practices

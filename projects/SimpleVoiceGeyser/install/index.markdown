@@ -72,7 +72,7 @@ client:
 
    # default: 2
    # idle websocket timeout in minutes
-   idletimout: 2
+   idletimeout: 2
 
    # default: false
    # Only allow bedrock players to join the chat
@@ -83,6 +83,9 @@ client:
    # WARNING: Make sure you have off-hand-emote turned off in geyser or there may
    #          be conflict
    useEmoteForSVG: true
+   
+updatechecker:
+  enable: true
 
 server:
 

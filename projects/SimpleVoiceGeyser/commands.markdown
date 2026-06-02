@@ -132,6 +132,19 @@ Leaves the current voice group.
 
 ---
 
+## /svg reload
+
+* Reloads the plugin configuration. Please note that this does not reload everything.
+* Requires * `svg.admin` permission.
+---
+
+## /svg checkUpdate
+
+* Triggers an update check and notifies the console if an update is available.
+* Requires * `svg.admin` permission.
+
+---
+
 ## /svg help
 
 Displays the command help menu.
