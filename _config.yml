@@ -35,7 +35,8 @@ plugins:
 
 # Exclude from processing.
 exclude:
-   - .git/
+  - _svg_build
+  - .git/
    - Gemfile
    - Gemfile.lock
 #   - .sass-cache/

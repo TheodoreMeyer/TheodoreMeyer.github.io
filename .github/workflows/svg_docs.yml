@@ -24,19 +24,22 @@ jobs:
       - name: Checkout website repo
         uses: actions/checkout@v4
 
-      - name: Checkout SimpleVoice-Geyser repo
+      # IMPORTANT: keep external repo OUT of Jekyll tree
+      - name: Checkout SimpleVoice-Geyser repo (staging only)
         uses: actions/checkout@v4
         with:
           repository: TheodoreMeyer/SimpleVoice-Geyser
-          path: svg
+          path: _svg_build
 
       - name: Sync docs into Jekyll project folder
         run: |
           rm -rf projects/simplevoicegeyser
           mkdir -p projects/simplevoicegeyser
-          cp -r svg/docs/* projects/simplevoicegeyser/
 
-      - name: Setup Pages
+          # copy only docs (no folder leakage)
+          cp -r _svg_build/docs/* projects/simplevoicegeyser/
+
+      - name: Configure Pages
         uses: actions/configure-pages@v5
 
       - name: Build Jekyll site
