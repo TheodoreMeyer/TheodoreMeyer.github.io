@@ -1,0 +1,42 @@
+<aside class="project-sidebar">
+
+    {%- assign project_slug = page.project -%}
+
+    {%- assign docs = site.pages
+    | where_exp: "p", "p.path contains project_slug"
+    | sort: "path" -%}
+
+    {%- assign home = docs | where_exp: "d", "d.path contains 'index.md'" | first -%}
+
+    <h3>
+        {{ home.title | default: project_slug }}
+    </h3>
+
+    <ul>
+
+        {%- for doc in docs -%}
+
+        {%- assign rel = doc.path
+        | remove_first: "projects/"
+        | remove_first: project_slug
+        | remove_first: "/"
+        -%}
+
+        {%- assign parts = rel | split: "/" -%}
+        {%- assign depth = parts | size -%}
+
+        {%- if doc.title -%}
+
+        <li class="depth-{{ depth }}">
+            <a href="{{ doc.url | relative_url }}"
+               class="{% if page.url == doc.url %}active{% endif %}">
+                {{ doc.title }}
+            </a>
+        </li>
+
+        {%- endif -%}
+
+        {%- endfor -%}
+
+    </ul>
+</aside>

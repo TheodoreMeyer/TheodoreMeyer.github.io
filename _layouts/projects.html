@@ -16,23 +16,12 @@
 
     <div class="project-wrapper">
 
-        <aside class="project-sidebar">
-            <h3>Simple Voice Geyser</h3>
+        {% if page.project %}
+        {% include docs_sidebar.html %}
 
-            {% assign docs = site.pages
-            | where: "project", "simplevoicegeyser"
-            | sort: "order" %}
-
-            <ul>
-                {% for doc in docs %}
-                {% if doc.title %}
-                <li>
-                    <a href="{{ doc.url }}">{{ doc.title }}</a>
-                </li>
-                {% endif %}
-                {% endfor %}
-            </ul>
-        </aside>
+        {% elsif page.sidebar %}
+        {% include project_sidebar.html %}
+        {% endif %}
 
         <div class="content-wrapper">
             {{ content }}
