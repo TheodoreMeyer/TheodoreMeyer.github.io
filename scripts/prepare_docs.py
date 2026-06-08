@@ -42,6 +42,4 @@ for md_file in project_dir.rglob("*.md"):
         f.write("---")
         f.write(parts[2])
 
-project_yml.unlink()
-
 print(f"Prepared docs for {slug}")
