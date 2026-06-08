@@ -3,24 +3,33 @@
     {% assign project_slug = page.project %}
     {% assign prefix = "projects/" | append: project_slug %}
 
-    {% assign all_docs = site.pages | sort: "path" %}
+    {% assign docs = site.pages | sort: "path" %}
 
     {% assign home_path = prefix | append: "/index.md" %}
     {% assign home = site.pages | where: "path", home_path | first %}
 
     {% assign current = page.path %}
 
-    <h3>{{ home.title | default: project_slug }}</h3>
+    <!-- HOME LINK -->
+    <h3>
+        <a href="{{ home.url | relative_url }}">
+            {{ home.title | default: project_slug }}
+        </a>
+    </h3>
 
     <ul>
 
-        {% for doc in all_docs %}
+        {% assign seen_folders = "" %}
+
+        {% for doc in docs %}
 
         {% if doc.path contains prefix and doc.path != home_path %}
 
         {% assign rel = doc.path | remove_first: prefix | remove_first: "/" %}
         {% assign parts = rel | split: "/" %}
+        {% assign folder = parts[0] %}
 
+        <!-- ROOT PAGES (no subfolder) -->
         {% if parts.size == 1 %}
 
         <li>
@@ -30,61 +39,48 @@
             </a>
         </li>
 
+        {% else %}
+
+        <!-- FOLDER HEADER (only once) -->
+        {% unless seen_folders contains folder %}
+
+        <li class="sidebar-section">
+            {{ folder }}
+        </li>
+
+        <!-- CHILDREN -->
+        {% for child in docs %}
+
+        {% if child.path contains prefix %}
+
+        {% assign child_rel = child.path | remove_first: prefix | remove_first: "/" %}
+        {% assign child_parts = child_rel | split: "/" %}
+
+        {% if child_parts[0] == folder %}
+
+        <li>
+            <a href="{{ child.url | relative_url }}"
+               style="padding-left: 1rem;"
+               class="{% if child.path == current %}active{% endif %}">
+                {% if child_parts.size > 1 %}
+                | {{ child.title }}
+                {% else %}
+                {{ child.title }}
+                {% endif %}
+            </a>
+        </li>
+
         {% endif %}
 
         {% endif %}
 
         {% endfor %}
 
-        {%- comment -%}
-        SECOND PASS: folders (NO rendered tracking)
-        {%- endcomment -%}
-
-        {% assign seen_folders = "" %}
-
-        {% for doc in all_docs %}
-
-        {% if doc.path contains prefix and doc.path != home_path %}
-
-        {% assign rel = doc.path | remove_first: prefix | remove_first: "/" %}
-        {% assign parts = rel | split: "/" %}
-        {% assign folder = parts[0] %}
-
-        {% unless seen_folders contains folder %}
-
-        <li>
-            <span class="sidebar-section">{{ folder }}</span>
-
-            <ul class="sidebar-subnav">
-
-                {% for child in all_docs %}
-
-                {% if child.path contains prefix %}
-
-                {% assign child_rel = child.path | remove_first: prefix | remove_first: "/" %}
-                {% assign child_parts = child_rel | split: "/" %}
-
-                {% if child_parts[0] == folder and child.path != home_path %}
-
-                <li>
-                    <a href="{{ child.url | relative_url }}"
-                       class="{% if child.path == current %}active{% endif %}">
-                        {{ child.title }}
-                    </a>
-                </li>
-
-                {% endif %}
-
-                {% endif %}
-
-                {% endfor %}
-
-            </ul>
-        </li>
-
         {% assign seen_folders = seen_folders | append: folder | append: "," %}
 
         {% endunless %}
+
+        {% endif %}
 
         {% endif %}
 
