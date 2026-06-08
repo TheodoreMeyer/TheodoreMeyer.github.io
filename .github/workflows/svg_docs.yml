@@ -2,14 +2,10 @@ name: SVG Docs Build
 
 on:
   push:
-    branches:
-      - main
-
+    branches: [main]
   workflow_dispatch:
-
   repository_dispatch:
-    types:
-      - svg-docs-updated
+    types: [svg-docs-updated]
 
 permissions:
   contents: read
@@ -32,81 +28,53 @@ jobs:
       - name: Checkout website
         uses: actions/checkout@v4
 
-      - name: Checkout SimpleVoice-Geyser
+      - name: Checkout SVG repo
         uses: actions/checkout@v4
         with:
           repository: TheodoreMeyer/SimpleVoice-Geyser
           ref: master
           path: svg
 
-      - name: Install yq
-        run: |
-          sudo wget -qO /usr/local/bin/yq \
-            https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64
-          sudo chmod +x /usr/local/bin/yq
+      - name: Setup Python
+        run: python3 -m pip install pyyaml
 
       - name: Read project metadata
         id: project
         run: |
-          SLUG=$(yq '.slug' svg/docs/_project.yml)
-          TITLE=$(yq '.title' svg/docs/_project.yml)
+          python3 - << 'EOF'
+          import yaml
+          data = yaml.safe_load(open("svg/docs/_project.yml"))
+          print(f"slug={data['slug']}")
+          print(f"title={data['title']}")
+          EOF >> $GITHUB_OUTPUT
 
-          echo "slug=$SLUG" >> $GITHUB_OUTPUT
-          echo "title=$TITLE" >> $GITHUB_OUTPUT
-
-      - name: Copy docs
+      - name: Build docs structure
         run: |
-          SLUG="${{ steps.project.outputs.slug }}"
+          rm -rf projects/${{ steps.project.outputs.slug }}
+          mkdir -p projects/${{ steps.project.outputs.slug }}
 
-          rm -rf "projects/$SLUG"
-          mkdir -p "projects/$SLUG"
+          cp -R svg/docs/* projects/${{ steps.project.outputs.slug }}/
 
-          cp -R svg/docs/. "projects/$SLUG/"
+      - name: Normalize markdown + inject Jekyll frontmatter
+        run: python3 scripts/prepare_docs.py projects/${{ steps.project.outputs.slug }}
 
-      - name: Copy metadata
-        run: |
-          mkdir -p _data/projects
-
-          cp svg/docs/_project.yml \
-            "_data/projects/${{ steps.project.outputs.slug }}.yml"
-
-      - name: Install Python dependencies
-        run: |
-          python3 -m pip install pyyaml
-
-      - name: Prepare docs
-        run: |
-          python3 scripts/prepare_docs.py \
-            "projects/${{ steps.project.outputs.slug }}"
-
-      - name: Show prepared docs
-        run: |
-          echo "==================="
-          find projects -name "*.md" -exec echo "FILE: {}" \; -exec cat {} \;
-
-      - name: Generate docs navigation
-        run: |
-          python3 scripts/generate_docs_nav.py \
-            "projects/${{ steps.project.outputs.slug }}"
+      - name: Generate sidebar tree
+        run: python3 scripts/generate_sidebar.py projects/${{ steps.project.outputs.slug }}
 
       - name: Configure Pages
         uses: actions/configure-pages@v5
 
-      - name: Build Jekyll site
+      - name: Build site
         uses: actions/jekyll-build-pages@v1
         with:
           source: ./
           destination: ./_site
 
-      - name: Show generated site
-        run: |
-          find _site | sort
-
-      - name: Upload artifact
+      - name: Upload
         uses: actions/upload-pages-artifact@v3
         with:
           path: ./_site
 
-      - name: Deploy to GitHub Pages
+      - name: Deploy
         id: deployment
         uses: actions/deploy-pages@v4
