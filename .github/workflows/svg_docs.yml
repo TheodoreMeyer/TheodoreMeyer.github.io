@@ -36,14 +36,53 @@ jobs:
         uses: actions/checkout@v4
         with:
           repository: TheodoreMeyer/SimpleVoice-Geyser
-          ref: master
+          ref: main
           path: svg
 
-      - name: Inject SVG docs
+      - name: Install yq
         run: |
-          rm -rf projects/simplevoicegeyser/docs
-          mkdir -p projects/simplevoicegeyser/docs
-          cp -R svg/docs/. projects/simplevoicegeyser/docs/
+          sudo wget -qO /usr/local/bin/yq \
+            https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64
+          sudo chmod +x /usr/local/bin/yq
+
+      - name: Read project metadata
+        id: project
+        run: |
+          SLUG=$(yq '.slug' svg/docs/_project.yml)
+          TITLE=$(yq '.title' svg/docs/_project.yml)
+
+          echo "slug=$SLUG" >> $GITHUB_OUTPUT
+          echo "title=$TITLE" >> $GITHUB_OUTPUT
+
+      - name: Copy docs
+        run: |
+          SLUG="${{ steps.project.outputs.slug }}"
+
+          rm -rf "projects/$SLUG"
+          mkdir -p "projects/$SLUG"
+
+          cp -R svg/docs/. "projects/$SLUG/"
+
+      - name: Copy metadata
+        run: |
+          mkdir -p _data/projects
+
+          cp svg/docs/_project.yml \
+            "_data/projects/${{ steps.project.outputs.slug }}.yml"
+
+      - name: Install Python dependencies
+        run: |
+          python3 -m pip install pyyaml
+
+      - name: Prepare docs
+        run: |
+          python3 scripts/prepare_docs.py \
+            "projects/${{ steps.project.outputs.slug }}"
+
+      - name: Generate docs navigation
+        run: |
+          python3 scripts/generate_docs_nav.py \
+            "projects/${{ steps.project.outputs.slug }}"
 
       - name: Configure Pages
         uses: actions/configure-pages@v5
