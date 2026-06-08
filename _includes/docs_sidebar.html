@@ -8,9 +8,9 @@
     {% assign home_path = prefix | append: "/index.md" %}
     {% assign home = site.pages | where: "path", home_path | first %}
 
-    <h3>
-        {{ home.title | default: project_slug }}
-    </h3>
+    <h3>{{ home.title | default: project_slug }}</h3>
+
+    {% assign rendered = "" %}
 
     <ul>
 
@@ -18,16 +18,30 @@
 
         {% if doc.path contains prefix and doc.path != home_path %}
 
+        {% assign key = doc.path %}
+
+        {% unless rendered contains key %}
+
         {% assign rel = doc.path | remove_first: prefix | remove_first: "/" %}
         {% assign parts = rel | split: "/" %}
 
-        <li class="{% if page.path == doc.path %}active{% endif %}">
+        {% assign is_active = page.path == doc.path %}
 
-            <a href="{{ doc.url | relative_url }}">
+        {% if parts.size == 1 %}
+
+        <li>
+            <a href="{{ doc.url | relative_url }}"
+               class="{% if is_active %}active{% endif %}">
                 {{ doc.title }}
             </a>
+        </li>
 
-            {% if parts.size > 1 %}
+        {% else %}
+
+        {% assign folder = parts[0] %}
+
+        <li>
+            <span class="sidebar-section">{{ folder }}</span>
 
             <ul class="sidebar-subnav">
 
@@ -38,7 +52,11 @@
                 {% assign child_rel = child.path | remove_first: prefix | remove_first: "/" %}
                 {% assign child_parts = child_rel | split: "/" %}
 
-                {% if child_parts[0] == parts[0] and child.path != home_path %}
+                {% if child_parts[0] == folder and child.path != home_path %}
+
+                {% assign child_key = child.path %}
+
+                {% unless rendered contains child_key %}
 
                 <li>
                     <a href="{{ child.url | relative_url }}"
@@ -47,6 +65,10 @@
                     </a>
                 </li>
 
+                {% assign rendered = rendered | append: child_key | append: "," %}
+
+                {% endunless %}
+
                 {% endif %}
 
                 {% endif %}
@@ -54,10 +76,13 @@
                 {% endfor %}
 
             </ul>
-
-            {% endif %}
-
         </li>
+
+        {% endif %}
+
+        {% assign rendered = rendered | append: key | append: "," %}
+
+        {% endunless %}
 
         {% endif %}
 
