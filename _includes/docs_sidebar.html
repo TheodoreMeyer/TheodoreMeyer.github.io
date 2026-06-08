@@ -29,7 +29,7 @@
         {% assign parts = rel | split: "/" %}
         {% assign folder = parts[0] %}
 
-        <!-- ROOT PAGES (no subfolder) -->
+        <!-- ROOT FILES -->
         {% if parts.size == 1 %}
 
         <li>
@@ -48,33 +48,31 @@
             {{ folder }}
         </li>
 
-        <!-- CHILDREN -->
-        {% for child in docs %}
+        <ul class="sidebar-subnav">
 
-        {% if child.path contains prefix %}
+            {% for child in docs %}
 
-        {% assign child_rel = child.path | remove_first: prefix | remove_first: "/" %}
-        {% assign child_parts = child_rel | split: "/" %}
+            {% if child.path contains prefix %}
 
-        {% if child_parts[0] == folder %}
+            {% assign child_rel = child.path | remove_first: prefix | remove_first: "/" %}
+            {% assign child_parts = child_rel | split: "/" %}
 
-        <li>
-            <a href="{{ child.url | relative_url }}"
-               style="padding-left: 1rem;"
-               class="{% if child.path == current %}active{% endif %}">
-                {% if child_parts.size > 1 %}
-                | {{ child.title }}
-                {% else %}
-                {{ child.title }}
-                {% endif %}
-            </a>
-        </li>
+            {% if child_parts[0] == folder %}
 
-        {% endif %}
+            <li>
+                <a href="{{ child.url | relative_url }}"
+                   class="{% if child.path == current %}active{% endif %}">
+                    {{ child.title }}
+                </a>
+            </li>
 
-        {% endif %}
+            {% endif %}
 
-        {% endfor %}
+            {% endif %}
+
+            {% endfor %}
+
+        </ul>
 
         {% assign seen_folders = seen_folders | append: folder | append: "," %}
 
