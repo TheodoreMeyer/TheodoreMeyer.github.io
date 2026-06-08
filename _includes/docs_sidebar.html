@@ -8,9 +8,9 @@
     {% assign home_path = prefix | append: "/index.md" %}
     {% assign home = site.pages | where: "path", home_path | first %}
 
-    <h3>{{ home.title | default: project_slug }}</h3>
+    {% assign current = page.path %}
 
-    {% assign rendered = "" %}
+    <h3>{{ home.title | default: project_slug }}</h3>
 
     <ul>
 
@@ -18,27 +18,39 @@
 
         {% if doc.path contains prefix and doc.path != home_path %}
 
-        {% assign key = doc.path %}
-
-        {% unless rendered contains key %}
-
         {% assign rel = doc.path | remove_first: prefix | remove_first: "/" %}
         {% assign parts = rel | split: "/" %}
-
-        {% assign is_active = page.path == doc.path %}
 
         {% if parts.size == 1 %}
 
         <li>
             <a href="{{ doc.url | relative_url }}"
-               class="{% if is_active %}active{% endif %}">
+               class="{% if doc.path == current %}active{% endif %}">
                 {{ doc.title }}
             </a>
         </li>
 
-        {% else %}
+        {% endif %}
 
+        {% endif %}
+
+        {% endfor %}
+
+        {%- comment -%}
+        SECOND PASS: folders (NO rendered tracking)
+        {%- endcomment -%}
+
+        {% assign seen_folders = "" %}
+
+        {% for doc in all_docs %}
+
+        {% if doc.path contains prefix and doc.path != home_path %}
+
+        {% assign rel = doc.path | remove_first: prefix | remove_first: "/" %}
+        {% assign parts = rel | split: "/" %}
         {% assign folder = parts[0] %}
+
+        {% unless seen_folders contains folder %}
 
         <li>
             <span class="sidebar-section">{{ folder }}</span>
@@ -54,20 +66,12 @@
 
                 {% if child_parts[0] == folder and child.path != home_path %}
 
-                {% assign child_key = child.path %}
-
-                {% unless rendered contains child_key %}
-
                 <li>
                     <a href="{{ child.url | relative_url }}"
-                       class="{% if page.path == child.path %}active{% endif %}">
+                       class="{% if child.path == current %}active{% endif %}">
                         {{ child.title }}
                     </a>
                 </li>
-
-                {% assign rendered = rendered | append: child_key | append: "," %}
-
-                {% endunless %}
 
                 {% endif %}
 
@@ -78,9 +82,7 @@
             </ul>
         </li>
 
-        {% endif %}
-
-        {% assign rendered = rendered | append: key | append: "," %}
+        {% assign seen_folders = seen_folders | append: folder | append: "," %}
 
         {% endunless %}
 
