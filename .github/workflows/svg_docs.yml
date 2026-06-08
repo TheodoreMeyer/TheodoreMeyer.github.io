@@ -79,6 +79,11 @@ jobs:
           python3 scripts/prepare_docs.py \
             "projects/${{ steps.project.outputs.slug }}"
 
+      - name: Show prepared docs
+        run: |
+          echo "==================="
+          find projects -name "*.md" -exec echo "FILE: {}" \; -exec cat {} \;
+
       - name: Generate docs navigation
         run: |
           python3 scripts/generate_docs_nav.py \
@@ -92,6 +97,10 @@ jobs:
         with:
           source: ./
           destination: ./_site
+
+      - name: Show generated site
+        run: |
+          find _site | sort
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
