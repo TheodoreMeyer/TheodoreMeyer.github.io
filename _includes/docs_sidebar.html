@@ -1,42 +1,89 @@
 <aside class="project-sidebar">
 
-    {%- assign project_slug = page.project -%}
+    {% assign project_slug = page.project %}
+    {% assign prefix = 'projects/' | append: project_slug %}
 
-    {%- assign docs = site.pages
-    | where_exp: "p", "p.path contains project_slug"
-    | sort: "path" -%}
+    {% assign docs = site.pages
+    | where_exp: "p", "p.path contains prefix"
+    | sort: "path" %}
 
-    {%- assign home = docs | where_exp: "d", "d.path contains 'index.md'" | first -%}
+    {% assign home_path = prefix | append: '/index.md' %}
+    {% assign home = site.pages | where: "path", home_path | first %}
 
-    <h3>
-        {{ home.title | default: project_slug }}
-    </h3>
+    <h3>{{ home.title | default: project_slug }}</h3>
 
     <ul>
 
-        {%- for doc in docs -%}
+        {% comment %}
+        ========================
+        RECURSIVE RENDER MACRO
+        ========================
+        {% endcomment %}
 
-        {%- assign rel = doc.path
-        | remove_first: "projects/"
-        | remove_first: project_slug
-        | remove_first: "/"
-        -%}
+        {% assign root_items = docs | where_exp: "d", "d.path != home_path and d.path contains prefix" %}
 
-        {%- assign parts = rel | split: "/" -%}
-        {%- assign depth = parts | size -%}
+        {% capture render_tree %}
+        {% endcapture %}
 
-        {%- if doc.title -%}
+        {% for item in root_items %}
 
-        <li class="depth-{{ depth }}">
-            <a href="{{ doc.url | relative_url }}"
-               class="{% if page.url == doc.url %}active{% endif %}">
-                {{ doc.title }}
+        {% assign rel = item.path | remove_first: prefix | remove_first: '/' %}
+        {% assign parts = rel | split: '/' %}
+
+        {% if parts.size == 1 %}
+
+        <li>
+            <a href="{{ item.url | relative_url }}"
+               class="{% if page.path == item.path %}active{% endif %}">
+                {{ item.title }}
             </a>
+
+            {% assign folder = parts[0] %}
+
+            {% assign children = docs | where_exp: "d",
+            "d.path contains folder and d.path != item.path" %}
+
+            {% assign has_children = false %}
+
+            {% for c in children %}
+            {% assign c_rel = c.path | remove_first: prefix | remove_first: '/' %}
+            {% assign c_parts = c_rel | split: '/' %}
+
+            {% if c_parts.size > 1 and c_parts[0] == folder %}
+            {% assign has_children = true %}
+            {% endif %}
+            {% endfor %}
+
+            {% if has_children %}
+            <ul class="sidebar-subnav">
+
+                {% for c in children %}
+
+                {% assign c_rel = c.path | remove_first: prefix | remove_first: '/' %}
+                {% assign c_parts = c_rel | split: '/' %}
+
+                {% if c_parts[0] == folder %}
+
+                <li>
+                    <a href="{{ c.url | relative_url }}"
+                       class="{% if page.path == c.path %}active{% endif %}">
+                        {{ c.title }}
+                    </a>
+                </li>
+
+                {% endif %}
+
+                {% endfor %}
+
+            </ul>
+            {% endif %}
+
         </li>
 
-        {%- endif -%}
+        {% endif %}
 
-        {%- endfor -%}
+        {% endfor %}
 
     </ul>
+
 </aside>
