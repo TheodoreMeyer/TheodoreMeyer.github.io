@@ -41,12 +41,7 @@ jobs:
       - name: Read project metadata
         id: project
         run: |
-          python3 - << 'EOF'
-          import yaml
-          data = yaml.safe_load(open("svg/docs/_project.yml"))
-          print(f"slug={data['slug']}")
-          print(f"title={data['title']}")
-          EOF >> $GITHUB_OUTPUT
+          python3 scripts/extract_meta.py >> $GITHUB_OUTPUT
 
       - name: Build docs structure
         run: |
