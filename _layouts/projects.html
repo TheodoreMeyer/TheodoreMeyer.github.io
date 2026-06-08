@@ -14,37 +14,25 @@
 
 <main class="page-content">
 
-    {% assign parts = page.url | split: "/" %}
-    {% assign slug = parts[2] %}
-    {% assign nav = site.data[slug | append: "_nav"][slug] %}
-
     <div class="project-wrapper">
 
-        {% if nav %}
-
         <aside class="project-sidebar">
-            <h3>{{ nav.title }}</h3>
+            <h3>Simple Voice Geyser</h3>
+
+            {% assign docs = site.pages
+            | where: "project", "simplevoicegeyser"
+            | sort: "order" %}
 
             <ul>
-                {% for item in nav.links %}
+                {% for doc in docs %}
+                {% if doc.title %}
                 <li>
-                    <a href="{{ item.url }}">{{ item.title }}</a>
-
-                    {% if item.children %}
-                    <ul class="sidebar-subnav">
-                        {% for child in item.children %}
-                        <li>
-                            <a href="{{ child.url }}">{{ child.title }}</a>
-                        </li>
-                        {% endfor %}
-                    </ul>
-                    {% endif %}
+                    <a href="{{ doc.url }}">{{ doc.title }}</a>
                 </li>
+                {% endif %}
                 {% endfor %}
             </ul>
         </aside>
-
-        {% endif %}
 
         <div class="content-wrapper">
             {{ content }}

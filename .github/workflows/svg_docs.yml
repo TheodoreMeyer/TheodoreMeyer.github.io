@@ -21,24 +21,22 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout website
+      - name: Checkout website repo
         uses: actions/checkout@v4
 
-      - name: Checkout SVG repo
+      - name: Checkout SimpleVoice-Geyser repo
         uses: actions/checkout@v4
         with:
           repository: TheodoreMeyer/SimpleVoice-Geyser
-          ref: master
           path: svg
 
-      - name: Setup Python
-        run: python3 -m pip install pyyaml
-
-      - name: Build docs (ALL IN ONE)
+      - name: Sync docs into Jekyll project folder
         run: |
-          python3 scripts/build_docs.py svg/docs projects simplevoicegeyser
+          rm -rf projects/simplevoicegeyser
+          mkdir -p projects/simplevoicegeyser
+          cp -r svg/docs/* projects/simplevoicegeyser/
 
-      - name: Configure Pages
+      - name: Setup Pages
         uses: actions/configure-pages@v5
 
       - name: Build Jekyll site
