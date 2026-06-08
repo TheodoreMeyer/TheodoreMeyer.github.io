@@ -1,45 +1,113 @@
+# scripts/build_docs.py
 from pathlib import Path
 import sys
 import yaml
-import os
 
-root = Path(sys.argv[1]).resolve()
-slug = root.name
+src = Path(sys.argv[1]).resolve()     # svg/docs
+out = Path(sys.argv[2]).resolve()     # projects
+slug = sys.argv[3]
 
-def to_url_path(p: Path):
-    rel = p.relative_to(root)
+out_root = out / slug
+out_root.mkdir(parents=True, exist_ok=True)
 
-    if rel.name == "index.md":
-        return f"/projects/{slug}/{rel.parent.as_posix()}/"
-
-    return f"/projects/{slug}/{rel.with_suffix('').as_posix()}/"
-
-for md in root.rglob("*.md"):
-    text = md.read_text(encoding="utf-8")
+def read_md(path: Path):
+    text = path.read_text(encoding="utf-8")
 
     if text.startswith("---"):
-        parts = text.split("---", 2)
-        if len(parts) < 3:
-            continue
-        front = yaml.safe_load(parts[1]) or {}
-        body = parts[2]
+        _, front, body = text.split("---", 2)
+        meta = yaml.safe_load(front) or {}
     else:
-        front = {}
+        meta = {}
         body = text
 
-    url = to_url_path(md)
+    return meta, body
 
-    front.update({
-        "layout": "project",
-        "permalink": url
-    })
 
-    md.write_text(
+def write_md(path: Path, meta, body, permalink):
+    meta["layout"] = "projects"
+    meta["permalink"] = permalink
+
+    path.write_text(
         "---\n" +
-        yaml.safe_dump(front, sort_keys=False, allow_unicode=True) +
+        yaml.safe_dump(meta, sort_keys=False, allow_unicode=True) +
         "---\n" +
         body,
         encoding="utf-8"
     )
 
-print("Docs prepared with permalinks")
+
+def to_permalink(rel: Path):
+    parts = list(rel.parts)
+
+    # index.md → folder URL
+    if rel.name == "index.md":
+        return f"/projects/{slug}/" + "/".join(parts[:-1]) + "/"
+
+    return f"/projects/{slug}/" + "/".join(parts).replace(".md", "") + "/"
+
+
+# -----------------------------
+# COPY + CONVERT ALL FILES
+# -----------------------------
+
+for md in src.rglob("*.md"):
+    rel = md.relative_to(src)
+
+    meta, body = read_md(md)
+
+    target = out_root / rel
+    target.parent.mkdir(parents=True, exist_ok=True)
+
+    permalink = to_permalink(rel)
+
+    write_md(target, meta, body, permalink)
+
+
+# -----------------------------
+# GENERATE SIDEBAR TREE
+# -----------------------------
+
+tree = []
+
+root_index = out_root / "index.md"
+if root_index.exists():
+    tree.append({
+        "title": "Overview",
+        "url": f"/projects/{slug}/"
+    })
+
+for folder in sorted([p for p in out_root.iterdir() if p.is_dir()]):
+    section_index = folder / "index.md"
+    if not section_index.exists():
+        continue
+
+    section = {
+        "title": folder.name.title(),
+        "url": f"/projects/{slug}/{folder.name}/",
+        "children": []
+    }
+
+    for md in sorted(folder.glob("*.md")):
+        if md.name == "index.md":
+            continue
+
+        section["children"].append({
+            "title": md.stem.title(),
+            "url": f"/projects/{slug}/{folder.name}/{md.stem}/"
+        })
+
+    tree.append(section)
+
+
+data_file = Path("_data")
+data_file.mkdir(exist_ok=True)
+
+with open(data_file / f"{slug}_nav.yml", "w") as f:
+    yaml.safe_dump({
+        slug: {
+            "title": slug,
+            "links": tree
+        }
+    }, f, sort_keys=False)
+
+print("Docs build complete")

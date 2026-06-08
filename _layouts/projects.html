@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>{{ page.title }}</title>
@@ -12,48 +12,47 @@
 
 {% include header.html %}
 
-<div class="project-wrapper">
+<main class="page-content">
 
-    {% assign slug = page.url | split: "/" | slice: 2, 1 | first %}
+    {% assign parts = page.url | split: "/" %}
+    {% assign slug = parts[2] %}
     {% assign nav = site.data[slug | append: "_nav"][slug] %}
 
-    {% if nav %}
+    <div class="project-wrapper">
 
-    <aside class="project-sidebar">
-        <h3>{{ nav.title }}</h3>
+        {% if nav %}
 
-        <ul>
-            {% for item in nav.links %}
+        <aside class="project-sidebar">
+            <h3>{{ nav.title }}</h3>
 
-            <li>
-                <a href="{{ item.url }}" class="{% if page.url == item.url %}active{% endif %}">
-                    {{ item.title }}
-                </a>
+            <ul>
+                {% for item in nav.links %}
+                <li>
+                    <a href="{{ item.url }}">{{ item.title }}</a>
 
-                {% if item.children %}
-                <ul>
-                    {% for child in item.children %}
-                    <li>
-                        <a href="{{ child.url }}" class="{% if page.url == child.url %}active{% endif %}">
-                            {{ child.title }}
-                        </a>
-                    </li>
-                    {% endfor %}
-                </ul>
-                {% endif %}
-            </li>
+                    {% if item.children %}
+                    <ul class="sidebar-subnav">
+                        {% for child in item.children %}
+                        <li>
+                            <a href="{{ child.url }}">{{ child.title }}</a>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                    {% endif %}
+                </li>
+                {% endfor %}
+            </ul>
+        </aside>
 
-            {% endfor %}
-        </ul>
-    </aside>
+        {% endif %}
 
-    {% endif %}
+        <div class="content-wrapper">
+            {{ content }}
+        </div>
 
-    <main class="content-wrapper">
-        {{ content }}
-    </main>
+    </div>
 
-</div>
+</main>
 
 {% include footer.html %}
 
