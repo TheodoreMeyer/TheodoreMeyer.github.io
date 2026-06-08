@@ -62,7 +62,7 @@
     color: var(--text);
 }
 
-.project-sidebar > ul > li > a.active {
+.project-sidebar a.active {
     background: var(--accent);
     color: white;
 }
