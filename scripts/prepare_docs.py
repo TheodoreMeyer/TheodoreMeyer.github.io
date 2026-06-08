@@ -14,32 +14,31 @@ with open(project_yml, "r", encoding="utf-8") as f:
 
 slug = project["slug"]
 
-for md_file in project_dir.rglob("*.md"):
-
+def process(md_file: Path):
     text = md_file.read_text(encoding="utf-8")
 
-    if not text.startswith("---"):
-        continue
+    if text.startswith("---"):
+        parts = text.split("---", 2)
+        if len(parts) < 3:
+            return
+        front = yaml.safe_load(parts[1]) or {}
+        body = parts[2]
+    else:
+        front = {}
+        body = text
 
-    parts = text.split("---", 2)
+    front["layout"] = "project"
 
-    if len(parts) < 3:
-        continue
-
-    frontmatter = yaml.safe_load(parts[1]) or {}
-
-    frontmatter["layout"] = "project"
-    frontmatter["project"] = slug
+    # IMPORTANT: DO NOT inject project anymore
+    # routing is URL-based now
 
     with open(md_file, "w", encoding="utf-8") as f:
         f.write("---\n")
-        yaml.safe_dump(
-            frontmatter,
-            f,
-            sort_keys=False,
-            allow_unicode=True
-        )
-        f.write("---")
-        f.write(parts[2])
+        yaml.safe_dump(front, f, sort_keys=False, allow_unicode=True)
+        f.write("---\n")
+        f.write(body)
+
+for md in project_dir.rglob("*.md"):
+    process(md)
 
 print(f"Prepared docs for {slug}")

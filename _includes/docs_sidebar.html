@@ -1,17 +1,17 @@
-{% assign nav = site.data.docs_nav[page.project] %}
+{% assign parts = page.url | split: "/" %}
+{% assign project = parts[2] %}
+
+{% assign nav = site.data.docs_nav[project] %}
 
 {% if nav %}
 
 <aside class="project-sidebar">
-
   <h3>{{ nav.title }}</h3>
 
   <ul>
-
     {% for item in nav.links %}
 
     <li>
-
       <a href="{{ item.url | relative_url }}"
          class="{% if page.url == item.url %}active{% endif %}">
         {{ item.title }}
@@ -19,27 +19,20 @@
 
       {% if item.children %}
       <ul class="sidebar-subnav">
-
         {% for child in item.children %}
-
         <li>
           <a href="{{ child.url | relative_url }}"
              class="{% if page.url == child.url %}active{% endif %}">
             {{ child.title }}
           </a>
         </li>
-
         {% endfor %}
-
       </ul>
       {% endif %}
-
     </li>
 
     {% endfor %}
-
   </ul>
-
 </aside>
 
 {% endif %}

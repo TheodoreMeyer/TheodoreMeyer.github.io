@@ -13,23 +13,55 @@
 
 <main class="page-content">
 
-    {% if page.project %}
+    {%- comment -%}
+    Detect whether we're inside /projects/
+    {%- endcomment -%}
+    {% assign parts = page.url | split: "/" %}
+    {% assign is_projects_area = parts[1] == "projects" %}
+    {% assign project_slug = parts[2] %}
+
+    {% if is_projects_area and project_slug != blank %}
 
     <div class="project-wrapper">
 
-        {% include docs_sidebar.html %}
+        {%- comment -%}
+        Docs sidebar (project-specific, from docs_nav.yml)
+        {%- endcomment -%}
+        {% assign nav = site.data.docs_nav[project_slug] %}
 
-        <div class="content-wrapper">
-            {{ content }}
-        </div>
+        {% if nav %}
 
-    </div>
+        <aside class="project-sidebar">
+            <h3>{{ nav.title }}</h3>
 
-    {% elsif page.sidebar %}
+            <ul>
+                {% for item in nav.links %}
 
-    <div class="project-wrapper">
+                <li>
+                    <a href="{{ item.url | relative_url }}"
+                       class="{% if page.url == item.url %}active{% endif %}">
+                        {{ item.title }}
+                    </a>
 
-        {% include project_sidebar.html %}
+                    {% if item.children %}
+                    <ul class="sidebar-subnav">
+                        {% for child in item.children %}
+                        <li>
+                            <a href="{{ child.url | relative_url }}"
+                               class="{% if page.url == child.url %}active{% endif %}">
+                                {{ child.title }}
+                            </a>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                    {% endif %}
+                </li>
+
+                {% endfor %}
+            </ul>
+        </aside>
+
+        {% endif %}
 
         <div class="content-wrapper">
             {{ content }}
@@ -39,6 +71,9 @@
 
     {% else %}
 
+    {%- comment -%}
+    Non-project pages (homepage, tools, etc.)
+    {%- endcomment -%}
     <div class="content-wrapper" style="max-width: 800px; margin: 2rem auto;">
         {{ content }}
     </div>
