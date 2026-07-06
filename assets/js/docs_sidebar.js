@@ -162,23 +162,26 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     ////////////////////////////////////////////////////////////
-    // Build sidebar
-    ////////////////////////////////////////////////////////////
+// Build sidebar
+////////////////////////////////////////////////////////////
 
     const root = nodes.get("index.md");
     if (!root) return;
 
-    const title = document.createElement("h3");
+    const header = document.createElement("div");
+    header.className = "sidebar-header";
 
     const home = document.createElement("a");
     home.href = root.url;
     home.textContent = root.title;
+    home.className = "sidebar-title";
 
     if (root.url.replace(/\/$/, "") === current)
         home.classList.add("active");
 
-    title.appendChild(home);
-    sidebar.appendChild(title);
+    header.appendChild(home);
+
+    sidebar.appendChild(header);
 
     const tree = renderChildren(root, 0);
 

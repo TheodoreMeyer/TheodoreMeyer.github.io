@@ -18,15 +18,32 @@
 }
 
 /* ==========================
-   Title
+   Sidebar Header
    ========================== */
-.project-sidebar h3 {
-    font-size: 0.9rem;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
 
-    color: var(--text-muted);
+.sidebar-header {
     margin-bottom: 1rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid var(--border);
+}
+
+.sidebar-title {
+    display: block;
+
+    font-size: 1.25rem;
+    font-weight: 700;
+    line-height: 1.3;
+
+    color: var(--text);
+    text-decoration: none;
+}
+
+.sidebar-title:hover {
+    color: var(--accent);
+}
+
+.sidebar-title.active {
+    color: var(--accent);
 }
 
 /* ==========================
