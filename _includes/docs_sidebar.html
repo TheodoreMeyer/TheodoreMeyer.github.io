@@ -1,89 +1,29 @@
-<aside class="project-sidebar">
+<aside id="project-sidebar"></aside>
 
-    {% assign project_slug = page.project %}
-    {% assign prefix = "projects/" | append: project_slug %}
+{% assign project_slug = page.project %}
+{% assign prefix = "projects/" | append: project_slug %}
+{% assign home_path = prefix | append: "/index.md" %}
 
+<script id="docs-sidebar-data" type="application/json">
+    [
+        {% assign first = true %}
     {% assign docs = site.pages | sort: "path" %}
 
-    {% assign home_path = prefix | append: "/index.md" %}
-    {% assign home = site.pages | where: "path", home_path | first %}
+    {% for doc in docs %}
+    {% if doc.path contains prefix %}
 
-    {% assign current = page.path %}
+    {% unless first %},{% endunless %}
+    {% assign first = false %}
 
-    <!-- HOME LINK -->
-    <h3>
-        <a href="{{ home.url | relative_url }}">
-            {{ home.title | default: project_slug }}
-        </a>
-    </h3>
+    {
+    "title": {{ doc.title | default: project_slug | jsonify }},
+    "url": {{ doc.url | relative_url | jsonify }},
+    "path": {{ doc.path | remove_first: prefix | remove_first: "/" | jsonify }}
+    }
 
-    <ul>
-
-        {% assign seen_folders = "" %}
-
-        {% for doc in docs %}
-
-        {% if doc.path contains prefix and doc.path != home_path %}
-
-        {% assign rel = doc.path | remove_first: prefix | remove_first: "/" %}
-        {% assign parts = rel | split: "/" %}
-        {% assign folder = parts[0] %}
-
-        <!-- ROOT FILES -->
-        {% if parts.size == 1 %}
-
-        <li>
-            <a href="{{ doc.url | relative_url }}"
-               class="{% if doc.path == current %}active{% endif %}">
-                {{ doc.title }}
-            </a>
-        </li>
-
-        {% else %}
-
-        <!-- FOLDER HEADER (only once) -->
-        {% unless seen_folders contains folder %}
-
-        <li class="sidebar-section">
-            {{ folder }}
-        </li>
-
-        <ul class="sidebar-subnav">
-
-            {% for child in docs %}
-
-            {% if child.path contains prefix %}
-
-            {% assign child_rel = child.path | remove_first: prefix | remove_first: "/" %}
-            {% assign child_parts = child_rel | split: "/" %}
-
-            {% if child_parts[0] == folder %}
-
-            <li>
-                <a href="{{ child.url | relative_url }}"
-                   class="{% if child.path == current %}active{% endif %}">
-                    {{ child.title }}
-                </a>
-            </li>
-
-            {% endif %}
-
-            {% endif %}
-
-            {% endfor %}
-
-        </ul>
-
-        {% assign seen_folders = seen_folders | append: folder | append: "," %}
-
-        {% endunless %}
-
-        {% endif %}
-
-        {% endif %}
-
+    {% endif %}
         {% endfor %}
+    ]
+</script>
 
-    </ul>
-
-</aside>
+<script src="{{ '/assets/js/docs_sidebar.js' | relative_url }}"></script>

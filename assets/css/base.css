@@ -308,6 +308,11 @@ button.danger:hover,
     display: none !important;
 }
 
+.muted {
+    color: var(--muted);
+    margin-bottom: 0.5rem;
+}
+
 /* ==========================
    RESPONSIVE
    ========================== */

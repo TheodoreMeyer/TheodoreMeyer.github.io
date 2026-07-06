@@ -1,0 +1,49 @@
+---
+layout: base
+title: Catan Cities & knights
+extra_js:
+- /games/catan/definitions.js
+- /games/catan/quests.js
+- /games/catan/calc.js
+- /games/catan/catan.js
+extra_css:
+- /games/catan/styles.css
+---
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Catan Cities & Knights Tracker</title>
+</head>
+<body>
+<main class="page">
+
+    <div class="card controls-card">
+
+        <div id="player-tabs"></div>
+        <div class="header-actions">
+            <button id="add-player">
+                Add Player
+            </button>
+            <button id="remove-player" class="danger">
+                Remove Player
+            </button>
+        </div>
+
+    </div>
+
+    <h1 id="player-name"></h1>
+    <hr>
+
+    <h2 id="improvements-header" class="section-header"></h2>
+    <div id="tracks" class="grid"></div>
+
+    <hr>
+
+    <h2 id="quests-header" class="section-header"></h2>
+    <div id="quests" class="grid"></div>
+
+</main>
+</body>
+</html>
