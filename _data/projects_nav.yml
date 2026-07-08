@@ -1,30 +1,3 @@
-simplevoicegeyser:
-  title: Simple Voice Geyser
-  links:
-    - title: Overview
-      url: /projects/simplevoicegeyser/
-    #- section: Wiki
-    - title: Installation
-      url: /projects/simplevoicegeyser/install/
-      children:
-        - title: Compatibility
-          url: /projects/simplevoicegeyser/install/compatibility/
-        - title: Upgrading
-          url: /projects/simplevoicegeyser/install/upgrading/
-        - title: Security
-          url: /projects/simplevoicegeyser/install/security/
-        - title: Proxy
-          url: /projects/simplevoicegeyser/install/proxy/
-    - title: Commands
-      url: /projects/simplevoicegeyser/commands/
-    - title: Joining a Server
-      url: /projects/simplevoicegeyser/join/
-      children:
-        - title: Chrome Flags
-          url: /projects/simplevoicegeyser/join/chrome-flags/
-    - title: Developer API
-      url: /projects/simplevoicegeyser/api/
-
 projects:
   title: All Projects
   links:
