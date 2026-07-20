@@ -37,8 +37,8 @@ plugins:
 exclude:
   - _svg_build
   - .git/
-   - Gemfile
-   - Gemfile.lock
+  - Gemfile
+  - Gemfile.lock
 #   - .sass-cache/
 #   - .jekyll-cache/
 #   - gemfiles/

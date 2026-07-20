@@ -21,37 +21,40 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout website repo
+      - name: Checkout website
         uses: actions/checkout@v4
 
-      # IMPORTANT: keep external repo OUT of Jekyll tree
-      - name: Checkout SimpleVoice-Geyser repo (staging only)
+      - name: Checkout SimpleVoice-Geyser
         uses: actions/checkout@v4
         with:
           repository: TheodoreMeyer/SimpleVoice-Geyser
           path: _svg_build
 
-      - name: Sync docs into Jekyll project folder
+      - name: Copy docs
         run: |
           rm -rf projects/simplevoicegeyser
           mkdir -p projects/simplevoicegeyser
-
-          # copy only docs (no folder leakage)
           cp -r _svg_build/docs/* projects/simplevoicegeyser/
+
+      - name: Setup Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 3.3
+          bundler-cache: true
+
+      - name: Install gems
+        run: bundle install
+
+      - name: Build site
+        run: bundle exec jekyll build
 
       - name: Configure Pages
         uses: actions/configure-pages@v5
 
-      - name: Build Jekyll site
-        uses: actions/jekyll-build-pages@v1
-        with:
-          source: ./
-          destination: ./_site
-
-      - name: Upload artifact
+      - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: ./_site
+          path: _site
 
       - name: Deploy
         uses: actions/deploy-pages@v4
