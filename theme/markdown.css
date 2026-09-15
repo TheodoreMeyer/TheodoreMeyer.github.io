@@ -1,0 +1,26 @@
+.markdown {
+    line-height: 1.6;
+}
+
+.markdown h1,
+.markdown h2,
+.markdown h3,
+.markdown h4,
+.markdown h5,
+.markdown h6 {
+    line-height: 1.2;
+}
+
+.markdown img {
+    max-width: 100%;
+}
+
+.markdown code {
+    font-family:
+            ui-monospace,
+            SFMono-Regular,
+            Menlo,
+            Monaco,
+            Consolas,
+            monospace;
+}

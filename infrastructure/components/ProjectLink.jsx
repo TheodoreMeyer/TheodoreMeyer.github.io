@@ -1,15 +1,17 @@
+import Link from "./Link.jsx";
+
 export default function ProjectLink({
                                         name,
                                         href,
                                         description
                                     }) {
     return (
-        <a href={href}>
+        <Link href={href}>
             <strong>{name}</strong>
 
             {description && (
                 <span>{description}</span>
             )}
-        </a>
+        </Link>
     );
 }

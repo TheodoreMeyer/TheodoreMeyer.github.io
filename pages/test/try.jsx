@@ -1,4 +1,4 @@
-import Page from "../../infrastructure/Page.js";
+import Page from "../../infrastructure/build/Page.js";
 
 export default new Page({
     title: "JSX Test",

@@ -63,7 +63,10 @@ export default function pagesPlugin() {
         name: "theodore-pages",
 
         async transform(code, id) {
-            if (!id.endsWith(".md")) {
+            const filePath =
+                id.split("?")[0];
+
+            if (!filePath.endsWith(".md")) {
                 return null;
             }
 
@@ -72,21 +75,13 @@ export default function pagesPlugin() {
                 html
             } = await compileMarkdown(code);
 
-            const filePath =
-                id.split("?")[0];
-
             const pagePath =
                 getPagePath(filePath);
-
-            const pageModule =
-                path.resolve(
-                    "infrastructure/Page.js"
-                );
 
             return {
                 code: `
 import React from "react";
-import Page from ${JSON.stringify(pageModule)};
+import Page from "/infrastructure/build/Page.js";
 
 const metadata = ${JSON.stringify(metadata)};
 

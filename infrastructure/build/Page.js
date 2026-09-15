@@ -1,4 +1,15 @@
 export default class Page {
+
+    path;
+
+    title;
+
+    description;
+
+    metadata;
+
+    component;
+
     constructor({
                     title,
                     description = "",

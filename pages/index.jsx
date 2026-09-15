@@ -1,4 +1,4 @@
-import Page from "../infrastructure/Page.js";
+import Page from "../infrastructure/build/Page.js";
 import ProjectLink from "../infrastructure/components/ProjectLink.jsx";
 
 export default new Page({

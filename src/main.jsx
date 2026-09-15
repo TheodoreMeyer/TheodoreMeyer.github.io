@@ -5,9 +5,12 @@ import {
     BrowserRouter
 } from "react-router-dom";
 
-import PageHandler from "../infrastructure/PageHandler.jsx";
+import PageHandler from "../infrastructure/build/PageHandler.jsx";
+import {
+    discoverPages
+} from "../infrastructure/build/pages.js";
 
-import "../theme/base.css";
+import "../theme/index.css";
 
 const modules = import.meta.glob(
     [
@@ -19,60 +22,8 @@ const modules = import.meta.glob(
     }
 );
 
-function getPagePath(file) {
-    const normalized =
-        file.replaceAll("\\", "/");
-
-    const pagesIndex =
-        normalized.indexOf("/pages/");
-
-    const relative =
-        normalized.substring(
-            pagesIndex + "/pages/".length
-        );
-
-    const parts =
-        relative.split("/");
-
-    const filename =
-        parts.pop();
-
-    if (
-        filename === "index.jsx" ||
-        filename === "index.md"
-    ) {
-        if (parts.length === 0) {
-            return "/";
-        }
-
-        return `/${parts.join("/")}/`;
-    }
-
-    const name =
-        filename.replace(
-            /\.(jsx|md)$/,
-            ""
-        );
-
-    return `/${[
-        ...parts,
-        name
-    ].join("/")}/`;
-}
-
-const pages = Object.entries(modules)
-    .map(([file, module]) => {
-        const page = module.default;
-
-        if (!page) {
-            return null;
-        }
-
-        page.path = getPagePath(file);
-
-        return page;
-    })
-    .filter(Boolean);
+const pages =
+    discoverPages(modules);
 
 ReactDOM.createRoot(
     document.getElementById("root")
