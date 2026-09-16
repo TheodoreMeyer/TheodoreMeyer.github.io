@@ -1,3 +1,5 @@
+import React from "react";
+
 export default class Page {
 
     path;
@@ -8,12 +10,15 @@ export default class Page {
 
     metadata;
 
+    theme;
+
     component;
 
     constructor({
                     title,
                     description = "",
                     metadata = {},
+                    theme = null,
                     component
                 }) {
         this.path = null;
@@ -21,6 +26,61 @@ export default class Page {
         this.title = title;
         this.description = description;
         this.metadata = metadata;
+        this.theme = theme ?? "default";
         this.component = component;
+    }
+
+    static fromHtml({
+                        title = "",
+                        description = "",
+                        metadata = {},
+                        theme = null,
+                        html
+                    }) {
+        return new Page({
+            title,
+            description,
+            metadata,
+            theme,
+
+            component: function StaticPage() {
+                return React.createElement(
+                    "div",
+                    {
+                        className: "html-page",
+                        dangerouslySetInnerHTML: {
+                            __html: html
+                        }
+                    }
+                );
+            }
+        });
+    }
+
+    static fromMarkdown({
+                            title = "",
+                            description = "",
+                            metadata = {},
+                            theme = null,
+                            html
+                        }) {
+        return new Page({
+            title,
+            description,
+            metadata,
+            theme,
+
+            component: function MarkdownPage() {
+                return React.createElement(
+                    "div",
+                    {
+                        className: "markdown",
+                        dangerouslySetInnerHTML: {
+                            __html: html
+                        }
+                    }
+                );
+            }
+        });
     }
 }

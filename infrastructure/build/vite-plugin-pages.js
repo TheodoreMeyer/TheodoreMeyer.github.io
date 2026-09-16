@@ -76,34 +76,42 @@ async function compileMarkdown(source) {
     };
 }
 
-function createPageModule({
-                              metadata,
-                              html,
-                              pagePath,
-                              className
-                          }) {
+function createHtmlPageModule({
+                                  metadata,
+                                  html,
+                                  pagePath
+                              }) {
     return `
-import React from "react";
 import Page from "/infrastructure/build/Page.js";
 
-const metadata = ${JSON.stringify(metadata)};
+const page = Page.fromHtml({
+    title: ${JSON.stringify(metadata.title ?? "")},
+    description: ${JSON.stringify(metadata.description ?? "")},
+    metadata: ${JSON.stringify(metadata)},
+    theme: ${JSON.stringify(metadata.theme ?? null)},
+    html: ${JSON.stringify(html)}
+});
 
-const page = new Page({
-    title: metadata.title ?? "",
-    description: metadata.description ?? "",
-    metadata,
+page.path = ${JSON.stringify(pagePath)};
 
-    component: function StaticPage() {
-        return React.createElement(
-            "div",
-            {
-                className: ${JSON.stringify(className)},
-                dangerouslySetInnerHTML: {
-                    __html: ${JSON.stringify(html)}
-                }
-            }
-        );
-    }
+export default page;
+`;
+}
+
+function createMarkdownPageModule({
+                                      metadata,
+                                      html,
+                                      pagePath
+                                  }) {
+    return `
+import Page from "/infrastructure/build/Page.js";
+
+const page = Page.fromMarkdown({
+    title: ${JSON.stringify(metadata.title ?? "")},
+    description: ${JSON.stringify(metadata.description ?? "")},
+    metadata: ${JSON.stringify(metadata)},
+    theme: ${JSON.stringify(metadata.theme ?? null)},
+    html: ${JSON.stringify(html)}
 });
 
 page.path = ${JSON.stringify(pagePath)};
@@ -134,12 +142,11 @@ export default function pagesPlugin() {
                 );
 
             return {
-                code: createPageModule({
+                code: createHtmlPageModule({
                     metadata: {},
                     html: source,
                     pagePath:
-                        getPagePath(filePath),
-                    className: "html-page"
+                        getPagePath(filePath)
                 }),
 
                 map: null
@@ -163,12 +170,11 @@ export default function pagesPlugin() {
             } = await compileMarkdown(code);
 
             return {
-                code: createPageModule({
+                code: createMarkdownPageModule({
                     metadata,
                     html,
                     pagePath:
-                        getPagePath(filePath),
-                    className: "markdown"
+                        getPagePath(filePath)
                 }),
 
                 map: null
