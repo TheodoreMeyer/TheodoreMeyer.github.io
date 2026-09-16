@@ -1,3 +1,4 @@
+import fs from "node:fs/promises";
 import path from "node:path";
 
 import matter from "gray-matter";
@@ -13,13 +14,29 @@ import rehypeStringify from "rehype-stringify";
 const pagesDirectory =
     path.resolve("pages");
 
-function getPagePath(filePath) {
-    const relative = path.relative(
-        pagesDirectory,
-        filePath
-    );
+function isInsidePages(filePath) {
+    const relative =
+        path.relative(
+            pagesDirectory,
+            filePath
+        );
 
-    const parsed = path.parse(relative);
+    return (
+        relative &&
+        !relative.startsWith("..") &&
+        !path.isAbsolute(relative)
+    );
+}
+
+function getPagePath(filePath) {
+    const relative =
+        path.relative(
+            pagesDirectory,
+            filePath
+        );
+
+    const parsed =
+        path.parse(relative);
 
     if (
         parsed.name === "index" &&
@@ -46,11 +63,12 @@ async function compileMarkdown(source) {
         content
     } = matter(source);
 
-    const result = await unified()
-        .use(remarkParse)
-        .use(remarkRehype)
-        .use(rehypeStringify)
-        .process(content);
+    const result =
+        await unified()
+            .use(remarkParse)
+            .use(remarkRehype)
+            .use(rehypeStringify)
+            .process(content);
 
     return {
         metadata: data,
@@ -58,28 +76,13 @@ async function compileMarkdown(source) {
     };
 }
 
-export default function pagesPlugin() {
-    return {
-        name: "theodore-pages",
-
-        async transform(code, id) {
-            const filePath =
-                id.split("?")[0];
-
-            if (!filePath.endsWith(".md")) {
-                return null;
-            }
-
-            const {
-                metadata,
-                html
-            } = await compileMarkdown(code);
-
-            const pagePath =
-                getPagePath(filePath);
-
-            return {
-                code: `
+function createPageModule({
+                              metadata,
+                              html,
+                              pagePath,
+                              className
+                          }) {
+    return `
 import React from "react";
 import Page from "/infrastructure/build/Page.js";
 
@@ -90,11 +93,11 @@ const page = new Page({
     description: metadata.description ?? "",
     metadata,
 
-    component: function MarkdownPage() {
+    component: function StaticPage() {
         return React.createElement(
             "div",
             {
-                className: "markdown",
+                className: ${JSON.stringify(className)},
                 dangerouslySetInnerHTML: {
                     __html: ${JSON.stringify(html)}
                 }
@@ -106,7 +109,67 @@ const page = new Page({
 page.path = ${JSON.stringify(pagePath)};
 
 export default page;
-                `,
+`;
+}
+
+export default function pagesPlugin() {
+    return {
+        name: "theodore-pages",
+
+        async load(id) {
+            const filePath =
+                id.split("?")[0];
+
+            if (
+                !filePath.endsWith(".html") ||
+                !isInsidePages(filePath)
+            ) {
+                return null;
+            }
+
+            const source =
+                await fs.readFile(
+                    filePath,
+                    "utf8"
+                );
+
+            return {
+                code: createPageModule({
+                    metadata: {},
+                    html: source,
+                    pagePath:
+                        getPagePath(filePath),
+                    className: "html-page"
+                }),
+
+                map: null
+            };
+        },
+
+        async transform(code, id) {
+            const filePath =
+                id.split("?")[0];
+
+            if (
+                !filePath.endsWith(".md") ||
+                !isInsidePages(filePath)
+            ) {
+                return null;
+            }
+
+            const {
+                metadata,
+                html
+            } = await compileMarkdown(code);
+
+            return {
+                code: createPageModule({
+                    metadata,
+                    html,
+                    pagePath:
+                        getPagePath(filePath),
+                    className: "markdown"
+                }),
 
                 map: null
             };

@@ -4,6 +4,7 @@ import {
 } from "react-router-dom";
 
 import PageLayout from "./PageLayout.jsx";
+import NotFound from "./../NotFound.jsx";
 
 export default function PageHandler({
                                         pages
@@ -26,6 +27,21 @@ export default function PageHandler({
                     />
                 );
             })}
+
+            <Route
+                path="*"
+                element={
+                    <PageLayout
+                        page={{
+                            title: "404 - Not Found",
+                            description:
+                                "The requested page could not be found."
+                        }}
+                    >
+                        <NotFound />
+                    </PageLayout>
+                }
+            />
         </Routes>
     );
 }

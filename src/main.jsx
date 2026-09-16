@@ -12,15 +12,25 @@ import {
 
 import "../theme/index.css";
 
-const modules = import.meta.glob(
-    [
-        "../pages/**/*.jsx",
-        "../pages/**/*.md"
-    ],
-    {
-        eager: true
-    }
-);
+const modules = {
+    ...import.meta.glob(
+        [
+            "/pages/**/*.jsx",
+            "/pages/**/*.md"
+        ],
+        {
+            eager: true
+        }
+    ),
+
+    ...import.meta.glob(
+        "/pages/**/*.html",
+        {
+            eager: true,
+            query: "?theodore-page"
+        }
+    )
+};
 
 const pages =
     discoverPages(modules);

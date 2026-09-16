@@ -1,3 +1,5 @@
+import Page from "./Page.js";
+
 export function getPagePath(file) {
     const normalized =
         file.replaceAll("\\", "/");
@@ -18,7 +20,8 @@ export function getPagePath(file) {
 
     if (
         filename === "index.jsx" ||
-        filename === "index.md"
+        filename === "index.md" ||
+        filename === "index.html"
     ) {
         if (parts.length === 0) {
             return "/";
@@ -29,7 +32,7 @@ export function getPagePath(file) {
 
     const name =
         filename.replace(
-            /\.(jsx|md)$/,
+            /\.(jsx|md|html)$/,
             ""
         );
 
@@ -42,9 +45,10 @@ export function getPagePath(file) {
 export function discoverPages(modules) {
     return Object.entries(modules)
         .map(([file, module]) => {
-            const page = module.default;
+            const page =
+                module.default;
 
-            if (!page) {
+            if (!(page instanceof Page)) {
                 return null;
             }
 

@@ -3,13 +3,14 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 
 import { build } from "vite";
+import pagesPlugin from "./vite-plugin-pages.js";
 
 const root =
     path.resolve(
         path.dirname(
             fileURLToPath(import.meta.url)
         ),
-        ".."
+        "../.."
     );
 
 const distDirectory =
@@ -145,10 +146,15 @@ async function buildSsr() {
     await build({
         root,
 
+        plugins: [
+            pagesPlugin()
+        ],
+
         build: {
             ssr: path.join(
                 root,
                 "infrastructure",
+                "build",
                 "ssr-entry.jsx"
             ),
 
