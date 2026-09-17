@@ -29,7 +29,7 @@ export default function PageLayout({
     ]);
 
     return (
-        <div className={`layout theme-${page.theme}`}>
+        <div className={page.theme ? `layout theme-${page.theme}` : ""}>
             <Header />
 
             <main className="page">

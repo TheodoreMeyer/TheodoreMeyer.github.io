@@ -22,7 +22,7 @@ export default class Page {
                     title,
                     description = "",
                     metadata = {},
-                    theme = null,
+                    theme = undefined,
                     component
                 }) {
         this.path = null;

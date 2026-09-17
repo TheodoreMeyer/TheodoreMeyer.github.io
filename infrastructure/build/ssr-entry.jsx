@@ -16,8 +16,8 @@ import {
 const modules = {
     ...import.meta.glob(
         [
-            "/pages/**/*.jsx",
-            "/pages/**/*.md"
+            "@/**/*.jsx",
+            "@/**/*.md"
         ],
         {
             eager: true
@@ -25,7 +25,7 @@ const modules = {
     ),
 
     ...import.meta.glob(
-        "/pages/**/*.html",
+        "@/**/*.html",
         {
             eager: true,
             query: "?theodore-page"
