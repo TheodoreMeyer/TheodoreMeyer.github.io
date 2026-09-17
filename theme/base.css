@@ -1,8 +1,67 @@
-* {
+/* =========================================================
+   DESIGN TOKENS
+   ========================================================= */
+
+:root {
+    --bg: #eaf6ff;
+
+    --surface: #ffffff;
+    --surface-muted: #f5faff;
+
+    --text: #111827;
+    --muted: #64748b;
+
+    --accent: #2563eb;
+    --accent-hover: #1d4ed8;
+
+    --border: #dbe5ef;
+    --border-strong: #c7d5e3;
+
+    --success: #10b981;
+    --warning: #f59e0b;
+    --danger: #ef4444;
+
+    --content-width: 1100px;
+    --header-height: 64px;
+
+    --radius: 10px;
+    --radius-large: 14px;
+
+    --shadow-sm:
+            0 1px 2px rgba(15, 23, 42, 0.04);
+
+    --shadow:
+            0 4px 12px rgba(15, 23, 42, 0.06);
+
+    --transition: 0.15s ease;
+}
+
+
+/* =========================================================
+   RESET
+   ========================================================= */
+
+*,
+*::before,
+*::after {
     box-sizing: border-box;
 }
 
 html {
+    width: 100%;
+    height: 100%;
+}
+
+body {
+    width: 100%;
+    min-width: 320px;
+    min-height: 100%;
+
+    margin: 0;
+
+    background: var(--bg);
+    color: var(--text);
+
     font-family:
             system-ui,
             -apple-system,
@@ -10,18 +69,357 @@ html {
             "Segoe UI",
             sans-serif;
 
-    color: var(--color-text);
-    background: var(--color-background);
+    line-height: 1.6;
+
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
 }
 
-body {
-    margin: 0;
+#root {
+    width: 100%;
+    min-height: 100%;
 }
+
+
+/* =========================================================
+   APPLICATION LAYOUT
+   ========================================================= */
+
+.layout {
+    display: flex;
+    flex-direction: column;
+
+    width: 100%;
+    min-height: 100vh;
+    min-height: 100dvh;
+
+    background: var(--bg);
+}
+
+
+/* =========================================================
+   PAGE
+   ========================================================= */
+
+.page {
+    width: 100%;
+
+    flex: 1;
+
+    padding: 2rem 1rem;
+}
+
+.page-content {
+    width: 100%;
+    max-width: var(--content-width);
+
+    margin: 0 auto;
+}
+
+
+/* =========================================================
+   GENERIC WRAPPER
+   ========================================================= */
+
+.wrapper {
+    width: 100%;
+    max-width: var(--content-width);
+
+    margin: 0 auto;
+}
+
+.container {
+    width: 100%;
+    max-width: var(--content-width);
+
+    margin: 0 auto;
+}
+
+
+/* =========================================================
+   TYPOGRAPHY
+   ========================================================= */
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    margin-top: 0;
+
+    color: var(--text);
+
+    line-height: 1.25;
+}
+
+h1 {
+    margin-bottom: 1.25rem;
+    font-size: 2rem;
+}
+
+h2 {
+    margin-bottom: 1rem;
+    font-size: 1.5rem;
+}
+
+h3 {
+    margin-bottom: 0.75rem;
+    font-size: 1.25rem;
+}
+
+p {
+    margin-top: 0;
+    margin-bottom: 1rem;
+}
+
+p:last-child {
+    margin-bottom: 0;
+}
+
+
+/* =========================================================
+   LINKS
+   ========================================================= */
 
 a {
-    color: var(--color-link);
+    color: var(--accent);
+
+    text-decoration: underline;
+    text-underline-offset: 2px;
+
+    transition: color var(--transition);
+}
+
+a:visited {
+    color: var(--accent);
 }
 
 a:hover {
-    color: var(--color-link-hover);
+    color: var(--accent-hover);
+}
+
+a:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
+
+    border-radius: 3px;
+}
+
+
+/* =========================================================
+   CARDS
+   ========================================================= */
+
+.card {
+    padding: 1.5rem;
+
+    background: var(--surface);
+
+    border: 1px solid var(--border);
+    border-radius: var(--radius-large);
+
+    box-shadow: var(--shadow-sm);
+}
+
+
+/* =========================================================
+   GRID
+   ========================================================= */
+
+.grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(
+            auto-fit,
+            minmax(250px, 1fr)
+        );
+
+    gap: 1rem;
+}
+
+
+/* =========================================================
+   FORMS
+   ========================================================= */
+
+input,
+textarea,
+select {
+    width: 100%;
+
+    padding: 0.65rem 0.75rem;
+
+    background: var(--surface);
+    color: var(--text);
+
+    border: 1px solid var(--border-strong);
+    border-radius: var(--radius);
+
+    outline: none;
+
+    transition:
+            border-color var(--transition),
+            box-shadow var(--transition);
+}
+
+textarea {
+    min-height: 120px;
+    resize: vertical;
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+    border-color: var(--accent);
+
+    box-shadow:
+            0 0 0 3px rgba(37, 99, 235, 0.12);
+}
+
+
+/* =========================================================
+   BUTTONS
+   ========================================================= */
+
+button,
+.button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    min-height: 40px;
+
+    padding: 0.55rem 1rem;
+
+    background: var(--accent);
+    color: #ffffff;
+
+    border: 1px solid var(--accent);
+    border-radius: var(--radius);
+
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition:
+            background var(--transition),
+            border-color var(--transition),
+            transform var(--transition);
+}
+
+button:hover,
+.button:hover {
+    background: var(--accent-hover);
+    border-color: var(--accent-hover);
+}
+
+button:active,
+.button:active {
+    transform: translateY(1px);
+}
+
+button:focus-visible,
+.button:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
+}
+
+
+/* =========================================================
+   CALLOUTS
+   ========================================================= */
+
+.callout {
+    margin: 1rem 0;
+    padding: 1rem 1rem 1rem 1.25rem;
+
+    background: var(--surface-muted);
+    color: #334155;
+
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--border-strong);
+
+    border-radius: var(--radius);
+}
+
+.callout.note {
+    background: #eff6ff;
+    border-left-color: #3b82f6;
+}
+
+.callout.tip {
+    background: #ecfdf5;
+    border-left-color: #10b981;
+}
+
+.callout.warning {
+    background: #fffbeb;
+    border-left-color: #f59e0b;
+}
+
+.callout.important {
+    background: #fef2f2;
+    border-left-color: #ef4444;
+}
+
+.callout p {
+    margin: 0;
+}
+
+.callout strong {
+    font-weight: 600;
+}
+
+
+/* =========================================================
+   UTILITIES
+   ========================================================= */
+
+.hidden {
+    display: none !important;
+}
+
+.text-muted {
+    color: var(--muted);
+}
+
+.text-center {
+    text-align: center;
+}
+
+.mt-0 {
+    margin-top: 0;
+}
+
+.mb-0 {
+    margin-bottom: 0;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 768px) {
+    .page {
+        padding: 1rem;
+    }
+
+    h1 {
+        font-size: 1.75rem;
+    }
+
+    h2 {
+        font-size: 1.35rem;
+    }
+
+    .card {
+        padding: 1.25rem;
+    }
+
+    .grid {
+        grid-template-columns: 1fr;
+    }
 }

@@ -1,5 +1,9 @@
 import React from "react";
 
+import {
+    hasTheme
+} from "../../theme/index.js";
+
 export default class Page {
 
     path;
@@ -26,7 +30,15 @@ export default class Page {
         this.title = title;
         this.description = description;
         this.metadata = metadata;
+
         this.theme = theme ?? "default";
+
+        if (!hasTheme(this.theme)) {
+            throw new Error(
+                `Unknown theme "${this.theme}".`
+            );
+        }
+
         this.component = component;
     }
 

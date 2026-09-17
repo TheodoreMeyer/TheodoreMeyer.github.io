@@ -1,6 +1,8 @@
 import {
     useEffect
 } from "react";
+import Header from "../Header.jsx";
+import Footer from "../Footer.jsx";
 
 export default function PageLayout({
                                        page,
@@ -10,45 +12,34 @@ export default function PageLayout({
         document.title =
             page.title || "Theodore Meyer";
 
-        let description =
+        const description =
             document.querySelector(
                 'meta[name="description"]'
             );
 
-        if (!description) {
-            description =
-                document.createElement("meta");
-
-            description.name =
-                "description";
-
-            document.head.appendChild(
-                description
+        if (description) {
+            description.setAttribute(
+                "content",
+                page.description || ""
             );
         }
-
-        description.content =
-            page.description || "";
     }, [
         page.title,
         page.description
     ]);
 
     return (
-        <>
-            <header>
-                <a href="/">
-                    Theodore Meyer
-                </a>
-            </header>
+        <div className={`layout theme-${page.theme}`}>
+            <Header />
 
-            <main>
-                {children}
+            <main className="page">
+                <div className="page-content">
+                    {children}
+                </div>
             </main>
 
-            <footer>
-                Theodore Meyer
-            </footer>
-        </>
+            <Footer />
+
+        </div>
     );
 }
