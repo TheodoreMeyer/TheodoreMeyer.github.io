@@ -1,0 +1,13 @@
+.github-stats {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin: 1rem 0;
+}
+
+.github-stats img {
+    max-width: 100%;
+    height: 140px;
+}
