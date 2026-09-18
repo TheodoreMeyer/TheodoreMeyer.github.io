@@ -1,21 +1,13 @@
 import React from "react";
-
-import {
-    hasTheme
-} from "../../theme/index.js";
+import { hasTheme } from "../../theme/index.js";
 
 export default class Page {
-
     path;
-
     title;
-
     description;
-
     metadata;
-
     theme;
-
+    project;
     component;
 
     constructor({
@@ -23,30 +15,30 @@ export default class Page {
                     description = "",
                     metadata = {},
                     theme = undefined,
+                    project = null,
                     component
                 }) {
         this.path = null;
-
         this.title = title;
         this.description = description;
         this.metadata = metadata;
-
         this.theme = theme ?? "default";
+        this.project = project;
+        this.component = component;
 
         if (!hasTheme(this.theme)) {
             throw new Error(
                 `Unknown theme "${this.theme}".`
             );
         }
-
-        this.component = component;
     }
 
     static fromHtml({
                         title = "",
                         description = "",
                         metadata = {},
-                        theme = null,
+                        theme = undefined,
+                        project = null,
                         html
                     }) {
         return new Page({
@@ -54,7 +46,7 @@ export default class Page {
             description,
             metadata,
             theme,
-
+            project,
             component: function StaticPage() {
                 return React.createElement(
                     "div",
@@ -73,7 +65,8 @@ export default class Page {
                             title = "",
                             description = "",
                             metadata = {},
-                            theme = null,
+                            theme = undefined,
+                            project = null,
                             html
                         }) {
         return new Page({
@@ -81,7 +74,7 @@ export default class Page {
             description,
             metadata,
             theme,
-
+            project,
             component: function MarkdownPage() {
                 return React.createElement(
                     "div",

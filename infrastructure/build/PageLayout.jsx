@@ -1,8 +1,10 @@
 import {
     useEffect
 } from "react";
+
 import Header from "../Header.jsx";
 import Footer from "../Footer.jsx";
+import Sidebar from "../../pages/projects/Sidebar.jsx";
 
 export default function PageLayout({
                                        page,
@@ -29,17 +31,28 @@ export default function PageLayout({
     ]);
 
     return (
-        <div className={page.theme ? `layout theme-${page.theme}` : ""}>
+        <div className={`layout theme-${page.theme}`}>
             <Header />
 
             <main className="page">
-                <div className="page-content">
-                    {children}
-                </div>
+                {page.project ? (
+                    <div className="project-wrapper">
+                        <Sidebar
+                            project={page.project}
+                        />
+
+                        <article className="content-wrapper">
+                            {children}
+                        </article>
+                    </div>
+                ) : (
+                    <div className="page-content">
+                        {children}
+                    </div>
+                )}
             </main>
 
             <Footer />
-
         </div>
     );
 }
