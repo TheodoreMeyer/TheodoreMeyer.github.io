@@ -1,0 +1,217 @@
+.votes-page,
+.vote-page,
+.admin-votes {
+    width: 100%;
+}
+
+.vote-list,
+.vote-options,
+.admin-vote-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.vote-card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 1rem 1.25rem;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-sm);
+    transition:
+            transform var(--transition),
+            box-shadow var(--transition);
+}
+
+.vote-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow);
+}
+
+.vote-card strong {
+    color: var(--text);
+}
+
+.vote-button,
+.primary-button,
+.secondary-button,
+.vote-actions button,
+.user-row button {
+    border: 0;
+    border-radius: var(--radius);
+    padding: 0.5rem 0.9rem;
+    background: var(--accent);
+    color: white;
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: none;
+    transition:
+            background var(--transition),
+            transform var(--transition);
+}
+
+.vote-button:hover,
+.primary-button:hover,
+.secondary-button:hover,
+.vote-actions button:hover,
+.user-row button:hover {
+    background: var(--accent-hover);
+}
+
+.vote-options {
+    margin-top: 1.25rem;
+}
+
+.vote-option {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    width: 100%;
+    padding: 0.9rem 1.1rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    background: var(--surface-muted);
+    color: var(--text);
+    text-align: left;
+    cursor: pointer;
+    transition:
+            transform var(--transition),
+            box-shadow var(--transition),
+            background var(--transition);
+}
+
+.vote-option:hover:not(:disabled) {
+    transform: translateY(-2px);
+    background: var(--surface-hover);
+    box-shadow: var(--shadow-sm);
+}
+
+.vote-option:disabled {
+    cursor: wait;
+    opacity: 0.6;
+}
+
+.vote-option span {
+    color: var(--accent);
+    font-weight: 600;
+}
+
+.vote-error {
+    padding: 0.75rem 1rem;
+    border: 1px solid var(--danger);
+    border-radius: var(--radius);
+    color: var(--danger);
+}
+
+.admin-section {
+    margin-bottom: 2rem;
+    padding: 1.25rem;
+    background: var(--surface-muted);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+}
+
+.admin-section h3 {
+    margin-top: 0;
+}
+
+.admin-section label {
+    display: block;
+    margin-bottom: 1rem;
+    color: var(--text);
+    font-weight: 600;
+}
+
+.admin-section input {
+    display: block;
+    box-sizing: border-box;
+    width: 100%;
+    margin-top: 0.4rem;
+    padding: 0.6rem 0.75rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    background: var(--surface);
+    color: var(--text);
+    font: inherit;
+}
+
+.vote-status {
+    display: inline-block;
+    margin-left: 0.6rem;
+    padding: 0.2rem 0.5rem;
+    border-radius: 5px;
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+.vote-status.OPEN {
+    background: var(--success);
+    color: white;
+}
+
+.vote-status.CLOSED {
+    background: var(--danger);
+    color: white;
+}
+
+.vote-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.vote-actions a {
+    color: var(--accent);
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.user-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+}
+
+.user-row {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    padding: 0.75rem;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+}
+
+.user-row span:first-child {
+    flex: 1;
+    min-width: 180px;
+}
+
+.user-row select {
+    padding: 0.4rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    background: var(--surface);
+    color: var(--text);
+}
+
+.approved {
+    color: var(--success);
+    font-weight: 600;
+}
+
+.secondary-button {
+    background: var(--surface-muted);
+    border: 1px solid var(--border);
+    color: var(--text);
+}
+
+.secondary-button:hover {
+    background: var(--surface-hover);
+}

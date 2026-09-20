@@ -1,0 +1,58 @@
+.server-portal {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.welcome-banner {
+    padding: 1rem;
+    margin-bottom: 1.25rem;
+    background: var(--accent);
+    color: white;
+    border-radius: var(--radius);
+    text-align: center;
+}
+
+.welcome-banner h2 {
+    margin: 0 0 0.35rem;
+}
+
+.welcome-banner p {
+    margin: 0;
+}
+
+.server-cards {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    justify-content: center;
+}
+
+.server-card {
+    display: block;
+    width: 200px;
+    padding: 1.25rem;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-sm);
+    color: var(--accent);
+    font-size: 1.1rem;
+    font-weight: 700;
+    text-align: center;
+    text-decoration: none;
+    transition:
+            transform var(--transition),
+            box-shadow var(--transition),
+            background var(--transition);
+}
+
+.server-card:hover {
+    background: var(--surface-hover);
+    transform: translateY(-3px);
+    box-shadow: var(--shadow);
+}
+
+.admin-card {
+    color: var(--danger);
+    background: var(--surface-muted);
+}
