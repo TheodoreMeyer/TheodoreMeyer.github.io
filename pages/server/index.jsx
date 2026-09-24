@@ -1,109 +1,32 @@
-import {
-    useEffect,
-    useState
-} from "react";
-
 import Page from "#/build/Page.js";
-
 import "./server.css";
 
-function ServerPortal() {
-    const [user, setUser] =
-        useState(null);
-
-    const [loading, setLoading] =
-        useState(true);
-
-    useEffect(() => {
-        let cancelled = false;
-
-        async function authenticate() {
-            const {
-                requireAuth
-            } = await import(
-                "#/api/auth.js"
-                );
-
-            const authenticatedUser =
-                await requireAuth();
-
-            if (
-                !cancelled &&
-                authenticatedUser
-            ) {
-                setUser(
-                    authenticatedUser
-                );
-                setLoading(false);
-            }
-        }
-
-        authenticate();
-
-        return () => {
-            cancelled = true;
-        };
-    }, []);
-
-    if (loading) {
-        return (
-            <div className="server-portal">
-                <p>Authenticating...</p>
-            </div>
-        );
-    }
-
-    if (!user) {
-        return null;
-    }
-
+function Server() {
     return (
-        <div className="server-portal">
-            <section className="welcome-banner">
-                <h2>
-                    Welcome, {user.email}
-                </h2>
+        <div className="server-page">
+            <h1>Server</h1>
 
-                <p>
-                    Role:{" "}
-                    <strong>
-                        {user.role}
-                    </strong>
-                </p>
-            </section>
+            <p>
+                This page contains information and tools
+                for the Minecraft server.
+            </p>
 
-            <div className="server-cards">
-                <a
-                    className="server-card"
-                    href="/server/votes/"
-                >
-                    Votes
+            <div className="server-links">
+                <a href="/server/rules/">
+                    EULA
                 </a>
 
-                <a
-                    className="server-card"
-                    href="/server/rules/"
-                >
-                    Rules
+                <a href="/server/forms/">
+                    Registration Form
                 </a>
-
-                {user.role === "Admin" && (
-                    <a
-                        className="server-card admin-card"
-                        href="/server/votes/admin/"
-                    >
-                        Admin Panel
-                    </a>
-                )}
             </div>
         </div>
     );
 }
 
 export default new Page({
-    title: "Server Portal",
-    description:
-        "Server management portal.",
+    title: "Server",
+    description: "Minecraft server information.",
     theme: "default",
-    component: ServerPortal
+    component: Server
 });

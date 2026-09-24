@@ -16,7 +16,7 @@ concurrency:
 
 jobs:
   svg-docs:
-    uses: .github/workflows/svg-docs.yml
+    uses: /.github/workflows/svg-docs.yml
 
   build:
     needs: svg-docs
