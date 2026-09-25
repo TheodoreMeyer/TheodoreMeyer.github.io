@@ -15,10 +15,6 @@ function Server() {
                 <a href="/server/rules/">
                     EULA
                 </a>
-
-                <a href="/server/forms/">
-                    Registration Form
-                </a>
             </div>
         </div>
     );

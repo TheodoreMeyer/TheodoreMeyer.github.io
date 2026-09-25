@@ -85,6 +85,12 @@ function createDocument({
         content="width=device-width, initial-scale=1.0"
     >
 
+    <link
+        rel="icon"
+        href="https://github.com/TheodoreMeyer.png"
+        type="image/x-icon"
+    >
+
     <title>${title}</title>
 
     ${
