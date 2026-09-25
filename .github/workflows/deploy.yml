@@ -6,6 +6,8 @@ on:
       - main
 
   workflow_dispatch:
+  repository_dispatch:
+    types: [svg-docs-updated]
 
 permissions:
   contents: read
