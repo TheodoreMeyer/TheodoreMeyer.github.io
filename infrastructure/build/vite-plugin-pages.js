@@ -3,6 +3,7 @@ import path from "node:path";
 import matter from "gray-matter";
 import { unified } from "unified";
 import remarkParse from "remark-parse";
+import remarkGfm from "remark-gfm";
 import remarkRehype from "remark-rehype";
 import rehypeStringify from "rehype-stringify";
 
@@ -125,6 +126,7 @@ async function compileMarkdown(
 
     const result = await unified()
         .use(remarkParse)
+        .use(remarkGfm)
         .use(remarkRehype)
         .use(rehypeStringify)
         .process(processedContent);
@@ -144,14 +146,24 @@ function createHtmlPageModule({
 import Page from "/infrastructure/build/Page.js";
 
 const page = Page.fromHtml({
-    title: ${JSON.stringify(metadata.title ?? "")},
-    description: ${JSON.stringify(metadata.description ?? "")},
-    metadata: ${JSON.stringify(metadata)},
-    theme: ${JSON.stringify(metadata.theme ?? null)},
+    title: ${JSON.stringify(
+        metadata.title ?? ""
+    )},
+    description: ${JSON.stringify(
+        metadata.description ?? ""
+    )},
+    metadata: ${JSON.stringify(
+        metadata
+    )},
+    theme: ${JSON.stringify(
+        metadata.theme ?? null
+    )},
     html: ${JSON.stringify(html)}
 });
 
-page.path = ${JSON.stringify(pagePath)};
+page.path = ${JSON.stringify(
+        pagePath
+    )};
 
 export default page;
 `;
@@ -168,15 +180,27 @@ function createMarkdownPageModule({
 import Page from "/infrastructure/build/Page.js";
 
 const page = Page.fromMarkdown({
-    title: ${JSON.stringify(title)},
-    description: ${JSON.stringify(metadata.description ?? "")},
-    metadata: ${JSON.stringify(metadata)},
-    theme: ${JSON.stringify(metadata.theme ?? "document")},
-    project: ${JSON.stringify(project)},
+    title: ${JSON.stringify(
+        title
+    )},
+    description: ${JSON.stringify(
+        metadata.description ?? ""
+    )},
+    metadata: ${JSON.stringify(
+        metadata
+    )},
+    theme: ${JSON.stringify(
+        metadata.theme ?? "document"
+    )},
+    project: ${JSON.stringify(
+        project
+    )},
     html: ${JSON.stringify(html)}
 });
 
-page.path = ${JSON.stringify(pagePath)};
+page.path = ${JSON.stringify(
+        pagePath
+    )};
 
 export default page;
 `;
@@ -187,11 +211,16 @@ export default function pagesPlugin() {
         name: "theodore-pages",
 
         async load(id) {
-            const filePath = id.split("?")[0];
+            const filePath =
+                id.split("?")[0];
 
             if (
-                !filePath.endsWith(".html") ||
-                !isInsidePages(filePath)
+                !filePath.endsWith(
+                    ".html"
+                ) ||
+                !isInsidePages(
+                    filePath
+                )
             ) {
                 return null;
             }
@@ -203,46 +232,65 @@ export default function pagesPlugin() {
                 );
 
             return {
-                code: createHtmlPageModule({
-                    metadata: {},
-                    html: source,
-                    pagePath:
-                        getPagePath(filePath)
-                }),
+                code:
+                    createHtmlPageModule({
+                        metadata: {},
+                        html: source,
+                        pagePath:
+                            getPagePath(
+                                filePath
+                            )
+                    }),
                 map: null
             };
         },
 
         async transform(code, id) {
-            const filePath = id.split("?")[0];
+            const filePath =
+                id.split("?")[0];
 
             if (
-                !filePath.endsWith(".md") ||
-                !isInsidePages(filePath)
+                !filePath.endsWith(
+                    ".md"
+                ) ||
+                !isInsidePages(
+                    filePath
+                )
             ) {
                 return null;
             }
 
-            const project = getProject(filePath);
+            const project =
+                getProject(filePath);
 
             const {
                 metadata,
                 html
-            } = await compileMarkdown(
-                code,
-                project
-            );
+            } =
+                await compileMarkdown(
+                    code,
+                    project
+                );
 
             return {
-                code: createMarkdownPageModule({
-                    metadata,
-                    html,
-                    pagePath: getPagePath(filePath),
-                    project: getProject(filePath),
-                    title:
-                        metadata.title ??
-                        getDefaultTitle(filePath)
-                }),
+                code:
+                    createMarkdownPageModule({
+                        metadata,
+                        html,
+                        pagePath:
+                            getPagePath(
+                                filePath
+                            ),
+                        project:
+                            getProject(
+                                filePath
+                            ),
+                        title:
+                            metadata.title ??
+                            getDefaultTitle(
+                                filePath
+                            )
+                    }),
                 map: null
             };
         }

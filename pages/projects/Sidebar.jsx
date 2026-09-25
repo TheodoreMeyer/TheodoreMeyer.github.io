@@ -3,6 +3,7 @@ import {
 } from "react-router-dom";
 
 import Page from "#/build/Page.js";
+import Link from "#/components/Link.jsx";
 
 import "./Sidebar.css";
 
@@ -80,7 +81,8 @@ function buildTree(pages, project) {
 
         parts.pop();
 
-        const parentPath = parts.join("/");
+        const parentPath =
+            parts.join("/");
 
         const node =
             nodes.get(path);
@@ -123,31 +125,43 @@ function DocsTree({
                     : ""
             }
         >
-            {node.children.map(child => (
-                <li key={child.path}>
-                    <a
-                        href={child.page.path}
-                        className={
-                            child.page.path ===
-                            currentPath
-                                ? "active"
-                                : ""
-                        }
-                    >
-                        {child.page.title}
-                    </a>
+            {node.children.map(child => {
+                const active =
+                    child.page.path ===
+                    currentPath;
 
-                    <DocsTree
-                        node={child}
-                        currentPath={
-                            currentPath
-                        }
-                        depth={
-                            depth + 1
-                        }
-                    />
-                </li>
-            ))}
+                return (
+                    <li key={child.path}>
+                        <Link
+                            href={
+                                child.page.path
+                            }
+                            className={
+                                active
+                                    ? "active"
+                                    : ""
+                            }
+                            aria-current={
+                                active
+                                    ? "page"
+                                    : undefined
+                            }
+                        >
+                            {child.page.title}
+                        </Link>
+
+                        <DocsTree
+                            node={child}
+                            currentPath={
+                                currentPath
+                            }
+                            depth={
+                                depth + 1
+                            }
+                        />
+                    </li>
+                );
+            })}
         </ul>
     );
 }
@@ -155,8 +169,9 @@ function DocsTree({
 function ProjectSidebar({
                             project
                         }) {
-    const { pathname: currentPath } =
-        useLocation();
+    const {
+        pathname: currentPath
+    } = useLocation();
 
     const pages =
         getProjectDocs(project);
@@ -178,22 +193,36 @@ function ProjectSidebar({
         projectInfo?.title ||
         project;
 
+    const projectPath =
+        `/projects/${project}/`;
+
+    const projectActive =
+        currentPath ===
+        projectPath;
+
     return (
-        <aside className="project-sidebar">
+        <aside
+            className="project-sidebar"
+            aria-label={`${title} documentation`}
+        >
             <div className="sidebar-header">
-                <a
-                    href={`/projects/${project}/`}
+                <Link
+                    href={projectPath}
                     className={
                         `sidebar-title${
-                            currentPath ===
-                            `/projects/${project}/`
+                            projectActive
                                 ? " active"
                                 : ""
                         }`
                     }
+                    aria-current={
+                        projectActive
+                            ? "page"
+                            : undefined
+                    }
                 >
                     {title}
-                </a>
+                </Link>
             </div>
 
             <DocsTree
@@ -207,13 +236,17 @@ function ProjectSidebar({
 }
 
 function ProjectsSidebar() {
-    const { pathname: currentPath } =
-        useLocation();
+    const {
+        pathname: currentPath
+    } = useLocation();
 
     return (
-        <aside className="project-sidebar">
+        <aside
+            className="project-sidebar"
+            aria-label="Projects"
+        >
             <div className="sidebar-header">
-                <a
+                <Link
                     href="/projects/"
                     className={
                         `sidebar-title${
@@ -223,33 +256,51 @@ function ProjectsSidebar() {
                                 : ""
                         }`
                     }
+                    aria-current={
+                        currentPath ===
+                        "/projects/"
+                            ? "page"
+                            : undefined
+                    }
                 >
                     Projects
-                </a>
+                </Link>
             </div>
 
             <ul>
-                {PROJECTS.map(project => (
-                    <li
-                        key={
-                            project.url
-                        }
-                    >
-                        <a
-                            href={
+                {PROJECTS.map(project => {
+                    const active =
+                        currentPath ===
+                        project.url;
+
+                    return (
+                        <li
+                            key={
                                 project.url
-                            }
-                            className={
-                                currentPath ===
-                                project.url
-                                    ? "active"
-                                    : ""
                             }
                         >
-                            {project.title}
-                        </a>
-                    </li>
-                ))}
+                            <Link
+                                href={
+                                    project.url
+                                }
+                                className={
+                                    active
+                                        ? "active"
+                                        : ""
+                                }
+                                aria-current={
+                                    active
+                                        ? "page"
+                                        : undefined
+                                }
+                            >
+                                {
+                                    project.title
+                                }
+                            </Link>
+                        </li>
+                    );
+                })}
             </ul>
         </aside>
     );
