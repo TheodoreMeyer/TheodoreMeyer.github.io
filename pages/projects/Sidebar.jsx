@@ -80,10 +80,7 @@ function buildTree(pages, project) {
 
         parts.pop();
 
-        const parentPath =
-            parts.length === 0
-                ? ""
-                : `${parts.join("/")}/`;
+        const parentPath = parts.join("/");
 
         const node =
             nodes.get(path);

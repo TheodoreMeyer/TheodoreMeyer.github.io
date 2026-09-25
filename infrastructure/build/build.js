@@ -61,6 +61,9 @@ function createDocument({
             page.description || ""
         );
 
+    const url =
+        `https://theo.2bameyer.net${page.path}`;
+
     const stylesheet =
         assets.css
             .map(asset =>
@@ -68,14 +71,14 @@ function createDocument({
             )
             .join("\n");
 
-    const scripts =
-        assets.js
-            .map(asset =>
-                `<script type="module" src="/${asset}"></script>`
-            )
-            .join("\n");
+const scripts =
+    assets.js
+        .map(asset =>
+            `<script type="module" src="/${asset}"></script>`
+        )
+        .join("\n");
 
-    return `<!doctype html>
+return `<!doctype html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -94,10 +97,35 @@ function createDocument({
     <title>${title}</title>
 
     ${
-        description
-            ? `<meta name="description" content="${description}">`
-            : ""
-    }
+    description
+        ? `<meta name="description" content="${description}">`
+        : ""
+}
+
+    <meta
+        property="og:title"
+        content="${title}"
+    >
+
+    <meta
+        property="og:description"
+        content="${description}"
+    >
+
+    <meta
+        property="og:url"
+        content="${url}"
+    >
+
+    <meta
+        property="og:type"
+        content="website"
+    >
+
+    <meta
+        property="og:image"
+        content="https://github.com/TheodoreMeyer.png"
+    >
 
     ${stylesheet}
 </head>
@@ -267,7 +295,6 @@ async function main() {
     console.log("Static build complete.");
     console.log("");
 }
-
 main().catch(error => {
     console.error("");
     console.error("Build failed.");

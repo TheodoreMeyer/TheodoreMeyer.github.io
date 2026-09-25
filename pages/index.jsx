@@ -4,8 +4,7 @@ import "./home.css";
 
 export default new Page({
     title: "Theodore Meyer",
-    description:
-        "Theodore Meyer's personal website.",
+    description: "Theo's public website.",
 
     component: function Home() {
         return (
