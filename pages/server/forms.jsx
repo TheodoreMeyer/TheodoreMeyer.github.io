@@ -258,7 +258,7 @@ function Forms() {
 
                     <span>
                         I have read and agree to the{" "}
-                        <a href="/server/eula/">
+                        <a href="/server/rules/">
                             server EULA and rules
                         </a>
                         .
