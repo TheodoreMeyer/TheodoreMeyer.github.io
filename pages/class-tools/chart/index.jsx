@@ -13,6 +13,9 @@ function shuffle(array) {
 }
 
 function getRosters() {
+    if (typeof localStorage === "undefined") {
+        return {};
+    }
     try {
         return JSON.parse(
             localStorage.getItem(STORAGE_KEY) || "{}"
