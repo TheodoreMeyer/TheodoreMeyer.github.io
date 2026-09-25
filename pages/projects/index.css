@@ -1,0 +1,55 @@
+.projects-page {
+    width: 100%;
+}
+
+.project-wrapper {
+    display: flex;
+    gap: 2rem;
+
+    max-width: var(--content-width);
+    margin: 0 auto;
+    padding: 2rem 1rem;
+}
+
+.content-wrapper {
+    flex: 1;
+    min-width: 0;
+
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-large);
+
+    padding: 2rem;
+}
+
+.content-wrapper h1 {
+    margin-top: 0;
+}
+
+.content-wrapper h2 {
+    font-size: 1.5rem;
+
+    padding-bottom: 0.3rem;
+
+    border-bottom: 1px solid var(--border);
+}
+
+.content-wrapper p,
+.content-wrapper li {
+    line-height: 1.7;
+    color: var(--muted);
+}
+
+.content-wrapper > * + * {
+    margin-top: 1.25rem;
+}
+
+@media (max-width: 768px) {
+    .project-wrapper {
+        flex-direction: column;
+    }
+
+    .content-wrapper {
+        padding: 1.25rem;
+    }
+}

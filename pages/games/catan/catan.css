@@ -1,0 +1,123 @@
+/* =========================
+   PLAYER CONTROLS
+   ========================= */
+
+#player-tabs {
+    display: flex;
+    gap: 0.5rem;
+    overflow-x: auto;
+    flex-wrap: nowrap;
+    scrollbar-width: thin;
+    width: 100%;
+}
+
+#player-tabs button {
+    flex-shrink: 0;
+}
+
+#player-tabs button.active,
+#player-tabs button.active:hover {
+    background: var(--accent-hover);
+    border-color: var(--accent-hover);
+    box-shadow: 0 0 0 5px var(--surface-hover);
+}
+
+.controls-card {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.header-actions {
+    display: flex;
+    gap: 0.5rem;
+    flex-shrink: 0;
+}
+
+/* =========================
+   IMPROVEMENT TRACKS
+   ========================= */
+
+.card.science {
+    border-left: 6px solid #16a34a;
+}
+
+.card.politics {
+    border-left: 6px solid #2563eb;
+}
+
+.card.trade {
+    border-left: 6px solid #ca8a04;
+}
+
+/* =========================
+   SECTION HEADERS
+   ========================= */
+
+.section-header {
+    cursor: pointer;
+    user-select: none;
+    margin-top: 2rem;
+    transition: color var(--transition);
+}
+
+.section-header:hover {
+    color: var(--accent);
+}
+
+/* =========================
+   COUNTERS
+   ========================= */
+
+.counter {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin: 1rem 0;
+}
+
+.counter button {
+    min-width: 42px;
+}
+
+.counter span {
+    min-width: 2rem;
+    text-align: center;
+    font-weight: 600;
+}
+
+/* =========================
+   MOBILE
+   ========================= */
+
+@media (max-width: 768px) {
+    .controls-card {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    #player-tabs {
+        width: 100%;
+        overflow-x: auto;
+    }
+
+    .header-actions {
+        width: 100%;
+        display: flex;
+        gap: 0.5rem;
+    }
+
+    .header-actions button {
+        flex: 1;
+    }
+
+    .card {
+        padding: 1rem;
+    }
+
+    button {
+        min-height: 44px;
+    }
+}

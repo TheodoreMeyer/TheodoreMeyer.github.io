@@ -1,0 +1,152 @@
+.server-page {
+    width: 100%;
+}
+
+.server-page h1 {
+    margin-top: 0;
+}
+
+.server-page h2 {
+    margin-top: 2rem;
+}
+
+.server-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-top: 1.5rem;
+}
+
+.server-links a {
+    display: inline-block;
+    padding: 0.65rem 1rem;
+    border-radius: var(--radius);
+    background: var(--accent);
+    color: white;
+    font-weight: 600;
+    text-decoration: none;
+    transition: background var(--transition);
+}
+
+.server-links a:hover {
+    background: var(--accent-hover);
+}
+
+.server-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    max-width: 600px;
+    margin-top: 1.5rem;
+}
+
+.server-form > label:not(.server-consent) {
+    display: flex;
+    flex-direction: column;
+    gap: 0.45rem;
+    color: var(--text);
+    font-weight: 600;
+}
+
+.server-form input[type="text"],
+.server-form input[type="email"],
+.server-form input[type="tel"] {
+    box-sizing: border-box;
+    width: 100%;
+    padding: 0.7rem 0.8rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    background: var(--surface);
+    color: var(--text);
+    font: inherit;
+    outline: none;
+    transition:
+            border-color var(--transition),
+            box-shadow var(--transition);
+}
+
+.server-form input[type="text"]:focus,
+.server-form input[type="email"]:focus,
+.server-form input[type="tel"]:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+.server-consent {
+    display: flex;
+    flex-direction: row !important;
+    align-items: flex-start;
+    gap: 0.75rem;
+    padding: 1rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    background: var(--surface-muted);
+    color: var(--text);
+    font-weight: normal !important;
+    line-height: 1.5;
+    cursor: pointer;
+}
+
+.server-consent input {
+    flex: 0 0 auto;
+    width: 1.1rem;
+    height: 1.1rem;
+    margin: 0.15rem 0 0;
+    accent-color: var(--accent);
+    cursor: pointer;
+}
+
+.server-consent span {
+    flex: 1;
+}
+
+.server-consent a {
+    color: var(--accent);
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.server-consent a:hover {
+    text-decoration: underline;
+}
+
+.server-form button {
+    align-self: flex-start;
+    padding: 0.7rem 1.1rem;
+    border: 0;
+    border-radius: var(--radius);
+    background: var(--accent);
+    color: white;
+    font: inherit;
+    font-weight: 600;
+    cursor: pointer;
+    transition:
+            background var(--transition),
+            opacity var(--transition);
+}
+
+.server-form button:hover:not(:disabled) {
+    background: var(--accent-hover);
+}
+
+.server-form button:disabled {
+    opacity: 0.6;
+    cursor: wait;
+}
+
+.server-error {
+    max-width: 600px;
+    padding: 0.75rem 1rem;
+    border: 1px solid var(--danger);
+    border-radius: var(--radius);
+    background: color-mix(
+            in srgb,
+            var(--danger) 6%,
+            var(--surface)
+    );
+    color: var(--danger);
+}
+
+.server-page p {
+    line-height: 1.6;
+}

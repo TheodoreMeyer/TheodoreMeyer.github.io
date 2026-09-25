@@ -1,0 +1,18 @@
+.theme-default .page-content {
+    padding: 2rem;
+
+    background: var(--surface);
+
+    border: 1px solid var(--border);
+    border-radius: var(--radius-large);
+
+    box-shadow: var(--shadow);
+}
+
+@media (max-width: 768px) {
+    .theme-default .page-content {
+        padding: 1.25rem;
+
+        border-radius: var(--radius);
+    }
+}

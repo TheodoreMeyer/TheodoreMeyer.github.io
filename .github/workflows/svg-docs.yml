@@ -1,0 +1,69 @@
+name: SVG Docs
+
+on:
+  workflow_call:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout website
+        uses: actions/checkout@v6
+
+      # Add repositories here.
+      #
+      # repository = GitHub repository
+      # docs       = docs directory inside that repository
+      # destination = directory inside the website
+      #
+      - name: Configure SVG Docs
+        run: |
+          cat > /tmp/svg-docs.json <<'EOF'
+          [
+            {
+              "repository": "TheodoreMeyer/SimpleVoice-Geyser",
+              "docs": "docs",
+              "destination": "projects/simplevoicegeyser"
+            }
+          ]
+          EOF
+
+      - name: Checkout SVG Docs repositories
+        run: |
+          mkdir -p _svg_sources
+
+          while read -r repository docs destination; do
+            name=$(echo "$repository" | tr '/' '_')
+
+            git clone \
+              --depth 1 \
+              "https://github.com/$repository.git" \
+              "_svg_sources/$name"
+
+            mkdir -p "svg-docs/$destination"
+            cp -r "_svg_sources/$name/$docs/." "svg-docs/$destination/"
+          done < <(
+            python3 - <<'PY'
+          import json
+
+          with open("/tmp/svg-docs.json") as f:
+              repos = json.load(f)
+
+          for repo in repos:
+              print(
+                  repo["repository"],
+                  repo["docs"],
+                  repo["destination"]
+              )
+          PY
+          )
+
+      - name: Upload SVG Docs
+        uses: actions/upload-artifact@v4
+        with:
+          name: svg-docs
+          path: svg-docs

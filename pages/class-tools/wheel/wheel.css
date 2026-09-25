@@ -1,0 +1,286 @@
+.setup-view,
+.wheel-view {
+    width: 100%;
+}
+
+.setup-back {
+    margin-bottom: 1rem;
+}
+
+.control-panel {
+    width: 100%;
+    max-width: 520px;
+    margin: 0 auto;
+}
+
+.control-panel-header {
+    margin-bottom: 1.75rem;
+}
+
+.control-panel-header h2 {
+    margin-bottom: 0.4rem;
+}
+
+.control-panel-header p {
+    margin: 0;
+    color: var(--muted);
+}
+
+.eyebrow {
+    display: block;
+    margin-bottom: 0.35rem;
+    color: var(--accent);
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+}
+
+.form-field {
+    margin-bottom: 1.25rem;
+}
+
+.form-field label {
+    display: block;
+    margin-bottom: 0.4rem;
+    font-weight: 600;
+}
+
+.form-field textarea {
+    min-height: 180px;
+}
+
+.create-wheel {
+    width: 100%;
+    margin-top: 0.25rem;
+}
+
+.rig-section {
+    margin-bottom: 1.5rem;
+    padding: 1rem;
+
+    background: var(--surface-muted);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+}
+
+.rig-toggle {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.rig-toggle input {
+    width: auto;
+    margin: 0;
+    accent-color: var(--accent);
+}
+
+.rig-section .form-field {
+    margin-top: 1rem;
+    margin-bottom: 0;
+}
+
+.wheel-stage {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 1.5rem;
+}
+
+.wheel-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 1rem;
+
+    width: 100%;
+    margin-bottom: 0.75rem;
+}
+
+.wheel-header h2 {
+    margin-bottom: 0;
+}
+
+.wheel-hint {
+    color: var(--muted);
+    font-size: 0.9rem;
+}
+
+.wheel-container {
+    position: relative;
+    width: min(700px, 100%);
+    margin: 0 auto;
+
+    cursor: pointer;
+    touch-action: manipulation;
+}
+
+#wheelCanvas {
+    display: block;
+    width: 100%;
+    height: auto;
+}
+
+.wheel-pointer {
+    position: absolute;
+    top: -2px;
+    left: 50%;
+    z-index: 2;
+
+    width: 0;
+    height: 0;
+
+    transform: translateX(-50%);
+
+    border-left: 20px solid transparent;
+    border-right: 20px solid transparent;
+    border-top: 42px solid var(--danger);
+
+    filter:
+            drop-shadow(
+                    0 2px 3px
+                    rgba(15, 23, 42, 0.25)
+            );
+
+    transition:
+            border-top-color 0.08s linear;
+}
+
+.wheel-actions {
+    display: flex;
+    justify-content: center;
+    gap: 0.75rem;
+
+    width: 100%;
+    margin-top: 1rem;
+}
+
+.wheel-actions button {
+    min-width: 110px;
+    margin-top: 0;
+}
+
+.wheel-actions .secondary {
+    background: var(--surface);
+    color: var(--text);
+    border-color: var(--border-strong);
+}
+
+.wheel-actions .secondary:hover {
+    background: var(--surface-muted);
+    border-color: var(--border-strong);
+}
+
+.winner-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    padding: 1rem;
+
+    background:
+            rgba(15, 23, 42, 0.62);
+
+    backdrop-filter: blur(4px);
+}
+
+.winner-card {
+    width: min(500px, 100%);
+    padding: 2.5rem 2rem;
+
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-large);
+
+    text-align: center;
+    box-shadow: var(--shadow);
+}
+
+.winner-label {
+    margin-top: 0.75rem;
+    color: var(--muted);
+    font-size: 0.95rem;
+    font-weight: 600;
+}
+
+.winner-name {
+    margin: 0.5rem 0 1rem;
+
+    color: var(--text);
+    font-size: clamp(2.25rem, 8vw, 3.5rem);
+    font-weight: 800;
+    line-height: 1.1;
+    overflow-wrap: anywhere;
+}
+
+.winner-target {
+    margin-bottom: 1.5rem;
+    color: var(--accent);
+    font-weight: 600;
+}
+
+.winner-actions {
+    display: flex;
+    justify-content: center;
+    gap: 0.75rem;
+}
+
+.winner-actions button {
+    min-width: 110px;
+    margin-top: 0;
+}
+
+.winner-actions .danger {
+    background: var(--danger);
+    border-color: var(--danger);
+}
+
+.winner-actions .danger:hover {
+    filter: brightness(0.92);
+}
+
+.hidden {
+    display: none !important;
+}
+
+@media (max-width: 600px) {
+    .wheel-stage {
+        padding: 1rem;
+    }
+
+    .wheel-header {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .wheel-hint {
+        font-size: 0.85rem;
+    }
+
+    .wheel-actions {
+        flex-direction: column;
+    }
+
+    .wheel-actions button {
+        width: 100%;
+    }
+
+    .winner-card {
+        padding: 2rem 1.25rem;
+    }
+
+    .winner-actions {
+        flex-direction: column;
+    }
+
+    .winner-actions button {
+        width: 100%;
+    }
+}
