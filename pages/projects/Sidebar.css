@@ -1,6 +1,6 @@
-/* =========================
+/* =========================================================
    SIDEBAR
-   ========================= */
+   ========================================================= */
 
 .project-sidebar {
     position: sticky;
@@ -9,27 +9,30 @@
     width: 260px;
     flex-shrink: 0;
 
-    height: fit-content;
     max-height: calc(100vh - 2rem);
 
-    padding: 0.75rem;
+    padding: 0.65rem;
 
     overflow-y: auto;
+    overflow-x: hidden;
 
     background: var(--surface);
     border: 1px solid var(--border);
     border-radius: var(--radius-large);
 
     box-shadow: var(--shadow-sm);
+
+    scrollbar-width: thin;
 }
 
-/* =========================
+
+/* =========================================================
    HEADER
-   ========================= */
+   ========================================================= */
 
 .sidebar-header {
     margin-bottom: 0.5rem;
-    padding: 0.35rem 0.35rem 0.75rem;
+    padding: 0.15rem 0.15rem 0.65rem;
 
     border-bottom: 1px solid var(--border);
 }
@@ -37,20 +40,21 @@
 .sidebar-title {
     display: block;
 
-    padding: 0.35rem 0.5rem;
+    padding: 0.55rem 0.65rem;
+
+    border-radius: var(--radius);
+
+    color: var(--text);
+    text-decoration: none;
 
     font-size: 1.05rem;
     font-weight: 700;
     line-height: 1.3;
 
-    color: var(--text);
-    text-decoration: none;
-
-    border-radius: 6px;
-
     transition:
             background var(--transition),
-            color var(--transition);
+            color var(--transition),
+            box-shadow var(--transition);
 }
 
 .sidebar-title:hover {
@@ -59,12 +63,17 @@
 }
 
 .sidebar-title.active {
+    background: var(--surface-hover);
     color: var(--accent);
+
+    box-shadow:
+            inset 3px 0 0 var(--accent);
 }
 
-/* =========================
+
+/* =========================================================
    LISTS
-   ========================= */
+   ========================================================= */
 
 .project-sidebar ul {
     list-style: none;
@@ -75,30 +84,33 @@
 
 .project-sidebar li {
     margin: 0;
+    padding: 0;
 }
 
-/* =========================
+
+/* =========================================================
    LINKS
-   ========================= */
+   ========================================================= */
 
 .project-sidebar a {
     display: block;
 
     margin: 0.1rem 0;
-    padding: 0.45rem 0.6rem;
+    padding: 0.45rem 0.65rem;
 
-    border-radius: 6px;
+    border-radius: 7px;
 
     color: var(--muted);
     text-decoration: none;
 
     font-size: 0.92rem;
-    line-height: 1.35;
+    font-weight: 500;
+    line-height: 1.4;
 
     transition:
             background var(--transition),
             color var(--transition),
-            transform var(--transition);
+            box-shadow var(--transition);
 }
 
 .project-sidebar a:hover {
@@ -106,35 +118,48 @@
     color: var(--text);
 }
 
+.project-sidebar a:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 1px;
+}
+
+
+/* =========================================================
+   ACTIVE LINKS
+   ========================================================= */
+
 .project-sidebar a.active {
     background: var(--surface-hover);
     color: var(--accent);
+
     font-weight: 600;
 
     box-shadow:
             inset 3px 0 0 var(--accent);
 }
 
-/* =========================
-   TOP-LEVEL NAVIGATION
-   ========================= */
+
+/* =========================================================
+   TOP-LEVEL DOCUMENTATION
+   ========================================================= */
 
 .project-sidebar > ul > li > a {
-    font-weight: 500;
+    font-size: 0.93rem;
 }
 
 .project-sidebar > ul > li > a.active {
     font-weight: 600;
 }
 
-/* =========================
+
+/* =========================================================
    SUBNAVIGATION
-   ========================= */
+   ========================================================= */
 
 .sidebar-subnav {
     position: relative;
 
-    margin: 0.15rem 0 0.25rem 0.8rem !important;
+    margin: 0.1rem 0 0.25rem 0.65rem !important;
     padding: 0 0 0 0.7rem !important;
 }
 
@@ -142,6 +167,7 @@
     content: "";
 
     position: absolute;
+
     top: 0.2rem;
     bottom: 0.2rem;
     left: 0;
@@ -152,47 +178,86 @@
 }
 
 .sidebar-subnav a {
-    font-size: 0.87rem;
     padding: 0.35rem 0.55rem;
+
+    font-size: 0.87rem;
+    font-weight: 400;
 }
 
 .sidebar-subnav a:hover {
     background: var(--surface-hover);
+    color: var(--text);
 }
 
 .sidebar-subnav a.active {
     background: transparent;
     color: var(--accent);
 
-    box-shadow: none;
     font-weight: 600;
+
+    box-shadow: none;
 }
 
-/* =========================
-   NESTED ACTIVE PATH
-   ========================= */
+
+/* =========================================================
+   DEEPER NESTING
+   ========================================================= */
 
 .sidebar-subnav .sidebar-subnav {
     margin-left: 0.45rem !important;
 }
 
-/* =========================
-   SCROLLBAR
-   ========================= */
 
-.project-sidebar {
-    scrollbar-width: thin;
+/* =========================================================
+   ACTIVE NESTED ITEM
+   ========================================================= */
+
+.sidebar-subnav .sidebar-subnav a.active {
+    background: transparent;
+    color: var(--accent);
+
+    box-shadow: none;
 }
 
-/* =========================
+
+/* =========================================================
+   SCROLLBAR
+   ========================================================= */
+
+.project-sidebar::-webkit-scrollbar {
+    width: 6px;
+}
+
+.project-sidebar::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.project-sidebar::-webkit-scrollbar-thumb {
+    background: var(--border-strong);
+    border-radius: 999px;
+}
+
+.project-sidebar::-webkit-scrollbar-thumb:hover {
+    background: var(--muted);
+}
+
+
+/* =========================================================
    MOBILE
-   ========================= */
+   ========================================================= */
 
 @media (max-width: 768px) {
     .project-sidebar {
         position: relative;
+        top: auto;
 
         width: 100%;
         max-height: none;
+
+        overflow: visible;
+    }
+
+    .sidebar-title {
+        font-size: 1rem;
     }
 }

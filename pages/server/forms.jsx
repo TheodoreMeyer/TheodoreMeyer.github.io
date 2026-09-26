@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import Page from "#/build/Page.js";
-import { api } from "#/api/api.js";
+import { api } from "./api/api.js";
 import "./server.css";
 
 function Forms() {

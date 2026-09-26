@@ -11,8 +11,6 @@ export default function Link({
         href?.startsWith("/") &&
         !href.startsWith("//");
 
-    console.log(`Link: ${href} (internal: ${internal})`);
-
     if (!internal) {
         return (
             <a
