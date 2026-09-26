@@ -1,0 +1,192 @@
+/* =========================================================
+   CODE BLOCKS
+   ========================================================= */
+
+.markdown pre {
+    margin: 1.5rem 0;
+    padding: 1rem;
+
+    max-width: 100%;
+
+    overflow-x: auto;
+    overflow-y: hidden;
+
+    background: var(--surface-muted);
+    color: var(--text);
+
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+
+    line-height: 1.5;
+
+    -webkit-overflow-scrolling: touch;
+}
+
+.markdown pre code {
+    display: block;
+
+    padding: 0;
+
+    background: transparent;
+    color: inherit;
+
+    font-family:
+            "SFMono-Regular",
+            Consolas,
+            "Liberation Mono",
+            Menlo,
+            monospace;
+
+    font-size: 0.9rem;
+    line-height: 1.6;
+
+    white-space: pre;
+}
+
+
+/* =========================================================
+   INLINE CODE
+   ========================================================= */
+
+.markdown :not(pre) > code {
+    padding: 0.15rem 0.35rem;
+
+    background: var(--surface-muted);
+    color: var(--text);
+
+    border: 1px solid var(--border);
+    border-radius: 4px;
+
+    font-family:
+            "SFMono-Regular",
+            Consolas,
+            "Liberation Mono",
+            Menlo,
+            monospace;
+
+    font-size: 0.9em;
+}
+
+
+/* =========================================================
+   HIGHLIGHT.JS BASE
+   ========================================================= */
+
+.markdown .hljs {
+    background: transparent;
+    color: var(--text);
+}
+
+
+/* =========================================================
+   COMMENTS
+   ========================================================= */
+
+.markdown .hljs-comment,
+.markdown .hljs-quote {
+    color: var(--muted);
+}
+
+
+/* =========================================================
+   KEYWORDS
+   ========================================================= */
+
+.markdown .hljs-keyword,
+.markdown .hljs-selector-tag,
+.markdown .hljs-literal,
+.markdown .hljs-type {
+    color: var(--accent);
+}
+
+
+/* =========================================================
+   STRINGS
+   ========================================================= */
+
+.markdown .hljs-string,
+.markdown .hljs-regexp {
+    color: var(--success);
+}
+
+
+/* =========================================================
+   ATTRIBUTES / PROPERTIES
+   ========================================================= */
+
+.markdown .hljs-attr,
+.markdown .hljs-attribute,
+.markdown .hljs-property {
+    color: var(--accent-hover);
+}
+
+
+/* =========================================================
+   NUMBERS / SYMBOLS
+   ========================================================= */
+
+.markdown .hljs-number,
+.markdown .hljs-symbol {
+    color: var(--warning);
+}
+
+
+/* =========================================================
+   NAMES / TITLES
+   ========================================================= */
+
+.markdown .hljs-title,
+.markdown .hljs-title.class_,
+.markdown .hljs-title.function_,
+.markdown .hljs-name {
+    color: var(--accent);
+}
+
+
+/* =========================================================
+   BUILT-IN / VARIABLES
+   ========================================================= */
+
+.markdown .hljs-built_in,
+.markdown .hljs-variable,
+.markdown .hljs-template-variable {
+    color: var(--danger);
+}
+
+
+/* =========================================================
+   META / TAGS
+   ========================================================= */
+
+.markdown .hljs-meta,
+.markdown .hljs-meta .hljs-keyword {
+    color: var(--muted);
+}
+
+.markdown .hljs-tag {
+    color: var(--text);
+}
+
+
+/* =========================================================
+   YAML-SPECIFIC READABILITY
+   ========================================================= */
+
+.markdown pre code.language-yaml {
+    color: var(--text);
+}
+
+
+/* =========================================================
+   SELECTION
+   ========================================================= */
+
+.markdown pre code::selection,
+.markdown pre code *::selection {
+    background: var(--surface-hover);
+}
+
+.markdown pre code::-moz-selection,
+.markdown pre code *::-moz-selection {
+    background: var(--surface-hover);
+}

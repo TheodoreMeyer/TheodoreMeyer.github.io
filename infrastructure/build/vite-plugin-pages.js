@@ -4,6 +4,7 @@ import matter from "gray-matter";
 import { unified } from "unified";
 import remarkParse from "remark-parse";
 import remarkGfm from "remark-gfm";
+import rehypeHighlight from "rehype-highlight";
 import remarkRehype from "remark-rehype";
 import rehypeStringify from "rehype-stringify";
 
@@ -128,6 +129,7 @@ async function compileMarkdown(
         .use(remarkParse)
         .use(remarkGfm)
         .use(remarkRehype)
+        .use(rehypeHighlight)
         .use(rehypeStringify)
         .process(processedContent);
 

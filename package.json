@@ -11,9 +11,11 @@
   },
   "dependencies": {
     "gray-matter": "^4.0.3",
+    "highlight.js": "^11.12.0",
     "react": "^19.3.0",
     "react-dom": "^19.3.0",
     "react-router-dom": "^7.18.4",
+    "rehype-highlight": "^7.0.2",
     "rehype-react": "^8.0.0",
     "remark-gfm": "^4.0.1",
     "remark-parse": "^11.0.0",
