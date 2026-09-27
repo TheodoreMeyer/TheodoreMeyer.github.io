@@ -49,6 +49,17 @@ export default new Page({
                             classroom use.
                         </div>
                     </div>
+
+                    <div className="card">
+                        <Link href="/class-tools/jeopardy/">
+                            Jeopardy
+                        </Link>
+
+                        <div className="tool-description">
+                            Open a JeopardyLabs game directly
+                            inside the page.
+                        </div>
+                    </div>
                 </div>
             </>
         );
