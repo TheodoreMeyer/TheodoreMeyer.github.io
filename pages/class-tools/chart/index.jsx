@@ -2,9 +2,9 @@ import { useState } from "react";
 
 import Page from "#/build/Page.js";
 
-import "./chart.css";
+import Roster from "../Roster.jsx";
 
-const STORAGE_KEY = "classroom_rosters";
+import "./chart.css";
 
 function shuffle(array) {
     return [...array].sort(
@@ -12,48 +12,13 @@ function shuffle(array) {
     );
 }
 
-function getRosters() {
-    if (typeof localStorage === "undefined") {
-        return {};
-    }
-    try {
-        return JSON.parse(
-            localStorage.getItem(STORAGE_KEY) || "{}"
-        );
-    } catch {
-        return {};
-    }
-}
-
-function saveRosters(rosters) {
-    localStorage.setItem(
-        STORAGE_KEY,
-        JSON.stringify(rosters)
-    );
-}
-
-function getNames(text) {
-    return text
-        .split("\n")
-        .map(name => name.trim())
-        .filter(Boolean);
-}
-
 function ClassroomRandomizer() {
     const [tab, setTab] =
         useState("seating");
 
+
     const [students, setStudents] =
-        useState("");
-
-    const [rosters, setRosters] =
-        useState(getRosters);
-
-    const [selectedRoster, setSelectedRoster] =
-        useState("");
-
-    const [rosterName, setRosterName] =
-        useState("");
+        useState([]);
 
     const [rows, setRows] =
         useState(5);
@@ -64,7 +29,7 @@ function ClassroomRandomizer() {
     const [seatLayout, setSeatLayout] =
         useState(() =>
             Array.from(
-                { length: 5 },
+                {length: 5},
                 () => Array(6).fill(true)
             )
         );
@@ -83,70 +48,6 @@ function ClassroomRandomizer() {
 
     const [groupValue, setGroupValue] =
         useState(4);
-
-    function saveRoster() {
-        const name =
-            rosterName.trim();
-
-        const value =
-            students.trim();
-
-        if (!name || !value) {
-            return;
-        }
-
-        const next = {
-            ...rosters,
-            [name]: value
-        };
-
-        saveRosters(next);
-
-        setRosters(next);
-        setRosterName("");
-        setSelectedRoster(name);
-    }
-
-    function loadRoster(name) {
-        setSelectedRoster(name);
-
-        if (!name || !rosters[name]) {
-            return;
-        }
-
-        setStudents(
-            rosters[name]
-        );
-    }
-
-    function deleteRoster() {
-        const name =
-            selectedRoster;
-
-        if (!name) {
-            return;
-        }
-
-        if (
-            !confirm(
-                `Delete roster "${name}"?\n\nThis will also clear the current student input text.`
-            )
-        ) {
-            return;
-        }
-
-        const next = {
-            ...rosters
-        };
-
-        delete next[name];
-
-        saveRosters(next);
-
-        setRosters(next);
-        setSelectedRoster("");
-        setStudents("");
-    }
 
     function buildGrid() {
         const safeRows =
@@ -201,9 +102,6 @@ function ClassroomRandomizer() {
     }
 
     function generateSeating() {
-        const names =
-            getNames(students);
-
         const seats = [];
 
         seatLayout.forEach(
@@ -227,7 +125,7 @@ function ClassroomRandomizer() {
         const assignments =
             new Map();
 
-        names.forEach(
+        students.forEach(
             (name, index) => {
                 const seat =
                     shuffledSeats[index];
@@ -329,9 +227,7 @@ function ClassroomRandomizer() {
 
     function generateGroups() {
         const names =
-            shuffle(
-                getNames(students)
-            );
+            shuffle(students);
 
         const value =
             Math.max(
@@ -412,7 +308,7 @@ function ClassroomRandomizer() {
                     <div className="results-actions">
                         <button
                             type="button"
-                            onClick={printResults}
+                            onClick={ printResults }
                         >
                             Print
                         </button>
@@ -420,7 +316,7 @@ function ClassroomRandomizer() {
                         <button
                             type="button"
                             className="secondary"
-                            onClick={showGenerator}
+                            onClick={ showGenerator }
                         >
                             Back
                         </button>
@@ -456,7 +352,9 @@ function ClassroomRandomizer() {
 
                                         return (
                                             <button
-                                                key={key}
+                                                key={
+                                                    key
+                                                }
                                                 type="button"
                                                 className={
                                                     `output-seat` +
@@ -469,7 +367,9 @@ function ClassroomRandomizer() {
                                                         column
                                                     )
                                                 }
-                                                disabled={!enabled}
+                                                disabled={
+                                                    !enabled
+                                                }
                                             >
                                                 {name}
                                             </button>
@@ -487,7 +387,9 @@ function ClassroomRandomizer() {
                             ) => (
                                 <div
                                     className="group-card"
-                                    key={index}
+                                    key={
+                                        index
+                                    }
                                 >
                                     <strong>
                                         Group{" "}
@@ -497,9 +399,13 @@ function ClassroomRandomizer() {
                                     {group.map(
                                         name => (
                                             <div
-                                                key={name}
+                                                key={
+                                                    name
+                                                }
                                             >
-                                                {name}
+                                                {
+                                                    name
+                                                }
                                             </div>
                                         )
                                     )}
@@ -559,77 +465,10 @@ function ClassroomRandomizer() {
             </div>
 
             <div className="chart-card">
-                <h2>
-                    Students
-                </h2>
-
-                <h3>
-                    Saved Rosters
-                </h3>
-
-                <select
-                    value={selectedRoster}
-                    onChange={event =>
-                        loadRoster(
-                            event.target.value
-                        )
-                    }
-                >
-                    <option value="">
-                        Select roster
-                    </option>
-
-                    {Object.keys(
-                        rosters
-                    ).map(name => (
-                        <option
-                            key={name}
-                            value={name}
-                        >
-                            {name}
-                        </option>
-                    ))}
-                </select>
-
-                <input
-                    value={rosterName}
-                    onChange={event =>
-                        setRosterName(
-                            event.target.value
-                        )
-                    }
-                    placeholder="Roster name"
-                />
-
-                <button
-                    type="button"
-                    onClick={saveRoster}
-                >
-                    Save
-                </button>
-
-                <button
-                    type="button"
-                    className="danger"
-                    onClick={deleteRoster}
-                >
-                    Delete
-                </button>
-
-                <h3>
-                    Add Students
-                </h3>
-
-                <p>
-                    Enter one student name per line.
-                </p>
-
-                <textarea
-                    value={students}
-                    onChange={event =>
-                        setStudents(
-                            event.target.value
-                        )
+                <Roster
+                    names={students}
+                    onNamesChange={
+                        setStudents
                     }
                 />
             </div>
@@ -665,7 +504,9 @@ function ClassroomRandomizer() {
 
                         <button
                             type="button"
-                            onClick={buildGrid}
+                            onClick={
+                                buildGrid
+                            }
                         >
                             Build
                         </button>
@@ -765,6 +606,8 @@ function ClassroomRandomizer() {
             )}
         </section>
     );
+
+
 }
 
 export default new Page({

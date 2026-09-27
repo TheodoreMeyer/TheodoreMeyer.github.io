@@ -158,7 +158,14 @@ function Timer() {
         return (
             <section className="timer-page">
                 <div className="timer-container card">
+                    <div className="card">
+                        <a href="/class-tools/">
+                            Go back to Main hub
+                        </a>
+                    </div>
+
                     <header className="timer-header">
+                        <br/>
                         <h1>
                             Classroom Timer
                         </h1>

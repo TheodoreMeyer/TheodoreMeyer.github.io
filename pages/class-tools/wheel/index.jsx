@@ -7,6 +7,7 @@ import {
 import Page from "#/build/Page.js";
 import Link from "#/components/Link.jsx";
 
+import Roster from "../Roster.jsx";
 import Wheel from "./wheel.jsx";
 
 import {
@@ -14,9 +15,6 @@ import {
 } from "./winner.js";
 
 import "./wheel.css";
-
-const WHEEL_KEY =
-    "wheel_names";
 
 const WINNER_DELAY =
     1000;
@@ -43,9 +41,6 @@ export default new Page({
         const [names, setNames] =
             useState([]);
 
-        const [namesText, setNamesText] =
-            useState("");
-
         const [winner, setWinner] =
             useState(null);
 
@@ -61,31 +56,12 @@ export default new Page({
         const [mappingTarget, setMappingTarget] =
             useState("");
 
+        const [target, setTarget] =
+            useState("");
+
         useEffect(() => {
-            let storedNames = [];
-
-            try {
-                const stored =
-                    JSON.parse(
-                        localStorage.getItem(
-                            WHEEL_KEY
-                        )
-                    );
-
-                if (Array.isArray(stored)) {
-                    storedNames = stored;
-                }
-            } catch {
-                storedNames = [];
-            }
-
-            setNames(storedNames);
-            setNamesText(
-                storedNames.join("\n")
-            );
-
             namesRef.current =
-                storedNames;
+                names;
 
             winnerSystemRef.current =
                 createWinnerSystem({
@@ -114,32 +90,15 @@ export default new Page({
             };
         }, []);
 
-        function saveNames(nextNames) {
-            localStorage.setItem(
-                WHEEL_KEY,
-                JSON.stringify(nextNames)
+        function handleNamesChange(
+            nextNames
+        ) {
+            setNames(
+                nextNames
             );
-        }
-
-        function handleNamesChange(event) {
-            const value =
-                event.target.value;
-
-            const nextNames =
-                value
-                    .split("\n")
-                    .map(name =>
-                        name.trim()
-                    )
-                    .filter(Boolean);
-
-            setNamesText(value);
-            setNames(nextNames);
 
             namesRef.current =
                 nextNames;
-
-            saveNames(nextNames);
 
             setRigTarget(previous =>
                 nextNames.includes(previous)
@@ -155,22 +114,14 @@ export default new Page({
         }
 
         function createWheelHandler() {
-            const nextNames =
-                namesText
-                    .split("\n")
-                    .map(name =>
-                        name.trim()
-                    )
-                    .filter(Boolean);
-
             if (
-                nextNames.length === 0
+                names.length === 0
             ) {
                 return;
             }
 
             const shuffled =
-                [...nextNames];
+                [...names];
 
             for (
                 let i =
@@ -193,15 +144,12 @@ export default new Page({
                 ];
             }
 
-            setNames(shuffled);
-            setNamesText(
-                shuffled.join("\n")
+            setNames(
+                shuffled
             );
 
             namesRef.current =
                 shuffled;
-
-            saveNames(shuffled);
 
             setWinner(null);
 
@@ -295,21 +243,30 @@ export default new Page({
                         name !== winner
                 );
 
-            setNames(nextNames);
-            setNamesText(
-                nextNames.join("\n")
+            setNames(
+                nextNames
             );
 
             namesRef.current =
                 nextNames;
-
-            saveNames(nextNames);
 
             wheelRef.current?.setNames(
                 nextNames
             );
 
             setWinner(null);
+
+            setRigTarget(previous =>
+                nextNames.includes(previous)
+                    ? previous
+                    : ""
+            );
+
+            setMappingTarget(previous =>
+                nextNames.includes(previous)
+                    ? previous
+                    : ""
+            );
         }
 
         function showSetup() {
@@ -328,9 +285,6 @@ export default new Page({
             setWinner(null);
             setView("setup");
         }
-
-        const [target, setTarget] =
-            useState("");
 
         return (
             <>
@@ -351,9 +305,9 @@ export default new Page({
 
                     <div className="card control-panel">
                         <div className="control-panel-header">
-                            <span className="eyebrow">
-                                CLASS TOOLS
-                            </span>
+                        <span className="eyebrow">
+                            CLASS TOOLS
+                        </span>
 
                             <h2>
                                 Wheel Setup
@@ -367,34 +321,12 @@ export default new Page({
                             </p>
                         </div>
 
-                        <div className="form-field">
-                            <label htmlFor="savedRosterSelect">
-                                Roster
-                            </label>
-
-                            <select id="savedRosterSelect">
-                                <option>
-                                    No saved roster
-                                </option>
-                            </select>
-                        </div>
-
-                        <div className="form-field">
-                            <label htmlFor="namesInput">
-                                Names
-                            </label>
-
-                            <textarea
-                                id="namesInput"
-                                value={namesText}
-                                onChange={
-                                    handleNamesChange
-                                }
-                                placeholder={
-                                    "Enter one name per line..."
-                                }
-                            />
-                        </div>
+                        <Roster
+                            names={names}
+                            onNamesChange={
+                                handleNamesChange
+                            }
+                        />
 
                         <div className="form-field">
                             <label htmlFor="modeSelect">
@@ -478,8 +410,8 @@ export default new Page({
                                 />
 
                                 <span>
-                                    Rig Wheel
-                                </span>
+                                Rig Wheel
+                            </span>
                             </label>
 
                             {rigWheel && (
@@ -537,9 +469,9 @@ export default new Page({
                     <div className="card wheel-stage">
                         <div className="wheel-header">
                             <div>
-                                <span className="eyebrow">
-                                    WHEEL SYSTEM
-                                </span>
+                            <span className="eyebrow">
+                                WHEEL SYSTEM
+                            </span>
 
                                 <h2>
                                     Spin the Wheel
@@ -547,8 +479,8 @@ export default new Page({
                             </div>
 
                             <span className="wheel-hint">
-                                Click the wheel to spin
-                            </span>
+                            Click the wheel to spin
+                        </span>
                         </div>
 
                         <Wheel
@@ -583,9 +515,9 @@ export default new Page({
                 {winner && (
                     <div className="winner-overlay">
                         <div className="winner-card">
-                            <span className="eyebrow">
-                                RESULT
-                            </span>
+                        <span className="eyebrow">
+                            RESULT
+                        </span>
 
                             <div className="winner-label">
                                 Winner
@@ -626,4 +558,6 @@ export default new Page({
             </>
         );
     }
+
+
 });

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import {useState} from "react";
 
 import Page from "#/build/Page.js";
 
@@ -84,9 +84,9 @@ export default new Page({
                             cursor: "pointer"
                         }}
                     >
-                        E<br />
-                        x<br />
-                        i<br />
+                        E<br/>
+                        x<br/>
+                        i<br/>
                         t
                     </a>
                 </>
@@ -94,44 +94,54 @@ export default new Page({
         }
 
         return (
-            <div className="card">
-                <h1>Jeopardy</h1>
 
-                <p>
-                    This tool lets you open a JeopardyLabs game
-                    directly inside this page.
-                </p>
+            <div>
 
-                <p>
-                    Paste the URL of a JeopardyLabs game below.
-                    Once opened, the game will fill the entire
-                    screen so you can play it without leaving
-                    this page.
-                </p>
+                <div className="card">
+                    <a href="/class-tools/">
+                        Go back to Main hub
+                    </a>
+                </div>
 
-                <p>
-                    To exit game, reload the page.
-                </p>
+                <div className="card">
+                    <h1>Jeopardy</h1>
 
-                <form onSubmit={openGame}>
-                    <label>
-                        JeopardyLabs Game URL
+                    <p>
+                        This tool lets you open a JeopardyLabs game
+                        directly inside this page.
+                    </p>
 
-                        <input
-                            type="url"
-                            value={urlInput}
-                            onChange={(event) =>
-                                setUrlInput(event.target.value)
-                            }
-                            placeholder="https://jeopardylabs.com/play/..."
-                            required
-                        />
-                    </label>
+                    <p>
+                        Paste the URL of a JeopardyLabs game below.
+                        Once opened, the game will fill the entire
+                        screen so you can play it without leaving
+                        this page.
+                    </p>
 
-                    <button type="submit">
-                        Open Game
-                    </button>
-                </form>
+                    <p>
+                        To exit game, reload the page.
+                    </p>
+
+                    <form onSubmit={openGame}>
+                        <label>
+                            JeopardyLabs Game URL
+
+                            <input
+                                type="url"
+                                value={urlInput}
+                                onChange={(event) =>
+                                    setUrlInput(event.target.value)
+                                }
+                                placeholder="https://jeopardylabs.com/play/..."
+                                required
+                            />
+                        </label>
+
+                        <button type="submit">
+                            Open Game
+                        </button>
+                    </form>
+                </div>
             </div>
         );
     }

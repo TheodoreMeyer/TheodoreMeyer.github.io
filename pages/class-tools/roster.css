@@ -1,0 +1,116 @@
+/* =========================================================
+ROSTER
+========================================================= */
+
+.roster {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+}
+
+/* HEADER */
+
+.roster-header h2 {
+    margin: 0.2rem 0 0.4rem;
+}
+
+.roster-header p {
+    margin: 0;
+    color: var(--muted);
+}
+
+/* INSTRUCTIONS */
+
+.roster-instructions {
+    padding: 1rem 1.1rem;
+    background: var(--surface-muted);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+}
+
+.roster-instructions strong {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: var(--text);
+}
+
+.roster-instructions ol {
+    margin: 0;
+    padding-left: 1.25rem;
+    color: var(--muted);
+}
+
+.roster-instructions li + li {
+    margin-top: 0.25rem;
+}
+
+/* FIELDS */
+
+.roster-field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.45rem;
+}
+
+.roster-field label {
+    color: var(--text);
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+/* TEXTAREA */
+
+.roster-field textarea {
+    min-height: 240px;
+    resize: vertical;
+
+    
+    font-family:
+            "SFMono-Regular",
+            Consolas,
+            "Liberation Mono",
+            Menlo,
+            monospace;
+
+    line-height: 1.55;
+    
+
+}
+
+/* COUNT */
+
+.roster-count {
+    color: var(--muted);
+    font-size: 0.8rem;
+}
+
+/* ACTIONS */
+
+.roster-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.roster-actions button {
+    min-height: 38px;
+}
+
+.roster-actions button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* MOBILE */
+
+@media (max-width: 600px) {
+    .roster-actions {
+        flex-direction: column;
+    }
+
+    .roster-actions button {
+    width: 100%;
+}
+    
+
+}
