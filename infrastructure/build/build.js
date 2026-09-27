@@ -282,6 +282,32 @@ async function main() {
     // Render every Page.
     await renderPages();
 
+    // GitHub Pages requires a root-level 404.html.
+    const notFoundPage =
+        path.join(
+            distDirectory,
+            "404",
+            "index.html"
+        );
+
+    const githubNotFound =
+        path.join(
+            distDirectory,
+            "404.html"
+        );
+
+    try {
+        await fs.copyFile(
+            notFoundPage,
+            githubNotFound
+        );
+    } catch (error) {
+        console.warn(
+            "Could not create GitHub Pages 404.html:",
+            error
+        );
+    }
+
     // SSR output is only temporary.
     await fs.rm(
         ssrOutputDirectory,
@@ -295,6 +321,7 @@ async function main() {
     console.log("Static build complete.");
     console.log("");
 }
+
 main().catch(error => {
     console.error("");
     console.error("Build failed.");
