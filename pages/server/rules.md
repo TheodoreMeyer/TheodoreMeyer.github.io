@@ -1,119 +1,137 @@
 ---
+
 layout: default
 title: Server Rules
 permalink: /server/rules/
----
+-------------------------
 
 # Server Rules
 
 ## Agreement
-By joining the server, you agree to follow all rules listed below.  
-Failure to follow these rules may result in warnings, temporary bans, or permanent bans depending on severity.
+
+By joining and playing on the server, you agree to follow these rules.
+
+Violations may result in warnings, temporary bans, or permanent bans depending on the severity and circumstances of the violation.
 
 ---
 
-## Universal Rules
-- The server administration is **not responsible** for any in-game damage or loss caused by other players.
-- Intentionally ruining another player’s experience may result in a **temporary ban** (typically 2–3 weeks). Repeated offenses may result in **longer bans**.
-- All players must follow **current and future rules** added by the server administration.
-- Destroying or damaging **spawn or public builds** will require you to repair the damage and may result in a 2-day ban or longer.
-- Entering **private buildings or areas** inside land claims without permission is not allowed.
-- Do not intentionally destroy the world’s environment (mass griefing terrain, forests, etc.).
-- By playing on this server, you agree to the **Minecraft EULA**: [https://www.minecraft.net/en-us/eula](https://www.minecraft.net/en-us/eula)
+## General Rules
+
+* Do not intentionally ruin another player's experience.
+* Do not grief, destroy, or damage another player's builds or property.
+* Do not enter private buildings or areas without permission.
+* Do not intentionally damage the world's environment or public areas.
+* Do not destroy or damage spawn or other public builds. Players responsible for damage may be required to repair it.
+* Respect other players and avoid harassment, threats, or unnecessary drama.
+* Players are responsible for protecting their own items and builds unless otherwise stated by the server administration.
+* All players must follow rules announced by the server administration, including rules added or changed in the future.
+* By playing on the server, you agree to the [Minecraft EULA](https://www.minecraft.net/en-us/eula).
 
 ---
 
-## Lifesteal / WildWood World Rules
-- This world is **free-for-all PvP**.
-- **Stealing and raiding** are allowed.
-- **Spawn trapping** is not allowed.
-- **Land Claims** are disabled.
-- Using tools or mods to locate bases unfairly is **not allowed**, including:
-    - Replay Mod base scouting
-    - Pie-Ray
-    - Similar exploits
+## PvP and Property
 
----
+PvP, stealing, raiding, and other forms of player interaction may vary between worlds.
 
-## Overworld Rules
-- **Stealing from other players is not allowed**.
-- Destroying another player's builds or property will result in a **1-week ban or longer**.
-- This world is intended for **normal survival gameplay and friendly building**.
-- Land Claims are **enabled**.
-- Destroying important world structures (villages, strongholds, etc.) is **not allowed unless inside your own claim**.
+The rules for a specific world will be announced by the server administration and may change between seasons or resets.
 
----
+Unless a world explicitly allows it:
 
-## End / Nether Rules
-- These worlds may reset at any time, with **at least 96 hours notice**.
-- PvP and raiding may occur.
-- Land Claims are **enabled**.
-- Destroying major structures like **End Cities** is not allowed unless inside your claim.
-- Mods or tools used to locate bases unfairly are **not allowed**.
-
----
-
-## Other Worlds
-- Any world not listed above falls under this section.
-- Land claim and PvP rules will depend on the **specific world or season**.
-- Server announcements will specify the rules for those worlds.
-
----
-
-## Server Administration
-- Server administrators may **kick or ban** players if necessary to protect the community.
-- Administrators can **see all chat messages**.
-- The server records logs for up to **2 weeks** to investigate reports.
-- Players are expected to **respect each other** and avoid harassment or drama.
+* Do not steal from other players.
+* Do not destroy another player's builds or property.
+* Do not use PvP to intentionally harass or repeatedly target another player.
+* Do not abuse land-claim mechanics or enter protected areas without permission.
 
 ---
 
 ## Exploits and Glitches
 
-**Do not abuse glitches or exploits that harm the server.**
+Do not abuse glitches or exploits in ways that negatively affect the server or give an unfair advantage.
 
 ### Allowed
-- Non-destructive duplication glitches
-- Zero-tick farms
+
+* Non-destructive duplication glitches
+* Zero-tick farms
 
 ### Not Allowed
-- Destructive duplication
-- Server crashes
-- Lag machines
-- Game-breaking exploits
 
-> If a glitch is important for gameplay but causes issues, please **contact an admin**.
+* Destructive duplication
+* Server crashes
+* Lag machines
+* Game-breaking exploits
+* Exploits used to gain an unfair advantage over other players
+
+If you discover a glitch that may significantly affect gameplay or server performance, contact an administrator before using it.
 
 ---
 
 ## Mods
-Mods are allowed only if they **do not provide unfair advantages**.  
-Allowed clients/mod loaders include **Fabric** and **NeoForge**.
+
+Mods are allowed as long as they do not provide an unfair advantage or violate another server rule.
+
+Supported mod loaders include **Fabric** and **NeoForge**.
 
 ### Allowed Mods
-- Bobby
-- Distant Horizons
-- Xaero’s Minimap / World Map
-- Fullbright / Gamma mods
+
+* Bobby
+* Distant Horizons
+* Xaero's Minimap / World Map
+* Fullbright / Gamma mods
 
 ### Not Allowed
-- X-ray mods
-- Hitbox mods
-- Hacked clients (such as Wurst)
-- Pie-Ray related mods
 
-> If you are unsure whether a mod is allowed, **ask an admin first**.
+* X-ray mods
+* Hitbox mods
+* Hacked clients, such as Wurst
+* Pie-Ray or similar tools
+* Mods designed to locate hidden bases or players unfairly
+
+If you are unsure whether a mod is allowed, ask an administrator before using it.
+
+---
+
+## World-Specific Rules
+
+Different worlds may have different rules for PvP, stealing, raiding, land claims, resets, and other mechanics.
+
+The rules for each world will be announced separately when the world is introduced or its rules change.
+
+Server announcements take priority over general world rules when they specifically apply to that world or season.
+
+---
+
+## Server Administration
+
+* Administrators may kick or ban players when necessary to protect the server and its community.
+* Administrators may review server logs and chat messages when investigating reports or rule violations.
+* Server logs may be retained for up to **2 weeks**.
+* Administrators may require players to repair damage they caused to public areas or other players' property.
+* Punishments may vary depending on the severity, frequency, and circumstances of a violation.
 
 ---
 
 ## Reporting Players
-- Accusations against players must include **evidence**.
-- Use `/report` to report, then **email** me with screenshots, video, or coordinates.
-- If harassment occurs, email me with the **Date and Time**.
+
+When reporting a player, provide as much evidence as possible.
+
+Use `/report` to submit a report, then email the server administration with relevant evidence such as:
+
+* Screenshots
+* Video
+* Coordinates
+* Player names
+* Date and time of the incident
+
+Reports involving harassment should include the **date and time** so the relevant logs can be investigated.
+
+False or intentionally misleading reports may result in disciplinary action.
 
 ---
 
 ## Definitions
-- **Mod** – Any modification that changes the game experience, including clients, datapacks, shaders, and resource packs.
-- **PvP** – Player vs Player combat.
-- **Exploit / Glitch** – A bug or unintended mechanic used to gain an unfair advantage.
+
+* **PvP** — Player versus Player combat.
+* **Griefing** — Intentionally damaging, destroying, or disrupting another player's property or gameplay.
+* **Exploit / Glitch** — A bug or unintended game mechanic that can be used to produce an advantage or unintended behavior.
+* **Land Claim** — A protected area controlled by a player or group of players.
+* **Mod** — Software that modifies Minecraft's behavior or functionality, including client-side modifications and modded clients.
