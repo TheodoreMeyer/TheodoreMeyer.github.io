@@ -138,13 +138,27 @@ export function createWinnerSystem({
             slice *
             EDGE_MARGIN;
 
+        const edgeBias =
+            0.23;
+
+        const random =
+            Math.random();
+
         const targetOffset =
-            edgeMargin +
-            Math.random() *
-            (
-                slice -
-                edgeMargin * 2
-            );
+            random < 0.5
+                ? edgeMargin +
+                Math.random() *
+                (
+                    edgeBias * slice -
+                    edgeMargin
+                )
+                : (1 - edgeBias) *
+                slice +
+                Math.random() *
+                (
+                    edgeBias * slice -
+                    edgeMargin
+                );
 
         const targetAngle =
             sectionStart +

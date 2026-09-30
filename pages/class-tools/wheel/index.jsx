@@ -44,9 +44,6 @@ export default new Page({
         const [winner, setWinner] =
             useState(null);
 
-        const [rigWheel, setRigWheel] =
-            useState(false);
-
         const [rigTarget, setRigTarget] =
             useState("");
 
@@ -183,10 +180,10 @@ export default new Page({
             const selected =
                 winnerSystem.chooseWinner({
                     rigged:
-                    rigWheel,
+                        mode === "rigged",
 
                     riggedName:
-                    rigTarget
+                        rigTarget
                 });
 
             if (!selected) {
@@ -305,9 +302,9 @@ export default new Page({
 
                     <div className="card control-panel">
                         <div className="control-panel-header">
-                        <span className="eyebrow">
-                            CLASS TOOLS
-                        </span>
+                            <span className="eyebrow">
+                                CLASS TOOLS
+                            </span>
 
                             <h2>
                                 Wheel Setup
@@ -346,6 +343,10 @@ export default new Page({
                                     Winner
                                 </option>
 
+                                <option value="rigged">
+                                    Rigged
+                                </option>
+
                                 <option
                                     value="seat"
                                     hidden
@@ -364,57 +365,8 @@ export default new Page({
                             </select>
                         </div>
 
-                        {mode !== "winner" && (
-                            <div className="form-field">
-                                <label htmlFor="targetSelect">
-                                    Target
-                                </label>
-
-                                <select
-                                    id="targetSelect"
-                                    value={
-                                        mappingTarget
-                                    }
-                                    onChange={event =>
-                                        setMappingTarget(
-                                            event.target.value
-                                        )
-                                    }
-                                >
-                                    <option value="">
-                                        Select target
-                                    </option>
-
-                                    {names.map(name => (
-                                        <option
-                                            key={name}
-                                            value={name}
-                                        >
-                                            {name}
-                                        </option>
-                                    ))}
-                                </select>
-                            </div>
-                        )}
-
-                        <div className="rig-section">
-                            <label className="rig-toggle">
-                                <input
-                                    type="checkbox"
-                                    checked={rigWheel}
-                                    onChange={event =>
-                                        setRigWheel(
-                                            event.target.checked
-                                        )
-                                    }
-                                />
-
-                                <span>
-                                Rig Wheel
-                            </span>
-                            </label>
-
-                            {rigWheel && (
+                        {mode === "rigged" && (
+                            <div className="rig-section">
                                 <div className="form-field">
                                     <label htmlFor="rigTargetSelect">
                                         Rigged Winner
@@ -443,8 +395,42 @@ export default new Page({
                                         ))}
                                     </select>
                                 </div>
+                            </div>
+                        )}
+
+                        {mode !== "winner" &&
+                            mode !== "rigged" && (
+                                <div className="form-field">
+                                    <label htmlFor="targetSelect">
+                                        Target
+                                    </label>
+
+                                    <select
+                                        id="targetSelect"
+                                        value={
+                                            mappingTarget
+                                        }
+                                        onChange={event =>
+                                            setMappingTarget(
+                                                event.target.value
+                                            )
+                                        }
+                                    >
+                                        <option value="">
+                                            Select target
+                                        </option>
+
+                                        {names.map(name => (
+                                            <option
+                                                key={name}
+                                                value={name}
+                                            >
+                                                {name}
+                                            </option>
+                                        ))}
+                                    </select>
+                                </div>
                             )}
-                        </div>
 
                         <button
                             className="create-wheel"
@@ -469,9 +455,9 @@ export default new Page({
                     <div className="card wheel-stage">
                         <div className="wheel-header">
                             <div>
-                            <span className="eyebrow">
-                                WHEEL SYSTEM
-                            </span>
+                                <span className="eyebrow">
+                                    WHEEL SYSTEM
+                                </span>
 
                                 <h2>
                                     Spin the Wheel
@@ -479,8 +465,8 @@ export default new Page({
                             </div>
 
                             <span className="wheel-hint">
-                            Click the wheel to spin
-                        </span>
+                                Click the wheel to spin
+                            </span>
                         </div>
 
                         <Wheel
@@ -515,9 +501,9 @@ export default new Page({
                 {winner && (
                     <div className="winner-overlay">
                         <div className="winner-card">
-                        <span className="eyebrow">
-                            RESULT
-                        </span>
+                            <span className="eyebrow">
+                                RESULT
+                            </span>
 
                             <div className="winner-label">
                                 Winner
@@ -558,6 +544,4 @@ export default new Page({
             </>
         );
     }
-
-
 });
