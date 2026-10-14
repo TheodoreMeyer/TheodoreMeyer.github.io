@@ -38,14 +38,26 @@ export default new Page({
         const [view, setView] =
             useState("setup");
 
+        /*
+         * The complete roster being configured.
+         *
+         * This does not change when winners are
+         * removed from the active wheel.
+         */
+        const [rosterNames, setRosterNames] =
+            useState([]);
+
+        /*
+         * The names currently on the wheel.
+         *
+         * Winners can be removed from this
+         * without changing the roster.
+         */
         const [names, setNames] =
             useState([]);
 
         const [winner, setWinner] =
             useState(null);
-
-        const [rigTarget, setRigTarget] =
-            useState("");
 
         const [mode, setMode] =
             useState("winner");
@@ -55,6 +67,50 @@ export default new Page({
 
         const [target, setTarget] =
             useState("");
+
+        /*
+         * Each item is either:
+         *
+         * ""       = Random
+         * "Alice"  = fixed to Alice
+         *
+         * In Rigged mode, these slots are
+         * resolved into a complete sequence
+         * when the wheel is created.
+         */
+        const [wheelOrder, setWheelOrder] =
+            useState([]);
+
+        /*
+         * The resolved sequence used by
+         * Rigged mode.
+         *
+         * Example:
+         *
+         * Wheel Order:
+         * 1. Bob
+         * 2. Random
+         * 3. Eli
+         * 4. Random
+         *
+         * Resolved sequence:
+         * 1. Bob
+         * 2. Theo
+         * 3. Eli
+         * 4. Tom
+         */
+        const [riggedSequence, setRiggedSequence] =
+            useState([]);
+
+        /*
+         * The next rigged sequence entry
+         * to consume.
+         */
+        const [riggedIndex, setRiggedIndex] =
+            useState(0);
+
+        const [showWheelOrder, setShowWheelOrder] =
+            useState(false);
 
         useEffect(() => {
             namesRef.current =
@@ -90,6 +146,10 @@ export default new Page({
         function handleNamesChange(
             nextNames
         ) {
+            setRosterNames(
+                nextNames
+            );
+
             setNames(
                 nextNames
             );
@@ -97,32 +157,73 @@ export default new Page({
             namesRef.current =
                 nextNames;
 
-            setRigTarget(previous =>
-                nextNames.includes(previous)
-                    ? previous
-                    : ""
-            );
-
             setMappingTarget(previous =>
                 nextNames.includes(previous)
                     ? previous
                     : ""
             );
+
+            setWheelOrder(
+                previous =>
+                    nextNames.map(
+                        name => {
+                            const existing =
+                                previous.find(
+                                    value =>
+                                        value ===
+                                        name
+                                );
+
+                            return existing ||
+                                "";
+                        }
+                    )
+            );
         }
 
-        function createWheelHandler() {
-            if (
-                names.length === 0
-            ) {
-                return;
-            }
+        function handleOrderChange(
+            index,
+            value
+        ) {
+            setWheelOrder(
+                previous => {
+                    const next =
+                        [...previous];
 
-            const shuffled =
-                [...names];
+                    if (value) {
+                        for (
+                            let i =
+                                0;
+                            i <
+                                next.length;
+                            i++
+                        ) {
+                            if (
+                                i !== index &&
+                                next[i] === value
+                            ) {
+                                next[i] = "";
+                            }
+                        }
+                    }
+
+                    next[index] =
+                        value;
+
+                    return next;
+                }
+            );
+        }
+
+        function shuffle(
+            values
+        ) {
+            const result =
+                [...values];
 
             for (
                 let i =
-                    shuffled.length - 1;
+                    result.length - 1;
                 i > 0;
                 i--
             ) {
@@ -133,25 +234,122 @@ export default new Page({
                     );
 
                 [
-                    shuffled[i],
-                    shuffled[j]
+                    result[i],
+                    result[j]
                 ] = [
-                    shuffled[j],
-                    shuffled[i]
+                    result[j],
+                    result[i]
                 ];
             }
 
+            return result;
+        }
+
+        function createWheelHandler() {
+            if (
+                rosterNames.length ===
+                0
+            ) {
+                return;
+            }
+
+            let orderedNames;
+
+            if (
+                mode === "rigged"
+            ) {
+                const assigned =
+                    wheelOrder.filter(
+                        Boolean
+                    );
+
+                const remaining =
+                    shuffle(
+                        rosterNames.filter(
+                            name =>
+                                !assigned.includes(
+                                    name
+                                )
+                        )
+                    );
+
+                let remainingIndex =
+                    0;
+
+                /*
+                 * Resolve every wheel slot now.
+                 *
+                 * Random slots are randomized once
+                 * and become part of the rigged
+                 * sequence.
+                 */
+                orderedNames =
+                    wheelOrder.map(
+                        value => {
+                            if (value) {
+                                return value;
+                            }
+
+                            const name =
+                                remaining[
+                                    remainingIndex
+                                ];
+
+                            remainingIndex++;
+
+                            return name;
+                        }
+                    );
+
+                /*
+                 * Safety fallback if the order
+                 * array is out of sync.
+                 */
+                if (
+                    orderedNames.length !==
+                        rosterNames.length ||
+                    orderedNames.some(
+                        name =>
+                            !name
+                    )
+                ) {
+                    orderedNames =
+                        shuffle(
+                            rosterNames
+                        );
+                }
+
+                /*
+                 * The resolved wheel order is
+                 * also the predetermined sequence.
+                 */
+                setRiggedSequence(
+                    [...orderedNames]
+                );
+
+                setRiggedIndex(0);
+            } else {
+                orderedNames =
+                    shuffle(
+                        rosterNames
+                    );
+
+                setRiggedSequence([]);
+                setRiggedIndex(0);
+            }
+
             setNames(
-                shuffled
+                orderedNames
             );
 
             namesRef.current =
-                shuffled;
+                orderedNames;
 
             setWinner(null);
+            setTarget("");
 
             wheelRef.current?.setNames(
-                shuffled
+                orderedNames
             );
 
             setView("wheel");
@@ -177,14 +375,71 @@ export default new Page({
                 return;
             }
 
-            const selected =
-                winnerSystem.chooseWinner({
-                    rigged:
-                        mode === "rigged",
+            let selected =
+                null;
 
-                    riggedName:
-                        rigTarget
-                });
+            /*
+             * During the rigged sequence, select
+             * the next predetermined name.
+             *
+             * This is independent of whether the
+             * previous winner was removed or kept.
+             */
+            if (
+                mode === "rigged" &&
+                riggedIndex <
+                    riggedSequence.length
+            ) {
+                const riggedName =
+                    riggedSequence[
+                        riggedIndex
+                    ];
+
+                const currentNames =
+                    namesRef.current;
+
+                const winnerIndex =
+                    currentNames.indexOf(
+                        riggedName
+                    );
+
+                /*
+                 * The name may have been removed
+                 * from the active wheel.
+                 */
+                if (
+                    winnerIndex >= 0
+                ) {
+                    selected = {
+                        winnerIndex,
+
+                        winnerName:
+                            riggedName
+                    };
+                }
+
+                /*
+                 * Consume this rigged result
+                 * regardless of whether the previous
+                 * result was Continued or Removed.
+                 */
+                setRiggedIndex(
+                    previous =>
+                        previous + 1
+                );
+            }
+
+            /*
+             * Once the rigged sequence is exhausted,
+             * selection becomes completely random.
+             */
+            if (!selected) {
+                selected =
+                    winnerSystem.chooseWinner({
+                        rigged: false,
+                        riggedName: ""
+                    });
+            }
 
             if (!selected) {
                 return;
@@ -218,7 +473,8 @@ export default new Page({
                             );
 
                             if (
-                                mode !== "winner"
+                                mode !==
+                                "winner"
                             ) {
                                 setTarget(
                                     mappingTarget
@@ -237,7 +493,8 @@ export default new Page({
             const nextNames =
                 names.filter(
                     name =>
-                        name !== winner
+                        name !==
+                        winner
                 );
 
             setNames(
@@ -253,20 +510,16 @@ export default new Page({
 
             setWinner(null);
 
-            setRigTarget(previous =>
-                nextNames.includes(previous)
-                    ? previous
-                    : ""
-            );
-
             setMappingTarget(previous =>
-                nextNames.includes(previous)
+                nextNames.includes(
+                    previous
+                )
                     ? previous
                     : ""
             );
         }
 
-        function showSetup() {
+        function resetWheel() {
             if (
                 winnerTimeoutRef.current !==
                 null
@@ -279,8 +532,56 @@ export default new Page({
                     null;
             }
 
+            /*
+             * Completely restore the active
+             * wheel from the original roster.
+             */
+            const resetNames =
+                [...rosterNames];
+
+            setNames(
+                resetNames
+            );
+
+            namesRef.current =
+                resetNames;
+
+            wheelRef.current?.setNames(
+                resetNames
+            );
+
+            /*
+             * Reset all configuration state.
+             */
+            setWheelOrder(
+                resetNames.map(
+                    () => ""
+                )
+            );
+
+            setRiggedSequence([]);
+            setRiggedIndex(0);
+
             setWinner(null);
+            setMappingTarget("");
+            setTarget("");
+            setShowWheelOrder(false);
+
             setView("setup");
+        }
+
+        function handleModeChange(
+            value
+        ) {
+            setMode(value);
+
+            if (
+                value !== "rigged"
+            ) {
+                setShowWheelOrder(
+                    false
+                );
+            }
         }
 
         return (
@@ -288,10 +589,11 @@ export default new Page({
                 <section
                     className={
                         `setup-view ${
-                            view !== "setup"
-                                ? "hidden"
-                                : ""
-                        }`
+    view !==
+    "setup"
+        ? "hidden"
+        : ""
+}`
                     }
                 >
                     <div className="card setup-back">
@@ -319,7 +621,7 @@ export default new Page({
                         </div>
 
                         <Roster
-                            names={names}
+                            names={rosterNames}
                             onNamesChange={
                                 handleNamesChange
                             }
@@ -334,8 +636,10 @@ export default new Page({
                                 id="modeSelect"
                                 value={mode}
                                 onChange={event =>
-                                    setMode(
-                                        event.target.value
+                                    handleModeChange(
+                                        event
+                                            .target
+                                            .value
                                     )
                                 }
                             >
@@ -365,41 +669,184 @@ export default new Page({
                             </select>
                         </div>
 
-                        {mode === "rigged" && (
-                            <div className="rig-section">
-                                <div className="form-field">
-                                    <label htmlFor="rigTargetSelect">
-                                        Rigged Winner
-                                    </label>
+                        {mode ===
+                            "rigged" &&
+                            rosterNames.length >
+                                0 && (
+                                <div className="rig-section">
+                                    <div className="form-field">
+                                        <h2>
+                                            Rigged Setup
+                                        </h2>
+                                        <label htmlFor="wheelOrder-0">
+                                            Slot 1
+                                        </label>
 
-                                    <select
-                                        id="rigTargetSelect"
-                                        value={rigTarget}
-                                        onChange={event =>
-                                            setRigTarget(
-                                                event.target.value
+                                        <select
+                                            id="wheelOrder-0"
+                                            value={
+                                                wheelOrder[
+                                                    0
+                                                ] ??
+                                                ""
+                                            }
+                                            onChange={event =>
+                                                handleOrderChange(
+                                                    0,
+                                                    event
+                                                        .target
+                                                        .value
+                                                )
+                                            }
+                                        >
+                                            <option value="">
+                                                Random
+                                            </option>
+
+                                            {rosterNames.map(
+                                                name => (
+                                                    <option
+                                                        key={
+                                                            name
+                                                        }
+                                                        value={
+                                                            name
+                                                        }
+                                                    >
+                                                        {
+                                                            name
+                                                        }
+                                                    </option>
+                                                )
+                                            )}
+                                        </select>
+                                    </div>
+
+                                    <button
+                                        type="button"
+                                        className="wheel-order-toggle"
+                                        onClick={() =>
+                                            setShowWheelOrder(
+                                                previous => !previous
                                             )
                                         }
                                     >
-                                        <option value="">
-                                            Select winner
-                                        </option>
+                                        <span>
+                                            {showWheelOrder
+                                                ? "Hide wheel order"
+                                                : "Show wheel order"}
+                                        </span>
 
-                                        {names.map(name => (
-                                            <option
-                                                key={name}
-                                                value={name}
-                                            >
-                                                {name}
-                                            </option>
-                                        ))}
-                                    </select>
+                                        <span
+                                            className={
+                                                `wheel-order-arrow ${
+                                                    showWheelOrder
+                                                        ? "expanded"
+                                                        : ""
+                                                }`
+                                            }
+                                        >
+                                            ▾
+                                        </span>
+                                    </button>
+
+                                    {showWheelOrder && (
+                                        <div>
+                                            {rosterNames
+                                                .slice(
+                                                    1
+                                                )
+                                                .map(
+                                                    (
+                                                        name,
+                                                        index
+                                                    ) => {
+                                                        const slot =
+                                                            index +
+                                                            1;
+
+                                                        return (
+                                                            <div
+                                                                className="form-field"
+                                                                key={`${name}-${slot}`}
+                                                            >
+                                                                <label
+                                                                    htmlFor={`wheelOrder-${slot}`}
+                                                                >
+                                                                    Slot{" "}
+                                                                    {slot +
+                                                                        1}
+                                                                </label>
+
+                                                                <select
+                                                                    id={`wheelOrder-${slot}`}
+                                                                    value={
+                                                                        wheelOrder[
+                                                                            slot
+                                                                        ] ??
+                                                                        ""
+                                                                    }
+                                                                    onChange={event =>
+                                                                        handleOrderChange(
+                                                                            slot,
+                                                                            event
+                                                                                .target
+                                                                                .value
+                                                                        )
+                                                                    }
+                                                                >
+                                                                    <option value="">
+                                                                        Random
+                                                                    </option>
+
+                                                                    {rosterNames.map(
+                                                                        option => {
+                                                                            const assignedIndex =
+                                                                                wheelOrder.findIndex(
+                                                                                    value =>
+                                                                                        value ===
+                                                                                        option
+                                                                                );
+
+                                                                            if (
+                                                                                assignedIndex !==
+                                                                                    -1 &&
+                                                                                assignedIndex !==
+                                                                                    slot
+                                                                            ) {
+                                                                                return null;
+                                                                            }
+
+                                                                            return (
+                                                                                <option
+                                                                                    key={
+                                                                                        option
+                                                                                    }
+                                                                                    value={
+                                                                                        option
+                                                                                    }
+                                                                                >
+                                                                                    {
+                                                                                        option
+                                                                                    }
+                                                                                </option>
+                                                                            );
+                                                                        }
+                                                                    )}
+                                                                </select>
+                                                            </div>
+                                                        );
+                                                    }
+                                                )}
+                                        </div>
+                                    )}
                                 </div>
-                            </div>
-                        )}
+                            )}
 
-                        {mode !== "winner" &&
-                            mode !== "rigged" && (
+                        {mode !==
+                            "winner" &&
+                            mode !==
+                                "rigged" && (
                                 <div className="form-field">
                                     <label htmlFor="targetSelect">
                                         Target
@@ -412,7 +859,9 @@ export default new Page({
                                         }
                                         onChange={event =>
                                             setMappingTarget(
-                                                event.target.value
+                                                event
+                                                    .target
+                                                    .value
                                             )
                                         }
                                     >
@@ -420,14 +869,22 @@ export default new Page({
                                             Select target
                                         </option>
 
-                                        {names.map(name => (
-                                            <option
-                                                key={name}
-                                                value={name}
-                                            >
-                                                {name}
-                                            </option>
-                                        ))}
+                                        {rosterNames.map(
+                                            name => (
+                                                <option
+                                                    key={
+                                                        name
+                                                    }
+                                                    value={
+                                                        name
+                                                    }
+                                                >
+                                                    {
+                                                        name
+                                                    }
+                                                </option>
+                                            )
+                                        )}
                                     </select>
                                 </div>
                             )}
@@ -446,9 +903,8 @@ export default new Page({
                 <section
                     className={
                         `wheel-view ${
-                            view !== "wheel"
-                                ? "hidden"
-                                : ""
+                            view !== "wheel" ? 
+                                "hidden" : ""
                         }`
                     }
                 >
@@ -489,7 +945,7 @@ export default new Page({
                             <button
                                 className="secondary"
                                 onClick={
-                                    showSetup
+                                    resetWheel
                                 }
                             >
                                 Back
@@ -515,7 +971,8 @@ export default new Page({
 
                             {target && (
                                 <div className="winner-target">
-                                    → {target}
+                                    →{" "}
+                                    {target}
                                 </div>
                             )}
 
@@ -531,8 +988,13 @@ export default new Page({
 
                                 <button
                                     onClick={() => {
-                                        setWinner(null);
-                                        setTarget("");
+                                        setWinner(
+                                            null
+                                        );
+
+                                        setTarget(
+                                            ""
+                                        );
                                     }}
                                 >
                                     Continue

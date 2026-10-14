@@ -40,6 +40,10 @@ function missingStaticFilesPlugin() {
           return;
         }
 
+        if (pathname.startsWith('/@') || pathname.startsWith('/node_modules/.vite/')) {
+          return next();
+        }
+
         const base = server.config.base;
         if (base !== "/" && pathname.startsWith(base)) {
           pathname = `/${pathname.slice(base.length)}`;
