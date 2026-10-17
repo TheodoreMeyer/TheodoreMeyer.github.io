@@ -111,7 +111,7 @@
     border: 1px solid var(--border);
     border-radius: 999px;
     background: var(--surface);
-    color: var(--text-muted, var(--text));
+    color: var(--muted, var(--text));
     font-size: 0.75rem;
     white-space: nowrap;
 }
@@ -176,7 +176,7 @@
 .registration-intro {
     max-width: 470px;
     margin: 1rem 0 0;
-    color: var(--text-muted, var(--text));
+    color: var(--muted, var(--text));
     font-size: 0.9rem;
     line-height: 1.8;
 }
@@ -202,7 +202,7 @@
 
 .registration-loading p {
     margin: 0.2rem 0 0;
-    color: var(--text-muted, var(--text));
+    color: var(--muted, var(--text));
     font-size: 0.8rem;
 }
 
@@ -274,7 +274,7 @@
 
 .registration-warning p {
     margin: 0;
-    color: var(--text-muted, var(--text));
+    color: var(--muted, var(--text));
     font-size: 0.78rem;
     line-height: 1.7;
 }
@@ -318,7 +318,7 @@
 }
 
 .registration-identity-details > span {
-    color: var(--text-muted, var(--text));
+    color: var(--muted, var(--text));
     font-size: 0.72rem;
 }
 
@@ -335,7 +335,7 @@
     border: 1px solid var(--border);
     border-radius: var(--radius);
     background: var(--surface);
-    color: var(--text-muted, var(--text));
+    color: var(--muted, var(--text));
     font-size: 0.68rem;
     font-weight: 750;
 }
@@ -359,7 +359,7 @@
 
 .registration-form-heading p {
     margin: 0.35rem 0 0;
-    color: var(--text-muted, var(--text));
+    color: var(--muted, var(--text));
     font-size: 0.8rem;
     line-height: 1.7;
 }
@@ -387,7 +387,7 @@
 }
 
 .optional-label {
-    color: var(--text-muted, var(--text));
+    color: var(--muted, var(--text));
     font-size: 0.6rem;
     font-weight: 750;
     letter-spacing: 0.08em;
@@ -422,7 +422,7 @@
 }
 
 .server-registration .form-field input::placeholder {
-    color: var(--text-muted, var(--text));
+    color: var(--muted, var(--text));
     opacity: 0.65;
 }
 
@@ -444,7 +444,7 @@
 
 .form-hint {
     margin: 0;
-    color: var(--text-muted, var(--text));
+    color: var(--muted, var(--text));
     font-size: 0.75rem;
     line-height: 1.7;
 }
@@ -541,7 +541,7 @@
 .registration-privacy-note {
     max-width: 440px;
     margin: 1rem auto 0;
-    color: var(--text-muted, var(--text));
+    color: var(--muted, var(--text));
     font-size: 0.68rem;
     line-height: 1.8;
     text-align: center;
@@ -635,7 +635,7 @@
 .registration-success-panel > p:not(.registration-step, .registration-footnote) {
     max-width: 440px;
     margin: 0.8rem auto 1.5rem;
-    color: var(--text-muted, var(--text));
+    color: var(--muted, var(--text));
     font-size: 0.85rem;
     line-height: 1.8;
 }
@@ -655,7 +655,7 @@
 }
 
 .registration-player-summary span {
-    color: var(--text-muted, var(--text));
+    color: var(--muted, var(--text));
     font-size: 0.75rem;
 }
 
@@ -681,7 +681,7 @@
 
 .registration-success-panel .registration-footnote {
     margin: 1.4rem 0 0;
-    color: var(--text-muted, var(--text));
+    color: var(--muted, var(--text));
     font-size: 0.75rem;
 }
 
@@ -693,7 +693,7 @@
     justify-content: space-between;
     gap: 0.75rem;
     padding: 1.25rem 0.25rem 0;
-    color: var(--text-muted, var(--text));
+    color: var(--muted, var(--text));
     font-size: 0.68rem;
 }
 
