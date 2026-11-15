@@ -17,6 +17,7 @@
     "react-router-dom": "^7.18.4",
     "rehype-highlight": "^7.0.2",
     "rehype-react": "^8.0.0",
+    "remark-directive": "^4.0.0",
     "remark-gfm": "^4.0.1",
     "remark-parse": "^11.0.0",
     "remark-rehype": "^11.1.2",

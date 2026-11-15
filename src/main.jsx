@@ -5,12 +5,19 @@ import {
     BrowserRouter
 } from "react-router-dom";
 
-import PageHandler from "../infrastructure/build/PageHandler.jsx";
+import PageHandler from "#/build/PageHandler.jsx";
 import {
     discoverPages
-} from "../infrastructure/build/pages.js";
+} from "#/build/pages.js";
+
+import {
+    initializeMarkdownHover
+} from "#/build/markdown/MarkdownHover.js";
 
 import "../theme/index.css";
+
+
+initializeMarkdownHover();
 
 const modules = {
     ...import.meta.glob(

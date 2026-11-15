@@ -7,6 +7,8 @@ import remarkGfm from "remark-gfm";
 import rehypeHighlight from "rehype-highlight";
 import remarkRehype from "remark-rehype";
 import rehypeStringify from "rehype-stringify";
+import MarkdownTagProcessor from "./markdown/MarkdownTagProcessor.js";
+import remarkDirective from "remark-directive";
 
 const pagesDirectory = path.resolve("pages");
 
@@ -110,32 +112,30 @@ function getDefaultTitle(filePath) {
         );
 }
 
-async function compileMarkdown(
-    source,
-    project
-) {
-    const {
-        data,
-        content
-    } = matter(source);
+async function compileMarkdown(source, project) {
+    const { data, content } = matter(source);
 
-    const processedContent =
-        processLiquidLinks(
-            content,
-            project
-        );
+    const processor = new MarkdownTagProcessor({ project });
 
-    const result = await unified()
-        .use(remarkParse)
-        .use(remarkGfm)
-        .use(remarkRehype)
-        .use(rehypeHighlight)
-        .use(rehypeStringify)
-        .process(processedContent);
+    const html = await processor.compile(
+        content,
+        async (markdown, handlers) => {
+            const result = await unified()
+                .use(remarkParse)
+                .use(remarkGfm)
+                .use(remarkDirective)
+                .use(remarkRehype, { handlers })
+                .use(rehypeHighlight)
+                .use(rehypeStringify)
+                .process(markdown);
+
+            return String(result);
+        }
+    );
 
     return {
         metadata: data,
-        html: String(result)
+        html
     };
 }
 

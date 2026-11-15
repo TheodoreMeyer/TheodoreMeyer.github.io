@@ -1,5 +1,4 @@
 ---
-
 layout: default
 title: Server Rules
 permalink: /server/rules/

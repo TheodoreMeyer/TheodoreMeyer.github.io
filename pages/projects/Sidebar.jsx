@@ -1,6 +1,5 @@
-import {
-    useLocation
-} from "react-router-dom";
+
+import { useLocation } from "react-router-dom";
 
 import Page from "#/build/Page.js";
 import Link from "#/components/Link.jsx";
@@ -22,13 +21,10 @@ const PROJECT_DOCS = import.meta.glob(
 );
 
 function getProjectDocs(project) {
-    const prefix =
-        `/projects/${project}/`;
+    const prefix = `/projects/${project}/`;
 
-    return Object.entries(
-        PROJECT_DOCS
-    )
-        .map(([file, module]) => {
+    return Object.entries(PROJECT_DOCS)
+        .map(([, module]) => {
             const page = module.default;
 
             if (!(page instanceof Page)) {
@@ -45,8 +41,7 @@ function getProjectDocs(project) {
 }
 
 function getDocPath(page, project) {
-    const prefix =
-        `/projects/${project}/`;
+    const prefix = `/projects/${project}/`;
 
     return page.path
         .replace(prefix, "")
@@ -57,8 +52,7 @@ function buildTree(pages, project) {
     const nodes = new Map();
 
     pages.forEach(page => {
-        const path =
-            getDocPath(page, project);
+        const path = getDocPath(page, project);
 
         nodes.set(path, {
             page,
@@ -69,26 +63,19 @@ function buildTree(pages, project) {
     });
 
     pages.forEach(page => {
-        const path =
-            getDocPath(page, project);
+        const path = getDocPath(page, project);
 
         if (path === "") {
             return;
         }
 
-        const parts =
-            path.split("/");
-
+        const parts = path.split("/");
         parts.pop();
 
-        const parentPath =
-            parts.join("/");
+        const parentPath = parts.join("/");
 
-        const node =
-            nodes.get(path);
-
-        const parent =
-            nodes.get(parentPath);
+        const node = nodes.get(path);
+        const parent = nodes.get(parentPath);
 
         if (node && parent) {
             node.parent = parent;
@@ -97,15 +84,26 @@ function buildTree(pages, project) {
     });
 
     nodes.forEach(node => {
-        node.children.sort(
-            (a, b) =>
-                a.page.title.localeCompare(
-                    b.page.title
-                )
+        node.children.sort((a, b) =>
+            a.page.title.localeCompare(b.page.title)
         );
     });
 
     return nodes.get("");
+}
+
+function isActiveBranch(node, currentPath) {
+    if (!node) {
+        return false;
+    }
+
+    if (node.page.path === currentPath) {
+        return true;
+    }
+
+    return node.children.some(child =>
+        isActiveBranch(child, currentPath)
+    );
 }
 
 function DocsTree({
@@ -113,92 +111,87 @@ function DocsTree({
                       currentPath,
                       depth = 0
                   }) {
-    if (!node?.children.length) {
+    if (!node) {
         return null;
     }
 
+    const active = node.page.path === currentPath;
+
+    const expanded = isActiveBranch(
+        node,
+        currentPath
+    );
+
+    const hasChildren = node.children.length > 0;
+
     return (
-        <ul
+        <li
             className={
-                depth > 0
-                    ? "sidebar-subnav"
-                    : ""
+                depth === 0
+                    ? "sidebar-section"
+                    : "sidebar-subsection"
             }
         >
-            {node.children.map(child => {
-                const active =
-                    child.page.path ===
-                    currentPath;
+            <Link
+                href={node.page.path}
+                className={[
+                    "sidebar-link",
+                    depth === 0
+                        ? "sidebar-section-title"
+                        : "sidebar-subsection-title",
+                    active ? "active" : "",
+                    hasChildren ? "has-children" : ""
+                ].filter(Boolean).join(" ")}
+                aria-current={
+                    active ? "page" : undefined
+                }
+            >
+                <span className="sidebar-link-text">
+                    {node.page.title}
+                </span>
 
-                return (
-                    <li key={child.path}>
-                        <Link
-                            href={
-                                child.page.path
-                            }
-                            className={
-                                active
-                                    ? "active"
-                                    : ""
-                            }
-                            aria-current={
-                                active
-                                    ? "page"
-                                    : undefined
-                            }
-                        >
-                            {child.page.title}
-                        </Link>
+                {/*
+                {hasChildren && (
+                    <span
+                        className={`sidebar-chevron${expanded ? " expanded" : ""}`}
+                        aria-hidden="true"
+                    />
+                )}
+                */}
+            </Link>
 
+            {expanded && hasChildren && (
+                <ul className="sidebar-subnav">
+                    {node.children.map(child => (
                         <DocsTree
+                            key={child.path}
                             node={child}
-                            currentPath={
-                                currentPath
-                            }
-                            depth={
-                                depth + 1
-                            }
+                            currentPath={currentPath}
+                            depth={depth + 1}
                         />
-                    </li>
-                );
-            })}
-        </ul>
+                    ))}
+                </ul>
+            )}
+        </li>
     );
 }
 
-function ProjectSidebar({
-                            project
-                        }) {
-    const {
-        pathname: currentPath
-    } = useLocation();
+function ProjectSidebar({ project }) {
+    const { pathname: currentPath } = useLocation();
 
-    const pages =
-        getProjectDocs(project);
+    const pages = getProjectDocs(project);
 
-    const root =
-        buildTree(
-            pages,
-            project
-        );
+    const root = buildTree(pages, project);
 
-    const projectInfo =
-        PROJECTS.find(
-            item =>
-                item.url ===
-                `/projects/${project}/`
-        );
+    const projectInfo = PROJECTS.find(
+        item => item.url === `/projects/${project}/`
+    );
 
-    const title =
-        projectInfo?.title ||
-        project;
+    const title = projectInfo?.title || project;
 
-    const projectPath =
-        `/projects/${project}/`;
+    const projectPath = `/projects/${project}/`;
 
-    const projectActive =
-        currentPath ===
-        projectPath;
+    const overviewActive = currentPath === projectPath;
 
     return (
         <aside
@@ -207,38 +200,48 @@ function ProjectSidebar({
         >
             <div className="sidebar-header">
                 <Link
-                    href={projectPath}
-                    className={
-                        `sidebar-title${
-                            projectActive
-                                ? " active"
-                                : ""
-                        }`
-                    }
-                    aria-current={
-                        projectActive
-                            ? "page"
-                            : undefined
-                    }
+                    href="/projects/"
+                    className="sidebar-back"
                 >
-                    {title}
+                    Projects
                 </Link>
+
+                <div className="sidebar-project-title">
+                    {title}
+                </div>
             </div>
 
-            <DocsTree
-                node={root}
-                currentPath={
-                    currentPath
-                }
-            />
+            <nav aria-label={`${title} documentation navigation`}>
+                <ul className="sidebar-nav">
+                    <li className="sidebar-overview">
+                        <Link
+                            href={projectPath}
+                            className={
+                                `sidebar-link sidebar-overview-link${overviewActive ? " active" : ""}`
+                            }
+                            aria-current={
+                                overviewActive ? "page" : undefined
+                            }
+                        >
+                            Overview
+                        </Link>
+                    </li>
+
+                    {root?.children.map(node => (
+                        <DocsTree
+                            key={node.path}
+                            node={node}
+                            currentPath={currentPath}
+                        />
+                    ))}
+                </ul>
+            </nav>
         </aside>
     );
 }
 
 function ProjectsSidebar() {
-    const {
-        pathname: currentPath
-    } = useLocation();
+    const { pathname: currentPath } = useLocation();
 
     return (
         <aside
@@ -249,16 +252,10 @@ function ProjectsSidebar() {
                 <Link
                     href="/projects/"
                     className={
-                        `sidebar-title${
-                            currentPath ===
-                            "/projects/"
-                                ? " active"
-                                : ""
-                        }`
+                        `sidebar-title${currentPath === "/projects/" ? " active" : ""}`
                     }
                     aria-current={
-                        currentPath ===
-                        "/projects/"
+                        currentPath === "/projects/"
                             ? "page"
                             : undefined
                     }
@@ -267,36 +264,22 @@ function ProjectsSidebar() {
                 </Link>
             </div>
 
-            <ul>
+            <ul className="sidebar-nav">
                 {PROJECTS.map(project => {
-                    const active =
-                        currentPath ===
-                        project.url;
+                    const active = currentPath === project.url;
 
                     return (
-                        <li
-                            key={
-                                project.url
-                            }
-                        >
+                        <li key={project.url}>
                             <Link
-                                href={
-                                    project.url
-                                }
+                                href={project.url}
                                 className={
-                                    active
-                                        ? "active"
-                                        : ""
+                                    `sidebar-link${active ? " active" : ""}`
                                 }
                                 aria-current={
-                                    active
-                                        ? "page"
-                                        : undefined
+                                    active ? "page" : undefined
                                 }
                             >
-                                {
-                                    project.title
-                                }
+                                {project.title}
                             </Link>
                         </li>
                     );
@@ -311,9 +294,7 @@ export default function Sidebar({
                                 }) {
     if (project) {
         return (
-            <ProjectSidebar
-                project={project}
-            />
+            <ProjectSidebar project={project} />
         );
     }
 
