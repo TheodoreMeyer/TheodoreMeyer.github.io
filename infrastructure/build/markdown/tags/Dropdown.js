@@ -104,21 +104,108 @@ export default class Dropdown extends MarkdownTag {
 
         return {
             type: "element",
-            tagName: "details",
-            properties: {},
+            tagName: "div",
+            properties: {
+                className: ["markdown-dropdown-wrapper"]
+            },
             children: [
                 {
                     type: "element",
-                    tagName: "summary",
+                    tagName: "style",
                     properties: {},
                     children: [
                         {
                             type: "text",
-                            value: node.label || "Details"
+                            value: `
+                            .markdown-dropdown {
+                                margin: 1.25rem 0;
+                                border: 1px solid var(--border);
+                                border-radius: var(--radius);
+                                background: var(--surface-muted);
+                                overflow: hidden;
+                            }
+
+                            .markdown-dropdown__title {
+                                display: flex;
+                                align-items: center;
+                                justify-content: space-between;
+                                gap: 1rem;
+                                padding: 0.85rem 1rem;
+                                font-weight: 600;
+                                cursor: pointer;
+                                list-style: none;
+                                user-select: none;
+                            }
+
+                            .markdown-dropdown__title::-webkit-details-marker {
+                                display: none;
+                            }
+
+                            .markdown-dropdown__title::after {
+                                content: "";
+                                width: 0.55rem;
+                                height: 0.55rem;
+                                flex-shrink: 0;
+                                border-right: 2px solid currentColor;
+                                border-bottom: 2px solid currentColor;
+                                transform: rotate(45deg);
+                                transition: transform 160ms ease;
+                            }
+
+                            .markdown-dropdown[open] > .markdown-dropdown__title::after {
+                                transform: rotate(225deg);
+                            }
+
+                            .markdown-dropdown__title:hover {
+                                background: color-mix(in srgb, var(--text-color) 5%, transparent);
+                            }
+
+                            .markdown-dropdown__content {
+                                padding: 0 1rem 1rem;
+                                border-top: 1px solid var(--border);
+                            }
+
+                            .markdown-dropdown__content > :first-child {
+                                margin-top: 1rem;
+                            }
+
+                            .markdown-dropdown__content > :last-child {
+                                margin-bottom: 0;
+                            }
+                        `
                         }
                     ]
                 },
-                ...state.all(node)
+                {
+                    type: "element",
+                    tagName: "details",
+                    properties: {
+                        className: ["markdown-dropdown"]
+                    },
+                    children: [
+                        {
+                            type: "element",
+                            tagName: "summary",
+                            properties: {
+                                className: ["markdown-dropdown__title"]
+                            },
+                            children: [
+                                {
+                                    type: "text",
+                                    value: node.label || "Details"
+                                }
+                            ]
+                        },
+                        {
+                            type: "element",
+                            tagName: "div",
+                            properties: {
+                                className: ["markdown-dropdown__content"]
+                            },
+                            children: state.all(node)
+                        }
+                    ]
+                }
             ]
         };
     }

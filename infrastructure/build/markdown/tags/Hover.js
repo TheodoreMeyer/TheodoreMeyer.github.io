@@ -54,10 +54,10 @@ export default class Hover extends MarkdownTag {
 
             padding: 1rem;
 
-            border: 1px solid var(--border-color);
-            border-radius: var(--border-radius);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
 
-            background: var(--bg);
+            background: var(--surface-muted);
             color: var(--text-color);
 
             box-shadow: var(--shadow);
