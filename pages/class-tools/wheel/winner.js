@@ -4,40 +4,18 @@ const FULL_TURN =
 const POINTER_ANGLE =
     Math.PI * 1.5;
 
-
-/*
- * Number of full rotations.
- *
- * Example:
- * 10 and 14 allows:
- * 10, 11, 12, 13, or 14 rotations.
- */
 const MIN_ROTATIONS =
     10;
 
 const MAX_ROTATIONS =
     14;
 
-
-/*
- * Percentage of each section to keep
- * clear from the edges.
- *
- * 0.02 = 2%
- * 0.01 = 1%
- * 0 = entire section
- */
 const EDGE_MARGIN =
     0.02;
 
+const EDGE_BIAS =
+    0.23;
 
-/*
- * Spin duration in milliseconds.
- *
- * Example:
- * 6500–8000ms gives a slightly
- * different duration every spin.
- */
 const MIN_SPIN_DURATION =
     6900;
 
@@ -57,13 +35,13 @@ function normalize(angle) {
 
 
 export function createWinnerSystem({
-                                       getNames,
-                                       getRotation
-                                   }) {
+    getNames,
+    getRotation
+}) {
     function chooseWinner({
-                              rigged,
-                              riggedName
-                          }) {
+        rigged,
+        riggedName
+    }) {
         const names =
             getNames();
 
@@ -96,7 +74,7 @@ export function createWinnerSystem({
 
         return {
             winnerIndex:
-            index,
+                index,
 
             winnerName:
                 names[index]
@@ -117,6 +95,23 @@ export function createWinnerSystem({
             return null;
         }
 
+        /*
+         * Use the exact index selected by
+         * chooseWinner().
+         */
+        const winnerIndex =
+            winner.winnerIndex;
+
+        if (
+            winnerIndex < 0 ||
+            winnerIndex >=
+                names.length ||
+            names[winnerIndex] !==
+                winner.winnerName
+        ) {
+            return null;
+        }
+
         const currentRotation =
             getRotation();
 
@@ -124,50 +119,50 @@ export function createWinnerSystem({
             FULL_TURN /
             names.length;
 
-
-        /*
-         * Pick a random position
-         * anywhere inside the winner's
-         * section.
-         */
         const sectionStart =
-            winner.winnerIndex *
+            winnerIndex *
             slice;
 
         const edgeMargin =
             slice *
             EDGE_MARGIN;
 
-        const edgeBias =
-            0.23;
-
+        /*
+         * Pick a point inside the winner's
+         * section, away from the edges.
+         */
         const random =
             Math.random();
 
         const targetOffset =
             random < 0.5
                 ? edgeMargin +
-                Math.random() *
-                (
-                    edgeBias * slice -
-                    edgeMargin
-                )
-                : (1 - edgeBias) *
-                slice +
-                Math.random() *
-                (
-                    edgeBias * slice -
-                    edgeMargin
-                );
+                  Math.random() *
+                  (
+                      EDGE_BIAS *
+                      slice -
+                      edgeMargin
+                  )
+                : (1 - EDGE_BIAS) *
+                      slice +
+                  Math.random() *
+                  (
+                      EDGE_BIAS *
+                      slice -
+                      edgeMargin
+                  );
 
         const targetAngle =
             sectionStart +
             targetOffset;
 
+        /*
+         * Rotation that puts targetAngle
+         * underneath the pointer.
+         */
         const desiredRotation =
             POINTER_ANGLE -
             targetAngle;
-
 
         const current =
             normalize(
@@ -179,12 +174,6 @@ export function createWinnerSystem({
                 desiredRotation
             );
 
-
-        /*
-         * Find the forward distance
-         * to the randomly selected
-         * position inside the section.
-         */
         let distance =
             target -
             current;
@@ -196,11 +185,6 @@ export function createWinnerSystem({
                 FULL_TURN;
         }
 
-
-        /*
-         * Random number of complete
-         * rotations.
-         */
         const rotations =
             MIN_ROTATIONS +
             Math.floor(
@@ -212,10 +196,6 @@ export function createWinnerSystem({
                 )
             );
 
-
-        /*
-         * Random spin duration.
-         */
         const duration =
             MIN_SPIN_DURATION +
             Math.random() *
@@ -224,22 +204,17 @@ export function createWinnerSystem({
                 MIN_SPIN_DURATION
             );
 
-
-        const endRotation =
-            currentRotation +
-            distance +
-            rotations *
-            FULL_TURN;
-
-
         return {
-            winnerIndex:
-            winner.winnerIndex,
+            winnerIndex,
 
             winnerName:
-            winner.winnerName,
+                winner.winnerName,
 
-            endRotation,
+            endRotation:
+                currentRotation +
+                distance +
+                rotations *
+                FULL_TURN,
 
             duration
         };

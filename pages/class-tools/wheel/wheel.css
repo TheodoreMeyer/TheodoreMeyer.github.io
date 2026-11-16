@@ -246,6 +246,35 @@
     filter: brightness(0.92);
 }
 
+.wheel-order-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+
+    margin-top: 0.75rem;
+    padding: 0;
+
+    background: none;
+    border: 0;
+
+    color: var(--muted);
+    font-size: 0.85rem;
+    font-weight: 600;
+}
+
+.wheel-order-toggle:hover {
+    background: none;
+    color: var(--text);
+}
+
+.wheel-order-arrow {
+    transition: transform 0.15s ease;
+}
+
+.wheel-order-arrow.expanded {
+    transform: rotate(180deg);
+}
+
 .hidden {
     display: none !important;
 }

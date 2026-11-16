@@ -15,13 +15,14 @@ const POINTER_ANGLE =
     Math.PI * 1.5;
 
 const COLORS = [
-    "#ef4444", // red
-    "#22c55e", // green
-    "#3b82f6", // blue
-    "#eab308", // yellow
-    "#ec4899", // pink
-    "#6b7280"  // gray
+    "#ef4444",
+    "#22c55e",
+    "#3b82f6",
+    "#eab308",
+    "#ec4899",
+    "#6b7280"
 ];
+
 
 function easeOut(t) {
     return 1 -
@@ -30,6 +31,8 @@ function easeOut(t) {
             4.4
         );
 }
+
+
 const Wheel = forwardRef(
     function Wheel(
         {
@@ -53,9 +56,20 @@ const Wheel = forwardRef(
         const spinningRef =
             useRef(false);
 
+
         useEffect(() => {
+            /*
+             * Do not reset rotation while
+             * the wheel is currently spinning.
+             */
+            if (
+                spinningRef.current
+            ) {
+                return;
+            }
+
             namesRef.current =
-                names;
+                [...names];
 
             rotationRef.current =
                 0;
@@ -63,10 +77,17 @@ const Wheel = forwardRef(
             draw();
         }, [names]);
 
+
         useImperativeHandle(
             ref,
             () => ({
                 setNames(nextNames) {
+                    if (
+                        spinningRef.current
+                    ) {
+                        return;
+                    }
+
                     namesRef.current =
                         [...nextNames];
 
@@ -84,8 +105,14 @@ const Wheel = forwardRef(
                     return spinningRef.current;
                 },
 
-                spin(plan, onStop) {
-                    spin(plan, onStop);
+                spin(
+                    plan,
+                    onStop
+                ) {
+                    spin(
+                        plan,
+                        onStop
+                    );
                 },
 
                 cleanup() {
@@ -108,11 +135,16 @@ const Wheel = forwardRef(
             []
         );
 
-        function getSectionColor(index) {
+
+        function getSectionColor(
+            index
+        ) {
             return COLORS[
-            index % COLORS.length
-                ];
+                index %
+                COLORS.length
+            ];
         }
+
 
         function getSectionAtPointer(
             rotation
@@ -137,14 +169,25 @@ const Wheel = forwardRef(
                 ) %
                 FULL_TURN;
 
-            if (angle < 0) {
-                angle += FULL_TURN;
+            if (
+                angle < 0
+            ) {
+                angle +=
+                    FULL_TURN;
             }
 
-            return Math.floor(
-                angle / slice
+            const index =
+                Math.floor(
+                    angle /
+                    slice
+                );
+
+            return Math.min(
+                index,
+                currentNames.length - 1
             );
         }
+
 
         function getFontSize(
             name,
@@ -176,7 +219,9 @@ const Wheel = forwardRef(
                     0.72
                 );
 
-            while (size > 11) {
+            while (
+                size > 11
+            ) {
                 ctx.font =
                     `700 ${size}px system-ui`;
 
@@ -194,6 +239,7 @@ const Wheel = forwardRef(
 
             return size;
         }
+
 
         function draw() {
             const canvas =
@@ -284,7 +330,9 @@ const Wheel = forwardRef(
                 ctx.closePath();
 
                 ctx.fillStyle =
-                    getSectionColor(i);
+                    getSectionColor(
+                        i
+                    );
 
                 ctx.fill();
 
@@ -359,6 +407,7 @@ const Wheel = forwardRef(
             updatePointer();
         }
 
+
         function updatePointer() {
             const pointer =
                 canvasRef.current
@@ -376,13 +425,18 @@ const Wheel = forwardRef(
                     rotationRef.current
                 );
 
-            if (index < 0) {
+            if (
+                index < 0
+            ) {
                 return;
             }
 
             pointer.style.borderTopColor =
-                getSectionColor(index);
+                getSectionColor(
+                    index
+                );
         }
+
 
         function spin(
             plan,
@@ -390,7 +444,8 @@ const Wheel = forwardRef(
         ) {
             if (
                 spinningRef.current ||
-                namesRef.current.length === 0
+                namesRef.current.length ===
+                    0
             ) {
                 return;
             }
@@ -410,6 +465,7 @@ const Wheel = forwardRef(
 
             const startTime =
                 performance.now();
+
 
             function animate(now) {
                 const progress =
@@ -445,6 +501,10 @@ const Wheel = forwardRef(
                     return;
                 }
 
+                /*
+                 * Set the exact predetermined
+                 * final rotation one last time.
+                 */
                 rotationRef.current =
                     endRotation;
 
@@ -457,9 +517,9 @@ const Wheel = forwardRef(
                     false;
 
                 /*
-                 * Verify that the actual final
-                 * wheel position matches the
-                 * predetermined winner.
+                 * Verify the actual final
+                 * section against the planned
+                 * winner.
                  */
                 const actualIndex =
                     getSectionAtPointer(
@@ -474,19 +534,30 @@ const Wheel = forwardRef(
                         "Wheel landing mismatch:",
                         {
                             expected:
-                            plan.winnerIndex,
+                                plan.winnerIndex,
 
                             actual:
-                            actualIndex,
+                                actualIndex,
+
+                            expectedName:
+                                plan.winnerName,
+
+                            actualName:
+                                namesRef.current[
+                                    actualIndex
+                                ],
 
                             rotation:
-                            rotationRef.current
+                                rotationRef.current
                         }
                     );
                 }
 
-                onStop?.(plan);
+                onStop?.(
+                    plan
+                );
             }
+
 
             animationRef.current =
                 requestAnimationFrame(
@@ -494,13 +565,18 @@ const Wheel = forwardRef(
                 );
         }
 
+
         return (
             <div
                 className="wheel-container"
-                onClick={onClick}
+                onClick={
+                    onClick
+                }
             >
                 <canvas
-                    ref={canvasRef}
+                    ref={
+                        canvasRef
+                    }
                     width="700"
                     height="700"
                 />
@@ -512,5 +588,6 @@ const Wheel = forwardRef(
         );
     }
 );
+
 
 export default Wheel;
